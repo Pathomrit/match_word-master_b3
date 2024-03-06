@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:match_word/login/Home_Play.dart';
 import 'package:match_word/login/Level.dart';
-
+import 'package:match_word/multi/SelectPeople.dart';
 class SingleOrMulti extends StatefulWidget {
   SingleOrMulti({Key? key}) : super(key: key);
   @override
@@ -74,7 +74,7 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                         () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Level()),
+                        MaterialPageRoute(builder: (context) => SelectPeople()),
                       );
                     },
                     textStyle: TextStyle(
