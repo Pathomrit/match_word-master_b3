@@ -16,6 +16,20 @@ class _Three extends State<Three> {
     "Pic/Knight.png",
     "Pic/Kid.png",
     "Pic/archer.png",
+    "Pic/Castle.png",
+    "Pic/King.png",
+    "Pic/Queen.png",
+    "Pic/Wizard.png",
+    "Pic/Knight.png",
+    "Pic/Kid.png",
+    "Pic/archer.png",
+    "Pic/Castle.png",
+    "Pic/King.png",
+    "Pic/Queen.png",
+    "Pic/Wizard.png",
+    "Pic/Knight.png",
+    "Pic/Kid.png",
+    "Pic/archer.png",
   ];
 
   List<String> wordImages = [
@@ -26,6 +40,21 @@ class _Three extends State<Three> {
     "Word/Knight.png",
     "Word/Kid.png",
     "Word/archer.png",
+    "Word/Castle.png",
+    "Word/King.png",
+    "Word/Queen.png",
+    "Word/Wizard.png",
+    "Word/Knight.png",
+    "Word/Kid.png",
+    "Word/archer.png",
+    "Word/Castle.png",
+    "Word/King.png",
+    "Word/Queen.png",
+    "Word/Wizard.png",
+    "Word/Knight.png",
+    "Word/Kid.png",
+    "Word/archer.png",
+
   ];
 
   List<bool> isFlipped = [];

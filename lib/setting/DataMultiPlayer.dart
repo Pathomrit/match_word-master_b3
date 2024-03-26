@@ -32,7 +32,7 @@ class DataCountCardThree {
 }
 class DataColumCardFour {
   static List<InputColumnFour> count = [
-    InputColumnFour(column_card: 4)
+    InputColumnFour(column_card: 6)
   ];
 }
 
@@ -246,7 +246,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                           InputCardThree defaultInputDataCardThree = InputCardThree(count_card: 16);
                           DataCountCardThree.countCard = [defaultInputDataCardThree];
                           _countControllerThree.clear();
-                          InputColumnFour defaultInputDataFour = InputColumnFour(column_card: 4);
+                          InputColumnFour defaultInputDataFour = InputColumnFour(column_card: 6);
                           DataColumCardFour.count = [defaultInputDataFour];
                           _columnControllerFour.clear();
                           InputCardFour defaultInputDataCardFour = InputCardFour(count_card: 20);
