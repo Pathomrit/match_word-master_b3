@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-
+import 'package:match_word/setting/DataSinglePlayer.dart';
 class Hard extends StatefulWidget {
   @override
   _Hard createState() => _Hard();
@@ -93,9 +93,9 @@ class _Hard extends State<Hard> {
         return AlertDialog(
           title: Center(
             child: Text(
-              matchedCard == 12 ? "You Win" : "You Lose",
+              matchedCard == DataCountCardHard.countCard.first.count_card ~/ 2 ? "You Win" : "You Lose",
               style: TextStyle(
-                color: matchedCard == 12 ? Colors.green : Colors.red,
+                color: matchedCard == DataCountCardHard.countCard.first.count_card ~/ 2 ? Colors.green : Colors.red,
               ),
             ),
           ),
@@ -116,9 +116,9 @@ class _Hard extends State<Hard> {
 
 
   void initTimer() {
-    if (timeLeft <= 0 || matchedCard == 12) {
+    if (timeLeft <= 0 || matchedCard == DataCountCardHard.countCard.first.count_card ~/ 2) {
       timer?.cancel();
-      if (matchedCard == 12) {
+      if (matchedCard == DataCountCardHard.countCard.first.count_card ~/ 2) {
         showResultDialog(true); // แสดงผลว่าชนะ
       } else {
         disableDeck = true;
@@ -145,7 +145,6 @@ class _Hard extends State<Hard> {
 
     setState(() {
       flips++;
-      flips/2;
     });
 
     if (clickedCard != cardOne && !disableDeck && timeLeft > 0) {
@@ -211,7 +210,7 @@ class _Hard extends State<Hard> {
     Random random = Random();
     List<int> randomPositions = [];
 
-    while (randomPositions.length < 12) {
+    while (randomPositions.length < DataCountCardHard.countCard.first.count_card ~/ 2) {
       int randomPosition = random.nextInt(picImages.length);
       if (!randomPositions.contains(randomPosition)) {
         randomPositions.add(randomPosition);
@@ -223,12 +222,12 @@ class _Hard extends State<Hard> {
     List<bool> isPic = []; // เพิ่มตัวแปรเพื่อเก็บข้อมูลว่าแต่ละการ์ดควรเป็นรูปภาพหรือคำอธิบาย
 
     // สุ่มเลือกว่าแต่ละการ์ดควรเป็นรูปภาพหรือคำอธิบาย
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < DataCountCardHard.countCard.first.count_card ~/ 2; i++) {
       isPic.add(random.nextBool());
     }
 
     // สร้างลิสต์การ์ดใหม่โดยเลือกตามค่าที่สุ่มได้
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < DataCountCardHard.countCard.first.count_card ~/ 2; i++) {
       if (isPic[i]) {
         shuffledPicImages.add(picImages[randomPositions[i]]);
         shuffledWordImages.add(wordImages[randomPositions[i]]);
@@ -248,7 +247,7 @@ class _Hard extends State<Hard> {
       cardTwo = "";
       timer?.cancel();
       isPlaying = false;
-      isFlipped = List.filled(24, false);
+      isFlipped = List.filled(DataCountCardHard.countCard.first.count_card, false);
     });
   }
 
@@ -271,7 +270,7 @@ class _Hard extends State<Hard> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/bluegradient.jpg',
+              'assets/images/BgGame.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -294,11 +293,11 @@ class _Hard extends State<Hard> {
                   ),
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
+                      crossAxisCount: DataColumCardHard.count.first.column_card,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 30,
                     ),
-                    itemCount: 24,
+                    itemCount: DataCountCardHard.countCard.first.count_card,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(

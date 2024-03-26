@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-
+import 'package:match_word/setting/DataMultiPlayer.dart';
 class Four extends StatefulWidget {
   @override
   _Four createState() => _Four();
@@ -75,9 +75,9 @@ class _Four extends State<Four> {
 
 
   void initTimer() {
-    if (timeLeft <= 0 || matchedCard == 6) {
+    if (timeLeft <= 0 || matchedCard == DataCountCardFour.countCard.first.count_card ~/ 2) {
       timer?.cancel();
-      if (matchedCard == 6) {
+      if (matchedCard == DataCountCardFour.countCard.first.count_card ~/ 2) {
         showResultDialog(true); // แสดงผลว่าชนะ
       } else {
         disableDeck = true;
@@ -105,7 +105,6 @@ class _Four extends State<Four> {
 
     setState(() {
       flips++;
-      flips/2;
     });
 
     if (clickedCard != cardOne && !disableDeck && timeLeft > 0) {
@@ -183,7 +182,7 @@ class _Four extends State<Four> {
     Random random = Random();
     List<int> randomPositions = [];
 
-    while (randomPositions.length < 6) {
+    while (randomPositions.length < DataCountCardFour.countCard.first.count_card ~/ 2) {
       int randomPosition = random.nextInt(picImages.length);
       if (!randomPositions.contains(randomPosition)) {
         randomPositions.add(randomPosition);
@@ -195,12 +194,12 @@ class _Four extends State<Four> {
     List<bool> isPic = []; // เพิ่มตัวแปรเพื่อเก็บข้อมูลว่าแต่ละการ์ดควรเป็นรูปภาพหรือคำอธิบาย
 
     // สุ่มเลือกว่าแต่ละการ์ดควรเป็นรูปภาพหรือคำอธิบาย
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < DataCountCardFour.countCard.first.count_card ~/ 2; i++) {
       isPic.add(random.nextBool());
     }
 
     // สร้างลิสต์การ์ดใหม่โดยเลือกตามค่าที่สุ่มได้
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < DataCountCardFour.countCard.first.count_card ~/ 2; i++) {
       if (isPic[i]) {
         shuffledPicImages.add(picImages[randomPositions[i]]);
         shuffledWordImages.add(wordImages[randomPositions[i]]);
@@ -220,7 +219,7 @@ class _Four extends State<Four> {
       cardTwo = "";
       timer?.cancel();
       isPlaying = false;
-      isFlipped = List.filled(12, false);
+      isFlipped = List.filled(DataCountCardFour.countCard.first.count_card, false);
     });
   }
 
@@ -229,7 +228,7 @@ class _Four extends State<Four> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Easy Mode',
+          'Four Player Mode',
           style: TextStyle(
             color: Colors.black,
             fontSize: 40.0,
@@ -243,7 +242,7 @@ class _Four extends State<Four> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/bluegradient.jpg',
+              'assets/images/BgGame.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -303,11 +302,11 @@ class _Four extends State<Four> {
                   ),
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
+                      crossAxisCount: DataColumCardFour.count.first.column_card,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 30,
                     ),
-                    itemCount: 12,
+                    itemCount: DataCountCardFour.countCard.first.count_card,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(

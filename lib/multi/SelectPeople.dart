@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:match_word/single/Hard.dart';
-import 'package:match_word/single/Medium.dart';
 import 'package:match_word/multi/twopeople/Two.dart';
 import 'package:match_word/multi/threepeople/Three.dart';
 import 'package:match_word/multi/fourpeople/Four.dart';
 class SelectPeople extends StatefulWidget {
   SelectPeople({Key? key}) : super(key: key);
-
   @override
   _SelectPeople createState() => _SelectPeople();
 }
