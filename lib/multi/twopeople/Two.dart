@@ -93,6 +93,42 @@ class _Two extends State<Two> {
       timeLeft--;
     });
   }
+  void showEnlargedImages(String imagePath1, String imagePath2) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent, // ตั้งค่าสีพื้นหลังของ Dialog เป็นโปร่งใส
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Image.asset(
+                  imagePath1,
+                  height: 200, // กำหนดความสูงของรูปให้ใหญ่ขึ้น
+                  width: 150, // กำหนดความกว้างของรูปให้ใหญ่ขึ้น
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Image.asset(
+                  imagePath2,
+                  height: 200, // กำหนดความสูงของรูปให้ใหญ่ขึ้น
+                  width: 150, // กำหนดความกว้างของรูปให้ใหญ่ขึ้น
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
   String currentPlayer = 'Player 1'; // กำหนดค่าเริ่มต้นให้กับ currentPlayer
 
@@ -122,9 +158,18 @@ class _Two extends State<Two> {
         String cardTwoImg = getImagePath(cardTwo);
 
         matchCards(cardOneImg, cardTwoImg); // ส่ง currentPlayer ไปยัง matchCards
+
+        // เรียกใช้งานฟังก์ชันเพื่อแสดงภาพใหญ่
+        showEnlargedImages(cardOneImg, cardTwoImg);
+
+        // ตั้งค่า Timer เพื่อปิดหน้าจอภาพใหญ่ลงหลังจากผ่านไป 1 วินาที
+        Timer(Duration(milliseconds: 400), () {
+          Navigator.of(context).pop(); // ปิดหน้าจอภาพใหญ่
+        });
       }
     }
   }
+
 
   String getImagePath(String cardIndex) {
     int index = int.parse(cardIndex);
@@ -329,6 +374,30 @@ class _Two extends State<Two> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class EnlargedImage extends StatelessWidget {
+  final String imagePath;
+
+  const EnlargedImage({required this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Container(
+          color: Colors.black.withOpacity(0.8),
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.contain,
+          ),
+        ),
       ),
     );
   }

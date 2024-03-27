@@ -28,6 +28,17 @@ class _Easy extends State<Easy> {
     "Word/archer.png",
   ];
 
+  List<String> playedWords = [
+    "Castle",
+    "King",
+    "Queen",
+    "Wizard",
+    "Knight",
+    "Kid",
+    "Archer",
+  ];
+
+
   List<bool> isFlipped = [];
   int maxTime = 30;
   int timeLeft = 0;
@@ -45,28 +56,85 @@ class _Easy extends State<Easy> {
     shuffleCard();
   }
   void showResultDialog(bool isWin) {
+    List<String> playedWordsList = isWin ? playedWords : picImages;
+    bool showWords = false;
+    double dialogHeight = MediaQuery.of(context).size.height * 0.2; // ความสูงเริ่มต้นของ AlertDialog
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(
-            child: Text(
-              matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2 ? "You Win" : "You Lose",
-              style: TextStyle(
-                color: matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2 ? Colors.green : Colors.red,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                padding: EdgeInsets.all(20.0),
+                width: MediaQuery.of(context).size.width * 0.2,
+                height: dialogHeight, // ใช้ตัวแปร dialogHeight เป็นค่าความสูงของ AlertDialog
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2 ? "You Win" : "You Lose",
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2 ? Colors.green : Colors.red,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text("Total flips: $flips", style: TextStyle(fontSize: 16)),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: showWords
+                          ? ListView.builder(
+                        itemCount: playedWordsList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            title: Text(
+                              playedWordsList[index],
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                          : SizedBox(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-          content: Text("Total flips: $flips"), // เพิ่มปุ่มแสดงจำนวนการ flip ที่นี่
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                shuffleCard();
-              },
-              child: Text("OK"),
-            ),
-          ],
+              actions: [
+                Row(
+                  children: [
+                    Visibility(
+                      visible: !showWords,
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            showWords = true;
+                            // เปลี่ยนความสูงของ AlertDialog เมื่อแสดงคำศัพท์
+                            dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                          });
+                        },
+                        child: Text("Show Words"),
+                      ),
+                    ),
+                    Spacer(), // เพิ่ม Spacer เพื่อจัดวางปุ่ม OK ไปทางขวาสุด
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        shuffleCard();
+                      },
+                      child: Text("OK"),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -240,6 +308,8 @@ class _Easy extends State<Easy> {
                   'Time: $timeLeft',
                   style: TextStyle(
                     fontSize: 30,
+                    fontFamily: 'TonphaiThin',
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 Container(
