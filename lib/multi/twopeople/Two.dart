@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:match_word/setting/DataMultiPlayer.dart';
+import 'package:match_word/multi/SelectPeople.dart';
 class Two extends StatefulWidget {
   @override
   _Two createState() => _Two();
@@ -29,6 +30,16 @@ class _Two extends State<Two> {
     "Word/archer.png",
   ];
 
+  List<String> playedWords = [
+    "Castle",
+    "King",
+    "Queen",
+    "Wizard",
+    "Knight",
+    "Kid",
+    "Archer",
+  ];
+
   List<bool> isFlipped = [];
   int maxTime = 30;
   int timeLeft = 0;
@@ -47,31 +58,144 @@ class _Two extends State<Two> {
   }
 
   void showResultDialog(bool isWin) {
+    String winner = currentPlayer == 'Player 1' ? 'Player 1' : 'Player 2';
+    List<String> playedWordsList = isWin ? playedWords : picImages;
+    bool showWords = false;
+    double dialogHeight = MediaQuery.of(context).size.height * 0.2;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(
-            child: Text(
-              isWin ? "You Win" : "You Lose",
-              style: TextStyle(
-                color: isWin ? Colors.green : Colors.red,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                padding: EdgeInsets.all(20.0),
+                width: MediaQuery.of(context).size.width * 0.1,
+                height: dialogHeight,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        matchedCard == DataCountCardTwo.countCard.first.count_card ~/ 2 ? "$winner Wins" : "You Lose",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: matchedCard == DataCountCardTwo.countCard.first.count_card ~/ 2 ? Colors.green : Colors.red,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text("Total flips: ${flips ~/ 2}",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontFamily: 'TonphaiThin',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: showWords
+                          ? ListView.builder(
+                        itemCount: playedWordsList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            title: Text(
+                              playedWordsList[index],
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                                fontFamily: 'TonphaiThin',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                          : SizedBox(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-          content: Text("Total flips: $flips\nWinner: $currentPlayer"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                shuffleCard();
-              },
-              child: Text("OK"),
-            ),
-          ],
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Visibility(
+                      visible: !showWords,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            showWords = true;
+                            dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                          });
+                        },
+                        child: Text(
+                          "Words",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        shuffleCard();
+                      },
+                      child: Text(
+                        "Retry",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        resumeTimer();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => SelectPeople()),
+                        );
+                      },
+                      child: Text(
+                        "Back",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
         );
       },
     );
+  }
+
+
+  void startTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      initTimer();
+    });
   }
 
 
@@ -79,10 +203,10 @@ class _Two extends State<Two> {
     if (timeLeft <= 0 || matchedCard == DataCountCardTwo.countCard.first.count_card ~/ 2) {
       timer?.cancel();
       if (matchedCard == DataCountCardTwo.countCard.first.count_card ~/ 2) {
-        showResultDialog(true); // แสดงผลว่าชนะ
+        showResultDialog(true);
       } else {
         disableDeck = true;
-        showResultDialog(false); // แสดงผลว่าแพ้
+        showResultDialog(false);
         Future.delayed(Duration(milliseconds: 500), () {
           disableDeck = false;
         });
@@ -98,7 +222,7 @@ class _Two extends State<Two> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          backgroundColor: Colors.transparent, // ตั้งค่าสีพื้นหลังของ Dialog เป็นโปร่งใส
+          backgroundColor: Colors.transparent,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -108,8 +232,8 @@ class _Two extends State<Two> {
                 },
                 child: Image.asset(
                   imagePath1,
-                  height: 200, // กำหนดความสูงของรูปให้ใหญ่ขึ้น
-                  width: 150, // กำหนดความกว้างของรูปให้ใหญ่ขึ้น
+                  height: 200,
+                  width: 150,
                 ),
               ),
               GestureDetector(
@@ -118,8 +242,8 @@ class _Two extends State<Two> {
                 },
                 child: Image.asset(
                   imagePath2,
-                  height: 200, // กำหนดความสูงของรูปให้ใหญ่ขึ้น
-                  width: 150, // กำหนดความกว้างของรูปให้ใหญ่ขึ้น
+                  height: 200,
+                  width: 150,
                 ),
               ),
             ],
@@ -129,15 +253,21 @@ class _Two extends State<Two> {
     );
   }
 
+  void pauseTimer() {
+    timer?.cancel();
+  }
 
-  String currentPlayer = 'Player 1'; // กำหนดค่าเริ่มต้นให้กับ currentPlayer
+  void resumeTimer() {
+    startTimer();
+  }
+
+  String currentPlayer = 'Player 1';
 
   void flipCard(String clickedCard) {
-    if (!isPlaying) {
+
+    if (!isPlaying && !disableDeck) {
       isPlaying = true;
-      timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-        initTimer();
-      });
+      startTimer();
     }
 
     setState(() {
@@ -157,14 +287,10 @@ class _Two extends State<Two> {
         String cardOneImg = getImagePath(cardOne);
         String cardTwoImg = getImagePath(cardTwo);
 
-        matchCards(cardOneImg, cardTwoImg); // ส่ง currentPlayer ไปยัง matchCards
-
-        // เรียกใช้งานฟังก์ชันเพื่อแสดงภาพใหญ่
         showEnlargedImages(cardOneImg, cardTwoImg);
-
-        // ตั้งค่า Timer เพื่อปิดหน้าจอภาพใหญ่ลงหลังจากผ่านไป 1 วินาที
-        Timer(Duration(milliseconds: 400), () {
-          Navigator.of(context).pop(); // ปิดหน้าจอภาพใหญ่
+        Future.delayed(Duration(milliseconds: 500), () {
+          matchCards(cardOneImg, cardTwoImg);
+          Navigator.of(context).pop();
         });
       }
     }
@@ -192,7 +318,7 @@ class _Two extends State<Two> {
         disableDeck = false;
       });
     } else {
-      Future.delayed(Duration(milliseconds: 400), () {
+      Future.delayed(Duration(milliseconds: 500), () {
         if (isFlipped[int.parse(cardOne) - 1]) {
           setState(() {
             isFlipped[int.parse(cardOne) - 1] = false;
@@ -207,8 +333,8 @@ class _Two extends State<Two> {
           cardOne = "";
           cardTwo = "";
           disableDeck = false;
-          currentPlayer = currentPlayer == 'Player 1' ? 'Player 2' : 'Player 1'; // เปลี่ยนผู้เล่น
-          timeLeft = maxTime; // เริ่มต้นนับเวลาใหม่
+          currentPlayer = currentPlayer == 'Player 1' ? 'Player 2' : 'Player 1';
+          timeLeft = maxTime;
         });
       });
     }
@@ -229,14 +355,12 @@ class _Two extends State<Two> {
 
     List<String> shuffledPicImages = [];
     List<String> shuffledWordImages = [];
-    List<bool> isPic = []; // เพิ่มตัวแปรเพื่อเก็บข้อมูลว่าแต่ละการ์ดควรเป็นรูปภาพหรือคำอธิบาย
+    List<bool> isPic = [];
 
-    // สุ่มเลือกว่าแต่ละการ์ดควรเป็นรูปภาพหรือคำอธิบาย
     for (int i = 0; i < DataCountCardTwo.countCard.first.count_card ~/ 2; i++) {
       isPic.add(random.nextBool());
     }
 
-    // สร้างลิสต์การ์ดใหม่โดยเลือกตามค่าที่สุ่มได้
     for (int i = 0; i < DataCountCardTwo.countCard.first.count_card ~/ 2; i++) {
       if (isPic[i]) {
         shuffledPicImages.add(picImages[randomPositions[i]]);
@@ -266,7 +390,7 @@ class _Two extends State<Two> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Two Player Mode',
+          'Two Player',
           style: TextStyle(
             color: Colors.black,
             fontSize: 40.0,
@@ -275,6 +399,62 @@ class _Two extends State<Two> {
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () {
+            pauseTimer();
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  alignment: Alignment.center,
+                  title: Text("Menu",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30.0,
+                      fontFamily: 'TonphaiThin',
+                      fontWeight: FontWeight.bold,
+                    ),),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          resumeTimer();
+                        },
+                        child: Text('Resume',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          resumeTimer();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => SelectPeople()),
+                          );
+                        },
+                        child: Text('Back To Menu',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
       body: Stack(
         children: [
@@ -294,33 +474,43 @@ class _Two extends State<Two> {
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 1' ? Colors.red : Colors.transparent, // เลือกสีแดงหรือสีโปร่งใสตามตำแหน่งปัจจุบันของผู้เล่น
+                        color: currentPlayer == 'Player 1' ? Colors.red : Colors.transparent,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
                         'Player 1',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: currentPlayer == 'Player 1' ? Colors.white : Colors.black), // เลือกสีของข้อความตามตำแหน่งปัจจุบันของผู้เล่น
+                        style: TextStyle(fontSize: 20,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold, color: currentPlayer == 'Player 1' ? Colors.white : Colors.black), // เลือกสีของข้อความตามตำแหน่งปัจจุบันของผู้เล่น
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(right: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 2' ? Colors.red : Colors.transparent, // เลือกสีแดงหรือสีโปร่งใสตามตำแหน่งปัจจุบันของผู้เล่น
+                        color: currentPlayer == 'Player 2' ? Colors.red : Colors.transparent,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
                         'Player 2',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: currentPlayer == 'Player 2' ? Colors.white : Colors.black), // เลือกสีของข้อความตามตำแหน่งปัจจุบันของผู้เล่น
+                        style: TextStyle(fontSize: 20,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold, color: currentPlayer == 'Player 2' ? Colors.white : Colors.black), // เลือกสีของข้อความตามตำแหน่งปัจจุบันของผู้เล่น
                       ),
                     ),
                   ],
                 ),
-                Text(
-                  'Time: $timeLeft',
-                  style: TextStyle(
-                    fontSize: 30,
+                Container(
+                  padding: EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black, width: 2.0),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Text(
+                    'Time: $timeLeft',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontFamily: 'TonphaiThin',
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Container(

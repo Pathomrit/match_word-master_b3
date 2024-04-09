@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:match_word/setting/DataMultiPlayer.dart';
+import 'package:match_word/multi/SelectPeople.dart';
 class Three extends StatefulWidget {
   @override
   _Three createState() => _Three();
@@ -57,6 +58,16 @@ class _Three extends State<Three> {
 
   ];
 
+  List<String> playedWords = [
+    "Castle",
+    "King",
+    "Queen",
+    "Wizard",
+    "Knight",
+    "Kid",
+    "Archer",
+  ];
+
   List<bool> isFlipped = [];
   int maxTime = 30;
   int timeLeft = 0;
@@ -75,31 +86,150 @@ class _Three extends State<Three> {
   }
 
   void showResultDialog(bool isWin) {
+    String winner;
+    if (currentPlayer == 'Player 1') {
+      winner = 'Player 1';
+    } else if (currentPlayer == 'Player 2') {
+      winner = 'Player 2';
+    } else {
+      winner = 'Player 3';
+    }
+    List<String> playedWordsList = isWin ? playedWords : picImages;
+    bool showWords = false;
+    double dialogHeight = MediaQuery.of(context).size.height * 0.2;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(
-            child: Text(
-              isWin ? "You Win" : "You Lose",
-              style: TextStyle(
-                color: isWin ? Colors.green : Colors.red,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                padding: EdgeInsets.all(20.0),
+                width: MediaQuery.of(context).size.width * 0.1,
+                height: dialogHeight,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2 ? "$winner Wins" : "You Lose",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2 ? Colors.green : Colors.red,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text("Total flips: ${flips ~/ 2}",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontFamily: 'TonphaiThin',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: showWords
+                          ? ListView.builder(
+                        itemCount: playedWordsList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            title: Text(
+                              playedWordsList[index],
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                                fontFamily: 'TonphaiThin',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                          : SizedBox(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-          content: Text("Total flips: $flips\nWinner: $currentPlayer"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                shuffleCard();
-              },
-              child: Text("OK"),
-            ),
-          ],
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Visibility(
+                      visible: !showWords,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            showWords = true;
+                            dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                          });
+                        },
+                        child: Text(
+                          "Words",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        shuffleCard();
+                      },
+                      child: Text(
+                        "Retry",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        resumeTimer();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => SelectPeople()),
+                        );
+                      },
+                      child: Text(
+                        "Back",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
         );
       },
     );
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      initTimer();
+    });
   }
 
 
@@ -107,10 +237,10 @@ class _Three extends State<Three> {
     if (timeLeft <= 0 || matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2) {
       timer?.cancel();
       if (matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2) {
-        showResultDialog(true); // แสดงผลว่าชนะ
+        showResultDialog(true);
       } else {
         disableDeck = true;
-        showResultDialog(false); // แสดงผลว่าแพ้
+        showResultDialog(false);
         Future.delayed(Duration(milliseconds: 500), () {
           disableDeck = false;
         });
@@ -121,15 +251,57 @@ class _Three extends State<Three> {
       timeLeft--;
     });
   }
+  void showEnlargedImages(String imagePath1, String imagePath2) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Image.asset(
+                  imagePath1,
+                  height: 200,
+                  width: 150,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Image.asset(
+                  imagePath2,
+                  height: 200,
+                  width: 150,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
-  String currentPlayer = 'Player 1'; // กำหนดค่าเริ่มต้นให้กับ currentPlayer
+  void pauseTimer() {
+    timer?.cancel();
+  }
+
+  void resumeTimer() {
+    startTimer();
+  }
+
+  String currentPlayer = 'Player 1';
 
   void flipCard(String clickedCard) {
-    if (!isPlaying) {
+
+    if (!isPlaying && !disableDeck) {
       isPlaying = true;
-      timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-        initTimer();
-      });
+      startTimer();
     }
 
     setState(() {
@@ -149,7 +321,11 @@ class _Three extends State<Three> {
         String cardOneImg = getImagePath(cardOne);
         String cardTwoImg = getImagePath(cardTwo);
 
-        matchCards(cardOneImg, cardTwoImg); // ส่ง currentPlayer ไปยัง matchCards
+        showEnlargedImages(cardOneImg, cardTwoImg);
+        Future.delayed(Duration(milliseconds: 500), () {
+          matchCards(cardOneImg, cardTwoImg);
+          Navigator.of(context).pop();
+        });
       }
     }
   }
@@ -175,7 +351,7 @@ class _Three extends State<Three> {
         disableDeck = false;
       });
     } else {
-      Future.delayed(Duration(milliseconds: 400), () {
+      Future.delayed(Duration(milliseconds: 500), () {
         if (isFlipped[int.parse(cardOne) - 1]) {
           setState(() {
             isFlipped[int.parse(cardOne) - 1] = false;
@@ -218,14 +394,12 @@ class _Three extends State<Three> {
 
     List<String> shuffledPicImages = [];
     List<String> shuffledWordImages = [];
-    List<bool> isPic = []; // เพิ่มตัวแปรเพื่อเก็บข้อมูลว่าแต่ละการ์ดควรเป็นรูปภาพหรือคำอธิบาย
+    List<bool> isPic = [];
 
-    // สุ่มเลือกว่าแต่ละการ์ดควรเป็นรูปภาพหรือคำอธิบาย
     for (int i = 0; i < DataCountCardThree.countCard.first.count_card ~/ 2; i++) {
       isPic.add(random.nextBool());
     }
 
-    // สร้างลิสต์การ์ดใหม่โดยเลือกตามค่าที่สุ่มได้
     for (int i = 0; i < DataCountCardThree.countCard.first.count_card ~/ 2; i++) {
       if (isPic[i]) {
         shuffledPicImages.add(picImages[randomPositions[i]]);
@@ -255,7 +429,7 @@ class _Three extends State<Three> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Three Player Mode',
+          'Three Player',
           style: TextStyle(
             color: Colors.black,
             fontSize: 40.0,
@@ -264,6 +438,62 @@ class _Three extends State<Three> {
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () {
+            pauseTimer();
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  alignment: Alignment.center,
+                  title: Text("Menu",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30.0,
+                      fontFamily: 'TonphaiThin',
+                      fontWeight: FontWeight.bold,
+                    ),),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          resumeTimer();
+                        },
+                        child: Text('Resume',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          resumeTimer();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => SelectPeople()),
+                          );
+                        },
+                        child: Text('Back To Menu',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
       body: Stack(
         children: [
@@ -291,6 +521,7 @@ class _Three extends State<Three> {
                         'Player 1',
                         style: TextStyle(
                           fontSize: 20,
+                          fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
                           color: currentPlayer == 'Player 1' ? Colors.white : Colors.black,
                         ),
@@ -307,6 +538,7 @@ class _Three extends State<Three> {
                         'Player 2',
                         style: TextStyle(
                           fontSize: 20,
+                          fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
                           color: currentPlayer == 'Player 2' ? Colors.white : Colors.black,
                         ),
@@ -314,10 +546,20 @@ class _Three extends State<Three> {
                     ),
                   ],
                 ),
-                Text(
-                  'Time: $timeLeft',
-                  style: TextStyle(
-                    fontSize: 30,
+                Container(
+                  padding: EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black, width: 2.0),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Text(
+                    'Time: $timeLeft',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontFamily: 'TonphaiThin',
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Container(
@@ -371,7 +613,7 @@ class _Three extends State<Three> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(right: 20, bottom: 20), // ปรับให้ Player 3 อยู่ด้านล่างซ้าย
+                      margin: EdgeInsets.only(left: 20, bottom: 20),
                       decoration: BoxDecoration(
                         color: currentPlayer == 'Player 3' ? Colors.red : Colors.transparent,
                         borderRadius: BorderRadius.circular(10),
@@ -381,6 +623,7 @@ class _Three extends State<Three> {
                         'Player 3',
                         style: TextStyle(
                           fontSize: 20,
+                          fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
                           color: currentPlayer == 'Player 3' ? Colors.white : Colors.black,
                         ),

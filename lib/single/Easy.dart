@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:match_word/setting/DataSinglePlayer.dart';
+import 'package:match_word/single/Level.dart';
 class Easy extends StatefulWidget {
   @override
   _Easy createState() => _Easy();
@@ -58,7 +59,7 @@ class _Easy extends State<Easy> {
   void showResultDialog(bool isWin) {
     List<String> playedWordsList = isWin ? playedWords : picImages;
     bool showWords = false;
-    double dialogHeight = MediaQuery.of(context).size.height * 0.2; // ความสูงเริ่มต้นของ AlertDialog
+    double dialogHeight = MediaQuery.of(context).size.height * 0.2;
 
     showDialog(
       context: context,
@@ -69,8 +70,8 @@ class _Easy extends State<Easy> {
               contentPadding: EdgeInsets.zero,
               content: Container(
                 padding: EdgeInsets.all(20.0),
-                width: MediaQuery.of(context).size.width * 0.2,
-                height: dialogHeight, // ใช้ตัวแปร dialogHeight เป็นค่าความสูงของ AlertDialog
+                width: MediaQuery.of(context).size.width * 0.1,
+                height: dialogHeight,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -78,13 +79,22 @@ class _Easy extends State<Easy> {
                       child: Text(
                         matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2 ? "You Win" : "You Lose",
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 30,
                           color: matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2 ? Colors.green : Colors.red,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     SizedBox(height: 10),
-                    Text("Total flips: $flips", style: TextStyle(fontSize: 16)),
+                    Text("Total flips: ${flips ~/ 2}",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontFamily: 'TonphaiThin',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     SizedBox(height: 20),
                     Expanded(
                       child: showWords
@@ -95,7 +105,10 @@ class _Easy extends State<Easy> {
                             title: Text(
                               playedWordsList[index],
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 15,
+                                color: Colors.black,
+                                fontFamily: 'TonphaiThin',
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           );
@@ -108,27 +121,63 @@ class _Easy extends State<Easy> {
               ),
               actions: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Visibility(
                       visible: !showWords,
-                      child: TextButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           setState(() {
                             showWords = true;
-                            // เปลี่ยนความสูงของ AlertDialog เมื่อแสดงคำศัพท์
                             dialogHeight = MediaQuery.of(context).size.height * 0.6;
                           });
                         },
-                        child: Text("Show Words"),
+                        child: Text(
+                          "Words",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
-                    Spacer(), // เพิ่ม Spacer เพื่อจัดวางปุ่ม OK ไปทางขวาสุด
-                    TextButton(
+                    SizedBox(width: 5),
+                    ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                         shuffleCard();
                       },
-                      child: Text("OK"),
+                      child: Text(
+                        "Retry",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        resumeTimer();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => Level()),
+                        );
+                      },
+                      child: Text(
+                        "Back",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -140,15 +189,20 @@ class _Easy extends State<Easy> {
     );
   }
 
+  void startTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      initTimer();
+    });
+  }
 
   void initTimer() {
     if (timeLeft <= 0 || matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2) {
       timer?.cancel();
       if (matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2) {
-        showResultDialog(true); // แสดงผลว่าชนะ
+        showResultDialog(true);
       } else {
         disableDeck = true;
-        showResultDialog(false); // แสดงผลว่าแพ้
+        showResultDialog(false);
         Future.delayed(Duration(milliseconds: 500), () {
           disableDeck = false;
         });
@@ -160,13 +214,18 @@ class _Easy extends State<Easy> {
     });
   }
 
+  void pauseTimer() {
+    timer?.cancel();
+  }
+
+  void resumeTimer() {
+    startTimer();
+  }
 
   void flipCard(String clickedCard) {
     if (!isPlaying) {
       isPlaying = true;
-      timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-        initTimer();
-      });
+      startTimer();
     }
 
     setState(() {
@@ -212,7 +271,7 @@ class _Easy extends State<Easy> {
         disableDeck = false;
       });
     } else {
-      Future.delayed(Duration(milliseconds: 400), () {
+      Future.delayed(Duration(milliseconds: 500), () {
         if (isFlipped[int.parse(cardOne) - 1]) {
           setState(() {
             isFlipped[int.parse(cardOne) - 1] = false;
@@ -245,14 +304,12 @@ class _Easy extends State<Easy> {
 
     List<String> shuffledPicImages = [];
     List<String> shuffledWordImages = [];
-    List<bool> isPic = []; // เพิ่มตัวแปรเพื่อเก็บข้อมูลว่าแต่ละการ์ดควรเป็นรูปภาพหรือคำอธิบาย
+    List<bool> isPic = [];
 
-    // สุ่มเลือกว่าแต่ละการ์ดควรเป็นรูปภาพหรือคำอธิบาย
     for (int i = 0; i < DataCountCardEasy.countCard.first.count_card ~/ 2; i++) {
       isPic.add(random.nextBool());
     }
 
-    // สร้างลิสต์การ์ดใหม่โดยเลือกตามค่าที่สุ่มได้
     for (int i = 0; i < DataCountCardEasy.countCard.first.count_card ~/ 2; i++) {
       if (isPic[i]) {
         shuffledPicImages.add(picImages[randomPositions[i]]);
@@ -291,6 +348,62 @@ class _Easy extends State<Easy> {
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () {
+            pauseTimer();
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  alignment: Alignment.center,
+                  title: Text("Menu",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30.0,
+                      fontFamily: 'TonphaiThin',
+                      fontWeight: FontWeight.bold,
+                    ),),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          resumeTimer();
+                        },
+                        child: Text('Resume',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          resumeTimer();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => Level()),
+                          );
+                        },
+                        child: Text('Back To Menu',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
       body: Stack(
         children: [
@@ -304,14 +417,23 @@ class _Easy extends State<Easy> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Time: $timeLeft',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontFamily: 'TonphaiThin',
-                    fontWeight: FontWeight.bold,
+                Container(
+                  padding: EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black, width: 2.0),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Text(
+                    'Time: $timeLeft',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontFamily: 'TonphaiThin',
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
+                SizedBox(height: 30),
                 Container(
                   margin: EdgeInsets.all(20.0),
                   padding: EdgeInsets.all(10.0),

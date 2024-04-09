@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:match_word/login/Home_Play.dart';
-import 'package:match_word/login/Level.dart';
+import 'package:match_word/single/Level.dart';
 import 'package:match_word/multi/SelectPeople.dart';
 class SingleOrMulti extends StatefulWidget {
   SingleOrMulti({Key? key}) : super(key: key);
@@ -48,7 +48,7 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30), // เพิ่มระยะห่างที่นี่
+                  SizedBox(height: 30),
                   RoundedButton(
                     'Single Player',
                         () {
@@ -68,7 +68,7 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                     buttonWidth: 250.0,
                     buttonHeight: 50.0,
                   ),
-                  SizedBox(height: 20), // เพิ่มระยะห่างที่นี่
+                  SizedBox(height: 20),
                   RoundedButton(
                     'Multi player',
                         () {

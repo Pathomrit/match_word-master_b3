@@ -15,8 +15,6 @@ class _PlayPageState extends State<PlayPage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              //bluegradient
-              //bluebackground
               'assets/images/bluegradient.jpg',
               fit: BoxFit.cover,
             ),
