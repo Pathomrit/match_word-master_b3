@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:match_word/single/Easy.dart';
 import 'package:match_word/single/Hard.dart';
 import 'package:match_word/single/Medium.dart';
+import 'package:match_word/setting/DataSinglePlayer.dart';
 class Level extends StatefulWidget {
   Level({Key? key}) : super(key: key);
 
@@ -98,7 +99,18 @@ class _Level extends State<Level> {
                   buttonWidth: 250.0,
                   buttonHeight: 50.0,
                 ),
-                SizedBox(height: 30,),
+                SizedBox(height: 30),
+                IconButton(
+                  icon: Icon(Icons.settings_applications_outlined),
+                  iconSize: 60,
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => SinglePlayerSetting()),
+                    );
+                  },
+                ),
               ],
             ),
           ),

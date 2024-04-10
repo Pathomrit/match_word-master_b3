@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:match_word/login/Single_Multi.dart';
-import 'package:match_word/setting/SettingPage.dart';
+import 'package:match_word/setting/SettingRequest.dart';
 class PlayPage extends StatefulWidget {
   PlayPage({Key? key}) : super(key: key);
   @override
@@ -113,7 +113,7 @@ class _PlayPageState extends State<PlayPage> {
                         RoundedButton('⚙️ Setting', () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => SettingPage()),
+                            MaterialPageRoute(builder: (context) => Request()),
                           );
                         },
                           textStyle: TextStyle(

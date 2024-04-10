@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:match_word/setting/DataMultiPlayer.dart';
 import 'package:match_word/setting/DataSinglePlayer.dart';
+import 'package:match_word/multi/fourpeople/Four.dart';
 class SettingPage extends StatefulWidget{
   SettingPage({Key? key}) : super(key: key);
 
@@ -60,7 +60,7 @@ class _SettingPage extends State<SettingPage>{
                 RoundedButton('Multi', () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MultiPlayerSetting()),
+                   MaterialPageRoute(builder: (context) =>  Four()),
                   );
                 },
                   textStyle: TextStyle(

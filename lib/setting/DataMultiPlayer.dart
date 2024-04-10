@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:match_word/multi/SelectPeople.dart';
 import 'package:match_word/setting/Setting.dart';
 
 class MultiPlayerSetting extends StatefulWidget{
   MultiPlayerSetting({Key? key}) : super(key: key);
-
   @override
   _MultiPlayerSetting createState() => _MultiPlayerSetting();
+
 }
 class DataColumCardTwo {
   static List<InputColumnTwo> count = [
@@ -54,10 +55,15 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Setting",
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Setting"),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
         body: Stack(
           children: [
@@ -73,7 +79,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Two Player Mode Setting", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)), // Centered heading
+                  Text("Two Player Mode Setting", style: TextStyle(fontSize: 30 ,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold)),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -117,7 +123,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                       ),
                     ],
                   ),
-                  Text("Three Player Mode Setting", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text("Three Player Mode Setting", style: TextStyle(fontSize: 30,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold)),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -161,7 +167,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                       ),
                     ],
                   ),
-                  Text("Four Player Mode Setting", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text("Four Player Mode Setting", style: TextStyle(fontSize: 30,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold)),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -228,8 +234,20 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                           DataColumCardFour.count = [inputDataFour];
                           InputCardFour inputDataCardFour = InputCardFour(count_card: int.parse(countTextFour));
                           DataCountCardFour.countCard = [inputDataCardFour];
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SelectPeople()),
+                          );
                         },
-                        child: Text('Save'),
+                          child: Text(
+                            "Save",
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.black,
+                              fontFamily: 'TonphaiThin',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                       ),
                       SizedBox(width: 20),
                       ElevatedButton(
@@ -253,7 +271,14 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                           DataCountCardFour.countCard = [defaultInputDataCardFour];
                           _countControllerFour.clear();
                         },
-                        child: Text('Reset'),
+                        child: Text('Reset',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 30,
+                              fontFamily: 'TonphaiThin',
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
                       ),
                     ],
                   ),

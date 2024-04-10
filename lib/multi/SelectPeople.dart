@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:match_word/multi/twopeople/Two.dart';
 import 'package:match_word/multi/threepeople/Three.dart';
 import 'package:match_word/multi/fourpeople/Four.dart';
+import 'package:match_word/setting/DataMultiPlayer.dart';
 class SelectPeople extends StatefulWidget {
   SelectPeople({Key? key}) : super(key: key);
   @override
@@ -97,7 +98,18 @@ class _SelectPeople extends State<SelectPeople> {
                   buttonWidth: 250.0,
                   buttonHeight: 50.0,
                 ),
-                SizedBox(height: 30,),
+                SizedBox(height: 30),
+                IconButton(
+                  icon: Icon(Icons.settings_applications_outlined),
+                  iconSize: 60,
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => MultiPlayerSetting()),
+                    );
+                  },
+                ),
               ],
             ),
           ),

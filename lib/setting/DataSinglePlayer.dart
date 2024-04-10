@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:match_word/setting/Setting.dart';
+import 'package:match_word/single/Level.dart';
 class SinglePlayerSetting extends StatefulWidget{
   SinglePlayerSetting({Key? key}) : super(key: key);
 
@@ -52,10 +53,16 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "Setting",
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Setting"),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
         body: Stack(
           children: [
@@ -73,7 +80,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Text("Easy Mode Setting", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    child: Text("Easy Mode Setting", style: TextStyle(fontSize: 30,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(height: 20),
                   Row(
@@ -118,7 +125,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                       ),
                     ],
                   ),
-                  Text("Medium Mode Setting", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text("Medium Mode Setting", style: TextStyle(fontSize: 30,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold)),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -162,7 +169,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                       ),
                     ],
                   ),
-                  Text("Hard Mode Setting", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text("Hard Mode Setting", style: TextStyle(fontSize: 30,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold)),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -229,8 +236,20 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                           DataColumCardHard.count = [inputDataHard];
                           InputCardHard inputDataCardHard = InputCardHard(count_card: int.parse(countTextHard));
                           DataCountCardHard.countCard = [inputDataCardHard];
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Level()),
+                          );
                         },
-                        child: Text('Save'),
+                        child: Text(
+                          "Save",
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.black,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       SizedBox(width: 20),
                       ElevatedButton(
@@ -254,7 +273,14 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                           DataCountCardHard.countCard = [defaultInputDataCardHard];
                           _countControllerHard.clear();
                         },
-                        child: Text('Reset'),
+                        child: Text('Reset',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 30,
+                              fontFamily: 'TonphaiThin',
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
                       ),
                     ],
                   ),

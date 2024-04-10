@@ -484,7 +484,8 @@ class _Four extends State<Four> {
                             fontSize: 20.0,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
-                          ),),
+                          ),
+                        ),
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -501,7 +502,8 @@ class _Four extends State<Four> {
                             fontSize: 20.0,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
-                          ),),
+                          ),
+                        ),
                       ),
                     ],
                   ),
