@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:match_word/login/Single_Multi.dart';
 import 'package:match_word/multi/twopeople/Two.dart';
 import 'package:match_word/multi/threepeople/Three.dart';
 import 'package:match_word/multi/fourpeople/Four.dart';
@@ -128,7 +129,15 @@ class GamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Game - $level'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => SingleOrMulti()),
+            );
+          },
+        ),
       ),
       body: Center(
         child: Text(

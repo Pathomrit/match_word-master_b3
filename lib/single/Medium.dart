@@ -218,7 +218,9 @@ class _Medium extends State<Medium> {
   }
 
   void startTimer() {
-    startTimer();
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      initTimer();
+    });
   }
 
   void initTimer() {
@@ -368,7 +370,7 @@ class _Medium extends State<Medium> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Easy Mode',
+          'Medium Mode',
           style: TextStyle(
             color: Colors.black,
             fontSize: 40.0,

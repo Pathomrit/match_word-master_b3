@@ -61,7 +61,10 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => SelectPeople()),
+              );
             },
           ),
         ),

@@ -381,7 +381,7 @@ class _Hard extends State<Hard> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Easy Mode',
+          'Hard Mode',
           style: TextStyle(
             color: Colors.black,
             fontSize: 40.0,

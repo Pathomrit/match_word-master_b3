@@ -60,7 +60,10 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Level()),
+              );
             },
           ),
         ),
@@ -236,7 +239,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                           DataColumCardHard.count = [inputDataHard];
                           InputCardHard inputDataCardHard = InputCardHard(count_card: int.parse(countTextHard));
                           DataCountCardHard.countCard = [inputDataCardHard];
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) => Level()),
                           );
