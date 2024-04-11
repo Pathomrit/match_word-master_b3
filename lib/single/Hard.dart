@@ -3,12 +3,25 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:match_word/setting/DataSinglePlayer.dart';
 import 'package:match_word/single/Level.dart';
+
 class Hard extends StatefulWidget {
   @override
   _Hard createState() => _Hard();
 }
 
 class _Hard extends State<Hard> {
+  String selectedBgImage = '';
+
+  void RandomBg() {
+    List<String> bgImages = [
+      'assets/images/BgGame.png',
+      'assets/images/BgGame1.png',
+      'assets/images/GbGame2.png',
+    ];
+    Random randomBg = Random();
+    int bgIndex = randomBg.nextInt(bgImages.length);
+    selectedBgImage = bgImages[bgIndex];
+  }
   List<String> picImages = [
     "Pic/Castle.png",
     "Pic/King.png",
@@ -95,8 +108,10 @@ class _Hard extends State<Hard> {
   @override
   void initState() {
     super.initState();
+    RandomBg();
     shuffleCard();
   }
+
   void showResultDialog(bool isWin) {
     List<String> playedWordsList = isWin ? playedWords : picImages;
     bool showWords = false;
@@ -118,17 +133,27 @@ class _Hard extends State<Hard> {
                   children: [
                     Center(
                       child: Text(
-                        matchedCard == DataCountCardHard.countCard.first.count_card ~/ 2 ? "You Win" : "You Lose",
+                        matchedCard ==
+                                DataCountCardHard.countCard.first.count_card ~/
+                                    2
+                            ? "You Win"
+                            : "You Lose",
                         style: TextStyle(
                           fontSize: 30,
-                          color: matchedCard == DataCountCardHard.countCard.first.count_card ~/ 2 ? Colors.green : Colors.red,
+                          color: matchedCard ==
+                                  DataCountCardHard
+                                          .countCard.first.count_card ~/
+                                      2
+                              ? Colors.green
+                              : Colors.red,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     SizedBox(height: 10),
-                    Text("Total flips: ${flips ~/ 2}",
+                    Text(
+                      "Total flips: ${flips ~/ 2}",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.black,
@@ -140,21 +165,21 @@ class _Hard extends State<Hard> {
                     Expanded(
                       child: showWords
                           ? ListView.builder(
-                        itemCount: playedWordsList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(
-                              playedWordsList[index],
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                                fontFamily: 'TonphaiThin',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        },
-                      )
+                              itemCount: playedWordsList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  title: Text(
+                                    playedWordsList[index],
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
                           : SizedBox(),
                     ),
                   ],
@@ -170,7 +195,8 @@ class _Hard extends State<Hard> {
                         onPressed: () {
                           setState(() {
                             showWords = true;
-                            dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                            dialogHeight =
+                                MediaQuery.of(context).size.height * 0.6;
                           });
                         },
                         child: Text(
@@ -237,7 +263,8 @@ class _Hard extends State<Hard> {
   }
 
   void initTimer() {
-    if (timeLeft <= 0 || matchedCard == DataCountCardHard.countCard.first.count_card ~/ 2) {
+    if (timeLeft <= 0 ||
+        matchedCard == DataCountCardHard.countCard.first.count_card ~/ 2) {
       timer?.cancel();
       if (matchedCard == DataCountCardHard.countCard.first.count_card ~/ 2) {
         showResultDialog(true);
@@ -262,7 +289,6 @@ class _Hard extends State<Hard> {
   void resumeTimer() {
     startTimer();
   }
-
 
   void flipCard(String clickedCard) {
     if (!isPlaying) {
@@ -337,7 +363,8 @@ class _Hard extends State<Hard> {
     Random random = Random();
     List<int> randomPositions = [];
 
-    while (randomPositions.length < DataCountCardHard.countCard.first.count_card ~/ 2) {
+    while (randomPositions.length <
+        DataCountCardHard.countCard.first.count_card ~/ 2) {
       int randomPosition = random.nextInt(picImages.length);
       if (!randomPositions.contains(randomPosition)) {
         randomPositions.add(randomPosition);
@@ -348,11 +375,15 @@ class _Hard extends State<Hard> {
     List<String> shuffledWordImages = [];
     List<bool> isPic = [];
 
-    for (int i = 0; i < DataCountCardHard.countCard.first.count_card ~/ 2; i++) {
+    for (int i = 0;
+        i < DataCountCardHard.countCard.first.count_card ~/ 2;
+        i++) {
       isPic.add(random.nextBool());
     }
 
-    for (int i = 0; i < DataCountCardHard.countCard.first.count_card ~/ 2; i++) {
+    for (int i = 0;
+        i < DataCountCardHard.countCard.first.count_card ~/ 2;
+        i++) {
       if (isPic[i]) {
         shuffledPicImages.add(picImages[randomPositions[i]]);
         shuffledWordImages.add(wordImages[randomPositions[i]]);
@@ -372,7 +403,8 @@ class _Hard extends State<Hard> {
       cardTwo = "";
       timer?.cancel();
       isPlaying = false;
-      isFlipped = List.filled(DataCountCardHard.countCard.first.count_card, false);
+      isFlipped =
+          List.filled(DataCountCardHard.countCard.first.count_card, false);
     });
   }
 
@@ -381,7 +413,7 @@ class _Hard extends State<Hard> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Easy Mode',
+          'Hard Mode',
           style: TextStyle(
             color: Colors.black,
             fontSize: 40.0,
@@ -399,13 +431,15 @@ class _Hard extends State<Hard> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   alignment: Alignment.center,
-                  title: Text("Menu",
+                  title: Text(
+                    "Menu",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 30.0,
                       fontFamily: 'TonphaiThin',
                       fontWeight: FontWeight.bold,
-                    ),),
+                    ),
+                  ),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -414,13 +448,15 @@ class _Hard extends State<Hard> {
                           Navigator.pop(context);
                           resumeTimer();
                         },
-                        child: Text('Resume',
+                        child: Text(
+                          'Resume',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
-                          ),),
+                          ),
+                        ),
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -431,13 +467,15 @@ class _Hard extends State<Hard> {
                             MaterialPageRoute(builder: (context) => Level()),
                           );
                         },
-                        child: Text('Back To Menu',
+                        child: Text(
+                          'Back To Menu',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
-                          ),),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -451,7 +489,7 @@ class _Hard extends State<Hard> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/BgGame.png',
+              selectedBgImage,
               fit: BoxFit.cover,
             ),
           ),
@@ -466,12 +504,28 @@ class _Hard extends State<Hard> {
                     border: Border.all(color: Colors.black, width: 2.0),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child: Text(
-                    'Time: $timeLeft',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontFamily: 'TonphaiThin',
-                      fontWeight: FontWeight.bold,
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Time: ',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '$timeLeft',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                            color: timeLeft < 6 ? Colors.red : Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -508,13 +562,13 @@ class _Hard extends State<Hard> {
                             child: InkWell(
                               child: isFlipped[index]
                                   ? Image.asset(
-                                getImagePath((index + 1).toString()),
-                                fit: BoxFit.cover,
-                              )
+                                      getImagePath((index + 1).toString()),
+                                      fit: BoxFit.cover,
+                                    )
                                   : Image.asset(
-                                'assets/BgCard/Star.png',
-                                fit: BoxFit.cover,
-                              ),
+                                      'assets/BgCard/Star.png',
+                                      fit: BoxFit.cover,
+                                    ),
                             ),
                           ),
                         ),

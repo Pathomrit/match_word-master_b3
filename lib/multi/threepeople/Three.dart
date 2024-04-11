@@ -3,12 +3,25 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:match_word/setting/DataMultiPlayer.dart';
 import 'package:match_word/multi/SelectPeople.dart';
+
 class Three extends StatefulWidget {
   @override
   _Three createState() => _Three();
 }
 
 class _Three extends State<Three> {
+  String selectedBgImage = '';
+
+  void RandomBg() {
+    List<String> bgImages = [
+      'assets/images/BgGame.png',
+      'assets/images/BgGame1.png',
+      'assets/images/GbGame2.png',
+    ];
+    Random randomBg = Random();
+    int bgIndex = randomBg.nextInt(bgImages.length);
+    selectedBgImage = bgImages[bgIndex];
+  }
   List<String> picImages = [
     "Pic/Castle.png",
     "Pic/King.png",
@@ -55,7 +68,6 @@ class _Three extends State<Three> {
     "Word/Knight.png",
     "Word/Kid.png",
     "Word/archer.png",
-
   ];
 
   List<String> playedWords = [
@@ -82,6 +94,7 @@ class _Three extends State<Three> {
   @override
   void initState() {
     super.initState();
+    RandomBg();
     shuffleCard();
   }
 
@@ -114,17 +127,27 @@ class _Three extends State<Three> {
                   children: [
                     Center(
                       child: Text(
-                        matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2 ? "$winner Wins" : "You Lose",
+                        matchedCard ==
+                                DataCountCardThree.countCard.first.count_card ~/
+                                    2
+                            ? "$winner Wins"
+                            : "You Lose",
                         style: TextStyle(
                           fontSize: 30,
-                          color: matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2 ? Colors.green : Colors.red,
+                          color: matchedCard ==
+                                  DataCountCardThree
+                                          .countCard.first.count_card ~/
+                                      2
+                              ? Colors.green
+                              : Colors.red,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     SizedBox(height: 10),
-                    Text("Total flips: ${flips ~/ 2}",
+                    Text(
+                      "Total flips: ${flips ~/ 2}",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.black,
@@ -136,21 +159,21 @@ class _Three extends State<Three> {
                     Expanded(
                       child: showWords
                           ? ListView.builder(
-                        itemCount: playedWordsList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(
-                              playedWordsList[index],
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                                fontFamily: 'TonphaiThin',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        },
-                      )
+                              itemCount: playedWordsList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  title: Text(
+                                    playedWordsList[index],
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
                           : SizedBox(),
                     ),
                   ],
@@ -166,7 +189,8 @@ class _Three extends State<Three> {
                         onPressed: () {
                           setState(() {
                             showWords = true;
-                            dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                            dialogHeight =
+                                MediaQuery.of(context).size.height * 0.6;
                           });
                         },
                         child: Text(
@@ -203,7 +227,8 @@ class _Three extends State<Three> {
                         resumeTimer();
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => SelectPeople()),
+                          MaterialPageRoute(
+                              builder: (context) => SelectPeople()),
                         );
                       },
                       child: Text(
@@ -232,9 +257,9 @@ class _Three extends State<Three> {
     });
   }
 
-
   void initTimer() {
-    if (timeLeft <= 0 || matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2) {
+    if (timeLeft <= 0 ||
+        matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2) {
       timer?.cancel();
       if (matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2) {
         showResultDialog(true);
@@ -251,6 +276,7 @@ class _Three extends State<Three> {
       timeLeft--;
     });
   }
+
   void showEnlargedImages(String imagePath1, String imagePath2) {
     showDialog(
       context: context,
@@ -298,7 +324,6 @@ class _Three extends State<Three> {
   String currentPlayer = 'Player 1';
 
   void flipCard(String clickedCard) {
-
     if (!isPlaying && !disableDeck) {
       isPlaying = true;
       startTimer();
@@ -379,13 +404,12 @@ class _Three extends State<Three> {
     }
   }
 
-
-
   void shuffleCard() {
     Random random = Random();
     List<int> randomPositions = [];
 
-    while (randomPositions.length < DataCountCardThree.countCard.first.count_card ~/ 2) {
+    while (randomPositions.length <
+        DataCountCardThree.countCard.first.count_card ~/ 2) {
       int randomPosition = random.nextInt(picImages.length);
       if (!randomPositions.contains(randomPosition)) {
         randomPositions.add(randomPosition);
@@ -396,11 +420,15 @@ class _Three extends State<Three> {
     List<String> shuffledWordImages = [];
     List<bool> isPic = [];
 
-    for (int i = 0; i < DataCountCardThree.countCard.first.count_card ~/ 2; i++) {
+    for (int i = 0;
+        i < DataCountCardThree.countCard.first.count_card ~/ 2;
+        i++) {
       isPic.add(random.nextBool());
     }
 
-    for (int i = 0; i < DataCountCardThree.countCard.first.count_card ~/ 2; i++) {
+    for (int i = 0;
+        i < DataCountCardThree.countCard.first.count_card ~/ 2;
+        i++) {
       if (isPic[i]) {
         shuffledPicImages.add(picImages[randomPositions[i]]);
         shuffledWordImages.add(wordImages[randomPositions[i]]);
@@ -420,7 +448,8 @@ class _Three extends State<Three> {
       cardTwo = "";
       timer?.cancel();
       isPlaying = false;
-      isFlipped = List.filled(DataCountCardThree.countCard.first.count_card, false);
+      isFlipped =
+          List.filled(DataCountCardThree.countCard.first.count_card, false);
     });
   }
 
@@ -447,13 +476,15 @@ class _Three extends State<Three> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   alignment: Alignment.center,
-                  title: Text("Menu",
+                  title: Text(
+                    "Menu",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 30.0,
                       fontFamily: 'TonphaiThin',
                       fontWeight: FontWeight.bold,
-                    ),),
+                    ),
+                  ),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -462,13 +493,15 @@ class _Three extends State<Three> {
                           Navigator.pop(context);
                           resumeTimer();
                         },
-                        child: Text('Resume',
+                        child: Text(
+                          'Resume',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
-                          ),),
+                          ),
+                        ),
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -476,16 +509,19 @@ class _Three extends State<Three> {
                           resumeTimer();
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => SelectPeople()),
+                            MaterialPageRoute(
+                                builder: (context) => SelectPeople()),
                           );
                         },
-                        child: Text('Back To Menu',
+                        child: Text(
+                          'Back To Menu',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
-                          ),),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -499,7 +535,7 @@ class _Three extends State<Three> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/BgGame.png',
+              selectedBgImage,
               fit: BoxFit.cover,
             ),
           ),
@@ -513,8 +549,9 @@ class _Three extends State<Three> {
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 1' ? Colors.red : Colors.transparent,
+                        color: currentPlayer == 'Player 1' ? Colors.red : Colors.white,
                         borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.black, width: 2),
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
@@ -523,15 +560,16 @@ class _Three extends State<Three> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 1' ? Colors.white : Colors.black,
+                          color: currentPlayer == 'Player 1' ? Colors.black : Colors.black,
                         ),
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(right: 20),
+                      margin: EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 2' ? Colors.red : Colors.transparent,
+                        color: currentPlayer == 'Player 2' ? Colors.red : Colors.white,
                         borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.black, width: 2),
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
@@ -540,7 +578,7 @@ class _Three extends State<Three> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 2' ? Colors.white : Colors.black,
+                          color: currentPlayer == 'Player 2' ? Colors.black : Colors.black,
                         ),
                       ),
                     ),
@@ -553,12 +591,28 @@ class _Three extends State<Three> {
                     border: Border.all(color: Colors.black, width: 2.0),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child: Text(
-                    'Time: $timeLeft',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontFamily: 'TonphaiThin',
-                      fontWeight: FontWeight.bold,
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Time: ',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '$timeLeft',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                            color: timeLeft < 6 ? Colors.red : Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -571,7 +625,8 @@ class _Three extends State<Three> {
                   ),
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: DataColumCardThree.count.first.column_card,
+                      crossAxisCount:
+                          DataColumCardThree.count.first.column_card,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 30,
                     ),
@@ -595,13 +650,13 @@ class _Three extends State<Three> {
                             child: InkWell(
                               child: isFlipped[index]
                                   ? Image.asset(
-                                getImagePath((index + 1).toString()),
-                                fit: BoxFit.cover,
-                              )
+                                      getImagePath((index + 1).toString()),
+                                      fit: BoxFit.cover,
+                                    )
                                   : Image.asset(
-                                'assets/BgCard/Star.png',
-                                fit: BoxFit.cover,
-                              ),
+                                      'assets/BgCard/Star.png',
+                                      fit: BoxFit.cover,
+                                    ),
                             ),
                           ),
                         ),
@@ -613,10 +668,11 @@ class _Three extends State<Three> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 20, bottom: 20),
+                      margin: EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 3' ? Colors.red : Colors.transparent,
+                        color: currentPlayer == 'Player 3' ? Colors.red : Colors.white,
                         borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.black, width: 2),
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
@@ -625,7 +681,7 @@ class _Three extends State<Three> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 3' ? Colors.white : Colors.black,
+                          color: currentPlayer == 'Player 3' ? Colors.black : Colors.black,
                         ),
                       ),
                     ),

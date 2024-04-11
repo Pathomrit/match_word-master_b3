@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:match_word/login/Single_Multi.dart';
 import 'package:match_word/setting/SettingRequest.dart';
+
 class PlayPage extends StatefulWidget {
   PlayPage({Key? key}) : super(key: key);
+
   @override
   _PlayPageState createState() => _PlayPageState();
 }
+
 class _PlayPageState extends State<PlayPage> {
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,7 @@ class _PlayPageState extends State<PlayPage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/bluegradient.jpg',
+              'assets/images/homeMenu.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -78,25 +81,19 @@ class _PlayPageState extends State<PlayPage> {
                         ],
                       ),
                     ),
-                    Text(
-                      '--------------------🎮------------------',
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.black,
-                        fontFamily: 'TonphaiThin',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                     SizedBox(height: 80.0),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        RoundedButton('START', () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SingleOrMulti()),
-                          );
-                        },
+                        RoundedButton(
+                          'START',
+                          () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SingleOrMulti()),
+                            );
+                          },
                           textStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 30.0,
@@ -108,14 +105,16 @@ class _PlayPageState extends State<PlayPage> {
                           buttonWidth: 250.0,
                           buttonHeight: 50.0,
                         ),
-
                         SizedBox(height: 15.0),
-                        RoundedButton('⚙️ Setting', () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Request()),
-                          );
-                        },
+                        RoundedButton(
+                          '⚙️ Setting',
+                          () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Request()),
+                            );
+                          },
                           textStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 24.0,
@@ -128,9 +127,11 @@ class _PlayPageState extends State<PlayPage> {
                           buttonHeight: 50.0,
                         ),
                         SizedBox(height: 15.0),
-                        RoundedButton('Exit', () {
-                          SystemNavigator.pop();
-                        },
+                        RoundedButton(
+                          'Exit',
+                          () {
+                            SystemNavigator.pop();
+                          },
                           textStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 27.0,
@@ -154,6 +155,7 @@ class _PlayPageState extends State<PlayPage> {
     );
   }
 }
+
 class RoundedButton extends StatelessWidget {
   final String label;
   final Function onPressed;
@@ -164,13 +166,14 @@ class RoundedButton extends StatelessWidget {
   final double borderWidth;
 
   RoundedButton(
-      this.label, this.onPressed, {
-        required this.textStyle,
-        required this.buttonWidth,
-        required this.buttonHeight,
-        required this.borderColor,
-        required this.borderWidth,
-      });
+    this.label,
+    this.onPressed, {
+    required this.textStyle,
+    required this.buttonWidth,
+    required this.buttonHeight,
+    required this.borderColor,
+    required this.borderWidth,
+  });
 
   @override
   Widget build(BuildContext context) {

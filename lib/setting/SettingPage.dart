@@ -2,24 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:match_word/setting/DataSinglePlayer.dart';
 import 'package:match_word/multi/fourpeople/Four.dart';
-class SettingPage extends StatefulWidget{
+
+class SettingPage extends StatefulWidget {
   SettingPage({Key? key}) : super(key: key);
 
   @override
   _SettingPage createState() => _SettingPage();
 }
 
-class _SettingPage extends State<SettingPage>{
+class _SettingPage extends State<SettingPage> {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bluegradient.jpg'),
-            fit: BoxFit.cover,
-          )
-        ),
+            image: DecorationImage(
+          image: AssetImage('assets/images/bluegradient.jpg'),
+          fit: BoxFit.cover,
+        )),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -39,12 +39,15 @@ class _SettingPage extends State<SettingPage>{
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                RoundedButton('Single', () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SinglePlayerSetting()),
-                  );
-                },
+                RoundedButton(
+                  'Single',
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SinglePlayerSetting()),
+                    );
+                  },
                   textStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
@@ -57,12 +60,14 @@ class _SettingPage extends State<SettingPage>{
                   buttonHeight: 50.0,
                 ),
                 SizedBox(height: 15.0),
-                RoundedButton('Multi', () {
-                  Navigator.push(
-                    context,
-                   MaterialPageRoute(builder: (context) =>  Four()),
-                  );
-                },
+                RoundedButton(
+                  'Multi',
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Four()),
+                    );
+                  },
                   textStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
@@ -83,6 +88,7 @@ class _SettingPage extends State<SettingPage>{
     );
   }
 }
+
 class RoundedButton extends StatelessWidget {
   final String label;
   final Function onPressed;
@@ -93,13 +99,14 @@ class RoundedButton extends StatelessWidget {
   final double borderWidth;
 
   RoundedButton(
-      this.label, this.onPressed, {
-        required this.textStyle,
-        required this.buttonWidth,
-        required this.buttonHeight,
-        required this.borderColor,
-        required this.borderWidth,
-      });
+    this.label,
+    this.onPressed, {
+    required this.textStyle,
+    required this.buttonWidth,
+    required this.buttonHeight,
+    required this.borderColor,
+    required this.borderWidth,
+  });
 
   @override
   Widget build(BuildContext context) {

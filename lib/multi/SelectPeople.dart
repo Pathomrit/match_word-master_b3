@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:match_word/login/Single_Multi.dart';
 import 'package:match_word/multi/twopeople/Two.dart';
 import 'package:match_word/multi/threepeople/Three.dart';
 import 'package:match_word/multi/fourpeople/Four.dart';
 import 'package:match_word/setting/DataMultiPlayer.dart';
+
 class SelectPeople extends StatefulWidget {
   SelectPeople({Key? key}) : super(key: key);
+
   @override
   _SelectPeople createState() => _SelectPeople();
 }
@@ -13,8 +16,7 @@ class _SelectPeople extends State<SelectPeople> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-      ),
+      appBar: AppBar(),
       body: Stack(
         children: [
           Positioned.fill(
@@ -41,7 +43,7 @@ class _SelectPeople extends State<SelectPeople> {
                 SizedBox(height: 30.0),
                 RoundedButton(
                   'Two People',
-                      () {
+                  () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Two()),
@@ -58,10 +60,12 @@ class _SelectPeople extends State<SelectPeople> {
                   buttonWidth: 250.0,
                   buttonHeight: 50.0,
                 ),
-                SizedBox(height: 30,),
+                SizedBox(
+                  height: 30,
+                ),
                 RoundedButton(
                   'Three People',
-                      () {
+                  () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Three()),
@@ -78,10 +82,12 @@ class _SelectPeople extends State<SelectPeople> {
                   buttonWidth: 250.0,
                   buttonHeight: 50.0,
                 ),
-                SizedBox(height: 30,),
+                SizedBox(
+                  height: 30,
+                ),
                 RoundedButton(
                   'Four People',
-                      () {
+                  () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Four()),
@@ -99,18 +105,24 @@ class _SelectPeople extends State<SelectPeople> {
                   buttonHeight: 50.0,
                 ),
                 SizedBox(height: 30),
-                IconButton(
-                  icon: Icon(Icons.settings_applications_outlined),
-                  iconSize: 60,
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => MultiPlayerSetting()),
-                    );
-                  },
-                ),
               ],
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 20,
+            child: IconButton(
+              icon: Icon(Icons.settings_applications_outlined),
+              iconSize: 70,
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MultiPlayerSetting(),
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -128,7 +140,15 @@ class GamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Game - $level'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => SingleOrMulti()),
+            );
+          },
+        ),
       ),
       body: Center(
         child: Text(
@@ -150,13 +170,14 @@ class RoundedButton extends StatelessWidget {
   final double borderWidth;
 
   RoundedButton(
-      this.label, this.onPressed, {
-        required this.textStyle,
-        required this.buttonWidth,
-        required this.buttonHeight,
-        required this.borderColor,
-        required this.borderWidth,
-      });
+    this.label,
+    this.onPressed, {
+    required this.textStyle,
+    required this.buttonWidth,
+    required this.buttonHeight,
+    required this.borderColor,
+    required this.borderWidth,
+  });
 
   @override
   Widget build(BuildContext context) {

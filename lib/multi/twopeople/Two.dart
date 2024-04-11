@@ -3,13 +3,25 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:match_word/setting/DataMultiPlayer.dart';
 import 'package:match_word/multi/SelectPeople.dart';
+
 class Two extends StatefulWidget {
   @override
   _Two createState() => _Two();
 }
 
-
 class _Two extends State<Two> {
+  String selectedBgImage = '';
+
+  void RandomBg() {
+    List<String> bgImages = [
+      'assets/images/BgGame.png',
+      'assets/images/BgGame1.png',
+      'assets/images/GbGame2.png',
+    ];
+    Random randomBg = Random();
+    int bgIndex = randomBg.nextInt(bgImages.length);
+    selectedBgImage = bgImages[bgIndex];
+  }
   List<String> picImages = [
     "Pic/Castle.png",
     "Pic/King.png",
@@ -54,6 +66,7 @@ class _Two extends State<Two> {
   @override
   void initState() {
     super.initState();
+    RandomBg();
     shuffleCard();
   }
 
@@ -79,17 +92,25 @@ class _Two extends State<Two> {
                   children: [
                     Center(
                       child: Text(
-                        matchedCard == DataCountCardTwo.countCard.first.count_card ~/ 2 ? "$winner Wins" : "You Lose",
+                        matchedCard ==
+                                DataCountCardTwo.countCard.first.count_card ~/ 2
+                            ? "$winner Wins"
+                            : "You Lose",
                         style: TextStyle(
                           fontSize: 30,
-                          color: matchedCard == DataCountCardTwo.countCard.first.count_card ~/ 2 ? Colors.green : Colors.red,
+                          color: matchedCard ==
+                                  DataCountCardTwo.countCard.first.count_card ~/
+                                      2
+                              ? Colors.green
+                              : Colors.red,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     SizedBox(height: 10),
-                    Text("Total flips: ${flips ~/ 2}",
+                    Text(
+                      "Total flips: ${flips ~/ 2}",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.black,
@@ -101,21 +122,21 @@ class _Two extends State<Two> {
                     Expanded(
                       child: showWords
                           ? ListView.builder(
-                        itemCount: playedWordsList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(
-                              playedWordsList[index],
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                                fontFamily: 'TonphaiThin',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        },
-                      )
+                              itemCount: playedWordsList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  title: Text(
+                                    playedWordsList[index],
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
                           : SizedBox(),
                     ),
                   ],
@@ -131,7 +152,8 @@ class _Two extends State<Two> {
                         onPressed: () {
                           setState(() {
                             showWords = true;
-                            dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                            dialogHeight =
+                                MediaQuery.of(context).size.height * 0.6;
                           });
                         },
                         child: Text(
@@ -168,7 +190,8 @@ class _Two extends State<Two> {
                         resumeTimer();
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => SelectPeople()),
+                          MaterialPageRoute(
+                              builder: (context) => SelectPeople()),
                         );
                       },
                       child: Text(
@@ -191,16 +214,15 @@ class _Two extends State<Two> {
     );
   }
 
-
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       initTimer();
     });
   }
 
-
   void initTimer() {
-    if (timeLeft <= 0 || matchedCard == DataCountCardTwo.countCard.first.count_card ~/ 2) {
+    if (timeLeft <= 0 ||
+        matchedCard == DataCountCardTwo.countCard.first.count_card ~/ 2) {
       timer?.cancel();
       if (matchedCard == DataCountCardTwo.countCard.first.count_card ~/ 2) {
         showResultDialog(true);
@@ -217,6 +239,7 @@ class _Two extends State<Two> {
       timeLeft--;
     });
   }
+
   void showEnlargedImages(String imagePath1, String imagePath2) {
     showDialog(
       context: context,
@@ -264,7 +287,6 @@ class _Two extends State<Two> {
   String currentPlayer = 'Player 1';
 
   void flipCard(String clickedCard) {
-
     if (!isPlaying && !disableDeck) {
       isPlaying = true;
       startTimer();
@@ -295,7 +317,6 @@ class _Two extends State<Two> {
       }
     }
   }
-
 
   String getImagePath(String cardIndex) {
     int index = int.parse(cardIndex);
@@ -340,13 +361,12 @@ class _Two extends State<Two> {
     }
   }
 
-
-
   void shuffleCard() {
     Random random = Random();
     List<int> randomPositions = [];
 
-    while (randomPositions.length < DataCountCardTwo.countCard.first.count_card ~/ 2) {
+    while (randomPositions.length <
+        DataCountCardTwo.countCard.first.count_card ~/ 2) {
       int randomPosition = random.nextInt(picImages.length);
       if (!randomPositions.contains(randomPosition)) {
         randomPositions.add(randomPosition);
@@ -381,7 +401,8 @@ class _Two extends State<Two> {
       cardTwo = "";
       timer?.cancel();
       isPlaying = false;
-      isFlipped = List.filled(DataCountCardTwo.countCard.first.count_card, false);
+      isFlipped =
+          List.filled(DataCountCardTwo.countCard.first.count_card, false);
     });
   }
 
@@ -408,13 +429,15 @@ class _Two extends State<Two> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   alignment: Alignment.center,
-                  title: Text("Menu",
+                  title: Text(
+                    "Menu",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 30.0,
                       fontFamily: 'TonphaiThin',
                       fontWeight: FontWeight.bold,
-                    ),),
+                    ),
+                  ),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -423,13 +446,15 @@ class _Two extends State<Two> {
                           Navigator.pop(context);
                           resumeTimer();
                         },
-                        child: Text('Resume',
+                        child: Text(
+                          'Resume',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
-                          ),),
+                          ),
+                        ),
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -437,16 +462,19 @@ class _Two extends State<Two> {
                           resumeTimer();
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => SelectPeople()),
+                            MaterialPageRoute(
+                                builder: (context) => SelectPeople()),
                           );
                         },
-                        child: Text('Back To Menu',
+                        child: Text(
+                          'Back To Menu',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
-                          ),),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -460,7 +488,7 @@ class _Two extends State<Two> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/BgGame.png',
+              selectedBgImage,
               fit: BoxFit.cover,
             ),
           ),
@@ -474,25 +502,37 @@ class _Two extends State<Two> {
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 1' ? Colors.red : Colors.transparent,
+                        color: currentPlayer == 'Player 1' ? Colors.red : Colors.white,
                         borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.black, width: 2),
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
                         'Player 1',
-                        style: TextStyle(fontSize: 20,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold, color: currentPlayer == 'Player 1' ? Colors.white : Colors.black), // เลือกสีของข้อความตามตำแหน่งปัจจุบันของผู้เล่น
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                          color: currentPlayer == 'Player 1' ? Colors.black : Colors.black,
+                        ),
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(right: 20),
+                      margin: EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 2' ? Colors.red : Colors.transparent,
+                        color: currentPlayer == 'Player 2' ? Colors.red : Colors.white,
                         borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.black, width: 2),
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
                         'Player 2',
-                        style: TextStyle(fontSize: 20,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold, color: currentPlayer == 'Player 2' ? Colors.white : Colors.black), // เลือกสีของข้อความตามตำแหน่งปัจจุบันของผู้เล่น
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                          color: currentPlayer == 'Player 2' ? Colors.black : Colors.black,
+                        ),
                       ),
                     ),
                   ],
@@ -504,12 +544,28 @@ class _Two extends State<Two> {
                     border: Border.all(color: Colors.black, width: 2.0),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child: Text(
-                    'Time: $timeLeft',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontFamily: 'TonphaiThin',
-                      fontWeight: FontWeight.bold,
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Time: ',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '$timeLeft',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                            color: timeLeft < 6 ? Colors.red : Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -546,13 +602,13 @@ class _Two extends State<Two> {
                             child: InkWell(
                               child: isFlipped[index]
                                   ? Image.asset(
-                                getImagePath((index + 1).toString()),
-                                fit: BoxFit.cover,
-                              )
+                                      getImagePath((index + 1).toString()),
+                                      fit: BoxFit.cover,
+                                    )
                                   : Image.asset(
-                                'assets/BgCard/Star.png',
-                                fit: BoxFit.cover,
-                              ),
+                                      'assets/BgCard/Star.png',
+                                      fit: BoxFit.cover,
+                                    ),
                             ),
                           ),
                         ),

@@ -32,8 +32,8 @@ class _HomePageState extends State<HomePage> {
             var offsetAnimation = animation.drive(tween);
 
             return SlideTransition(
-              position: Tween(begin: Offset(1.0, 0.0), end: Offset.zero)
-                  .animate(
+              position:
+                  Tween(begin: Offset(1.0, 0.0), end: Offset.zero).animate(
                 CurvedAnimation(
                   parent: animation,
                   curve: Interval(delay, 1, curve: curve),

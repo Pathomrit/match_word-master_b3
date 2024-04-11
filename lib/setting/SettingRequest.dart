@@ -36,11 +36,35 @@ class _RequestState extends State<Request> {
   }
 
   void _saveImages() {
-    // Implement your saving logic here
-    // You can use _image1, _image2, _imageName1, and _imageName2
-    // for saving the images and their names
-    // For example:
-    // SaveLogic.saveImages(_image1, _image2, _imageName1, _imageName2);
+    if (_image1 != null && _image2 != null) {
+      // Implement your saving logic here
+      // For example, you can copy the images to a specific directory
+      // and rename them with the provided image names.
+
+      // Copy image 1
+      final String destinationPath1 =
+          'your_destination_directory/${_imageName1}';
+      _image1!.copy(destinationPath1);
+
+      // Copy image 2
+      final String destinationPath2 =
+          'C:\Users\d9_ca\Desktop\match_word-master\match_word-master\assets/${_imageName2}';
+      _image2!.copy(destinationPath2);
+
+      // Display a message to indicate successful saving
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Images saved successfully.'),
+        ),
+      );
+    } else {
+      // Display a message if any image is not selected
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please select both images.'),
+        ),
+      );
+    }
   }
 
   @override
@@ -90,22 +114,22 @@ class _RequestState extends State<Request> {
                             ),
                             _image1 != null
                                 ? Image.file(
-                              _image1!,
-                              height: 200,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            )
+                                    _image1!,
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
                                 : Container(
-                              height: 200,
-                              color: Colors.grey,
-                              child: Center(
-                                child: Icon(
-                                  Icons.image,
-                                  size: 100,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
+                                    height: 200,
+                                    color: Colors.grey,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.image,
+                                        size: 100,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                             TextFormField(
                               controller: _textFieldController1,
                               decoration: InputDecoration(
@@ -114,9 +138,11 @@ class _RequestState extends State<Request> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                _getImageFromGallery(1, _textFieldController1.text);
+                                _getImageFromGallery(
+                                    1, _textFieldController1.text);
                               },
-                              child: Text("Select Image 1",
+                              child: Text(
+                                "Select Image 1",
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.black,
@@ -149,22 +175,22 @@ class _RequestState extends State<Request> {
                             ),
                             _image2 != null
                                 ? Image.file(
-                              _image2!,
-                              height: 200,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            )
+                                    _image2!,
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
                                 : Container(
-                              height: 200,
-                              color: Colors.grey,
-                              child: Center(
-                                child: Icon(
-                                  Icons.image,
-                                  size: 100,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
+                                    height: 200,
+                                    color: Colors.grey,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.image,
+                                        size: 100,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                             TextFormField(
                               controller: _textFieldController2,
                               decoration: InputDecoration(
@@ -173,15 +199,17 @@ class _RequestState extends State<Request> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                _getImageFromGallery(2, _textFieldController2.text);
+                                _getImageFromGallery(
+                                    2, _textFieldController2.text);
                               },
-                              child: Text("Select Image 2",
+                              child: Text(
+                                "Select Image 2",
                                 style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                                fontFamily: 'TonphaiThin',
-                                fontWeight: FontWeight.bold,
-                              ),
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ],
@@ -196,7 +224,8 @@ class _RequestState extends State<Request> {
                 onPressed: () {
                   _saveImages();
                 },
-                child: Text("Save",
+                child: Text(
+                  "Save",
                   style: TextStyle(
                     fontSize: 30,
                     color: Colors.black,

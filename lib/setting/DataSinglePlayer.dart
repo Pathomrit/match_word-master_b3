@@ -2,44 +2,36 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:match_word/setting/Setting.dart';
 import 'package:match_word/single/Level.dart';
-class SinglePlayerSetting extends StatefulWidget{
+
+class SinglePlayerSetting extends StatefulWidget {
   SinglePlayerSetting({Key? key}) : super(key: key);
 
   @override
   _SinglePlayerSetting createState() => _SinglePlayerSetting();
 }
+
 class DataColumCardEasy {
-  static List<InputColumnEasy> count = [
-    InputColumnEasy(column_card: 4)
-  ];
+  static List<InputColumnEasy> count = [InputColumnEasy(column_card: 4)];
 }
 
 class DataCountCardEasy {
-  static List<InputCardEasy> countCard = [
-    InputCardEasy(count_card: 12)
-  ];
+  static List<InputCardEasy> countCard = [InputCardEasy(count_card: 12)];
 }
+
 class DataColumCardMedium {
-  static List<InputColumnMedium> count = [
-    InputColumnMedium(column_card: 4)
-  ];
+  static List<InputColumnMedium> count = [InputColumnMedium(column_card: 4)];
 }
 
 class DataCountCardMedium {
-  static List<InputCardMedium> countCard = [
-    InputCardMedium(count_card: 16)
-  ];
+  static List<InputCardMedium> countCard = [InputCardMedium(count_card: 16)];
 }
+
 class DataColumCardHard {
-  static List<InputColumnHard> count = [
-    InputColumnHard(column_card: 4)
-  ];
+  static List<InputColumnHard> count = [InputColumnHard(column_card: 4)];
 }
 
 class DataCountCardHard {
-  static List<InputCardHard> countCard = [
-    InputCardHard(count_card: 20)
-  ];
+  static List<InputCardHard> countCard = [InputCardHard(count_card: 20)];
 }
 
 class _SinglePlayerSetting extends State<SinglePlayerSetting> {
@@ -60,7 +52,10 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Level()),
+              );
             },
           ),
         ),
@@ -80,7 +75,11 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Text("Easy Mode Setting", style: TextStyle(fontSize: 30,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold)),
+                    child: Text("Easy Mode Setting",
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(height: 20),
                   Row(
@@ -96,7 +95,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                                 controller: _columnControllerEasy,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  labelText: 'Enter Column card',
+                                  labelText: 'Column card',
                                   border: OutlineInputBorder(),
                                 ),
                               ),
@@ -115,7 +114,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                                 controller: _countControllerEasy,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  labelText: 'Enter Count card',
+                                  labelText: 'Sum card',
                                   border: OutlineInputBorder(),
                                 ),
                               ),
@@ -125,7 +124,11 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                       ),
                     ],
                   ),
-                  Text("Medium Mode Setting", style: TextStyle(fontSize: 30,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold)),
+                  Text("Medium Mode Setting",
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold)),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -140,7 +143,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                                 controller: _columnControllerMedium,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  labelText: 'Enter Column card',
+                                  labelText: 'Column card',
                                   border: OutlineInputBorder(),
                                 ),
                               ),
@@ -159,7 +162,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                                 controller: _countControllerMedium,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  labelText: 'Enter Count card',
+                                  labelText: 'Sum card',
                                   border: OutlineInputBorder(),
                                 ),
                               ),
@@ -169,7 +172,11 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                       ),
                     ],
                   ),
-                  Text("Hard Mode Setting", style: TextStyle(fontSize: 30,fontFamily: 'TonphaiThin', fontWeight: FontWeight.bold)),
+                  Text("Hard Mode Setting",
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold)),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -184,7 +191,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                                 controller: _columnControllerHard,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  labelText: 'Enter Column card',
+                                  labelText: 'Column card',
                                   border: OutlineInputBorder(),
                                 ),
                               ),
@@ -203,7 +210,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                                 controller: _countControllerHard,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  labelText: 'Enter Count card',
+                                  labelText: 'Sum card',
                                   border: OutlineInputBorder(),
                                 ),
                               ),
@@ -218,28 +225,81 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          String columnTextEasy = _columnControllerEasy.text.isNotEmpty ? _columnControllerEasy.text : "4";
-                          String countTextEasy = _countControllerEasy.text.isNotEmpty ? _countControllerEasy.text : "12";
-                          InputColumnEasy inputDataEasy = InputColumnEasy(column_card: int.parse(columnTextEasy));
+                          String columnTextEasy =
+                              _columnControllerEasy.text.isNotEmpty
+                                  ? _columnControllerEasy.text
+                                  : "4";
+                          String countTextEasy =
+                              _countControllerEasy.text.isNotEmpty
+                                  ? _countControllerEasy.text
+                                  : "12";
+                          String columnTextMedium =
+                              _columnControllerMedium.text.isNotEmpty
+                                  ? _columnControllerMedium.text
+                                  : "4";
+                          String countTextMedium =
+                              _countControllerMedium.text.isNotEmpty
+                                  ? _countControllerMedium.text
+                                  : "16";
+                          String columnTextHard =
+                              _columnControllerHard.text.isNotEmpty
+                                  ? _columnControllerHard.text
+                                  : "4";
+                          String countTextHard =
+                              _countControllerHard.text.isNotEmpty
+                                  ? _countControllerHard.text
+                                  : "20";
+
+                          int countCardEasy = int.parse(countTextEasy);
+                          int countCardMedium = int.parse(countTextMedium);
+                          int countCardHard = int.parse(countTextHard);
+                          if (countCardEasy % 2 == 0 &&
+                              countCardMedium % 2 == 0 &&
+                              countCardHard % 2 == 0) {
+                            InputCardEasy inputDataCardEasy =
+                                InputCardEasy(count_card: countCardEasy);
+                            DataCountCardEasy.countCard = [inputDataCardEasy];
+                            InputCardMedium inputDataCardMedium =
+                                InputCardMedium(count_card: countCardMedium);
+                            DataCountCardMedium.countCard = [
+                              inputDataCardMedium
+                            ];
+                            InputCardHard inputDataCardHard =
+                                InputCardHard(count_card: countCardHard);
+                            DataCountCardHard.countCard = [inputDataCardHard];
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => Level()),
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Warning"),
+                                  content: Text(
+                                      "Please enter an even number for count card."),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("OK"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                          InputColumnEasy inputDataEasy = InputColumnEasy(
+                              column_card: int.parse(columnTextEasy));
                           DataColumCardEasy.count = [inputDataEasy];
-                          InputCardEasy inputDataCardEasy = InputCardEasy(count_card: int.parse(countTextEasy));
-                          DataCountCardEasy.countCard = [inputDataCardEasy];
-                          String columnTextMedium = _columnControllerMedium.text.isNotEmpty ? _columnControllerMedium.text : "4";
-                          String countTextMedium = _countControllerMedium.text.isNotEmpty ? _countControllerMedium.text : "16";
-                          InputColumnMedium inputDataMedium = InputColumnMedium(column_card: int.parse(columnTextMedium));
+                          InputColumnMedium inputDataMedium = InputColumnMedium(
+                              column_card: int.parse(columnTextMedium));
                           DataColumCardMedium.count = [inputDataMedium];
-                          InputCardMedium inputDataCardMedium = InputCardMedium(count_card: int.parse(countTextMedium));
-                          DataCountCardMedium.countCard = [inputDataCardMedium];
-                          String columnTextHard = _columnControllerHard.text.isNotEmpty ? _columnControllerHard.text : "4";
-                          String countTextHard = _countControllerHard.text.isNotEmpty ? _countControllerHard.text : "20";
-                          InputColumnHard inputDataHard = InputColumnHard(column_card: int.parse(columnTextHard));
+                          InputColumnHard inputDataHard = InputColumnHard(
+                              column_card: int.parse(columnTextHard));
                           DataColumCardHard.count = [inputDataHard];
-                          InputCardHard inputDataCardHard = InputCardHard(count_card: int.parse(countTextHard));
-                          DataCountCardHard.countCard = [inputDataCardHard];
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Level()),
-                          );
                         },
                         child: Text(
                           "Save",
@@ -254,32 +314,44 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                       SizedBox(width: 20),
                       ElevatedButton(
                         onPressed: () {
-                          InputColumnEasy defaultInputDataEasy = InputColumnEasy(column_card: 4);
+                          InputColumnEasy defaultInputDataEasy =
+                              InputColumnEasy(column_card: 4);
                           DataColumCardEasy.count = [defaultInputDataEasy];
                           _columnControllerEasy.clear();
-                          InputCardEasy defaultInputDataCardEasy = InputCardEasy(count_card: 12);
-                          DataCountCardEasy.countCard = [defaultInputDataCardEasy];
+                          InputCardEasy defaultInputDataCardEasy =
+                              InputCardEasy(count_card: 12);
+                          DataCountCardEasy.countCard = [
+                            defaultInputDataCardEasy
+                          ];
                           _countControllerEasy.clear();
-                          InputColumnMedium defaultInputDataMedium = InputColumnMedium(column_card: 4);
+                          InputColumnMedium defaultInputDataMedium =
+                              InputColumnMedium(column_card: 4);
                           DataColumCardMedium.count = [defaultInputDataMedium];
                           _columnControllerMedium.clear();
-                          InputCardMedium defaultInputDataCardMedium = InputCardMedium(count_card: 16);
-                          DataCountCardMedium.countCard = [defaultInputDataCardMedium];
+                          InputCardMedium defaultInputDataCardMedium =
+                              InputCardMedium(count_card: 16);
+                          DataCountCardMedium.countCard = [
+                            defaultInputDataCardMedium
+                          ];
                           _countControllerMedium.clear();
-                          InputColumnHard defaultInputDataHard = InputColumnHard(column_card: 4);
+                          InputColumnHard defaultInputDataHard =
+                              InputColumnHard(column_card: 4);
                           DataColumCardHard.count = [defaultInputDataHard];
                           _columnControllerHard.clear();
-                          InputCardHard defaultInputDataCardHard = InputCardHard(count_card: 20);
-                          DataCountCardHard.countCard = [defaultInputDataCardHard];
+                          InputCardHard defaultInputDataCardHard =
+                              InputCardHard(count_card: 20);
+                          DataCountCardHard.countCard = [
+                            defaultInputDataCardHard
+                          ];
                           _countControllerHard.clear();
                         },
-                        child: Text('Reset',
+                        child: Text(
+                          'Reset',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 30,
                               fontFamily: 'TonphaiThin',
-                              fontWeight: FontWeight.bold
-                          ),
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],

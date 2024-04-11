@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:match_word/login/Home_Play.dart';
 import 'package:match_word/login/Create_Acc.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
 
@@ -147,15 +148,16 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-
-
                         SizedBox(height: 20.0),
-                        RoundedButton('SIGN IN', () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => PlayPage()),
-                          );
-                        },
+                        RoundedButton(
+                          'SIGN IN',
+                          () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PlayPage()),
+                            );
+                          },
                           textStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
@@ -172,7 +174,8 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => CreateAccPage()),
+                              MaterialPageRoute(
+                                  builder: (context) => CreateAccPage()),
                             );
                           },
                           child: RichText(
@@ -196,8 +199,6 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-
-
                       ],
                     ),
                   ],
@@ -221,13 +222,14 @@ class RoundedButton extends StatelessWidget {
   final double borderWidth;
 
   RoundedButton(
-      this.label, this.onPressed, {
-        required this.textStyle,
-        required this.buttonWidth,
-        required this.buttonHeight,
-        required this.borderColor,
-        required this.borderWidth,
-      });
+    this.label,
+    this.onPressed, {
+    required this.textStyle,
+    required this.buttonWidth,
+    required this.buttonHeight,
+    required this.borderColor,
+    required this.borderWidth,
+  });
 
   @override
   Widget build(BuildContext context) {

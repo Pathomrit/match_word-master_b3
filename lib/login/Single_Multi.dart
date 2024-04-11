@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:match_word/login/Home_Play.dart';
 import 'package:match_word/single/Level.dart';
 import 'package:match_word/multi/SelectPeople.dart';
+
 class SingleOrMulti extends StatefulWidget {
   SingleOrMulti({Key? key}) : super(key: key);
+
   @override
   _SingleOrMulti createState() => _SingleOrMulti();
 }
@@ -17,9 +19,10 @@ class _SingleOrMulti extends State<SingleOrMulti> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: (){
-              Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PlayPage()),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PlayPage()),
               );
             },
           ),
@@ -51,7 +54,7 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                   SizedBox(height: 30),
                   RoundedButton(
                     'Single Player',
-                        () {
+                    () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Level()),
@@ -71,7 +74,7 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                   SizedBox(height: 20),
                   RoundedButton(
                     'Multi player',
-                        () {
+                    () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SelectPeople()),
@@ -108,13 +111,14 @@ class RoundedButton extends StatelessWidget {
   final double borderWidth;
 
   RoundedButton(
-      this.label, this.onPressed, {
-        required this.textStyle,
-        required this.buttonWidth,
-        required this.buttonHeight,
-        required this.borderColor,
-        required this.borderWidth,
-      });
+    this.label,
+    this.onPressed, {
+    required this.textStyle,
+    required this.buttonWidth,
+    required this.buttonHeight,
+    required this.borderColor,
+    required this.borderWidth,
+  });
 
   @override
   Widget build(BuildContext context) {

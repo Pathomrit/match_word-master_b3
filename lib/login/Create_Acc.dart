@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:match_word/login/Home_Play.dart';
+
 class CreateAccPage extends StatefulWidget {
   CreateAccPage({Key? key}) : super(key: key);
 
@@ -13,6 +14,7 @@ class _CreateAccPageState extends State<CreateAccPage> {
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _confirmpasslController = TextEditingController();
   final beigeColor = Color(0xFFe4d5b7);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +57,6 @@ class _CreateAccPageState extends State<CreateAccPage> {
                         ],
                       ),
                     ),
-
                     SizedBox(height: 50.0),
                     RichText(
                       text: TextSpan(
@@ -192,11 +193,13 @@ class _CreateAccPageState extends State<CreateAccPage> {
                         ),
                         SizedBox(height: 35.0),
                         RoundedButton(
-                          icon: Icon(Icons.arrow_forward, size: 34.0, color: Colors.white),
+                          icon: Icon(Icons.arrow_forward,
+                              size: 34.0, color: Colors.white),
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => PlayPage()),
+                              MaterialPageRoute(
+                                  builder: (context) => PlayPage()),
                             );
                           },
                           textStyle: TextStyle(
@@ -264,4 +267,3 @@ class RoundedButton extends StatelessWidget {
     );
   }
 }
-

@@ -3,12 +3,25 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:match_word/setting/DataSinglePlayer.dart';
 import 'package:match_word/single/Level.dart';
+
 class Medium extends StatefulWidget {
   @override
   _Medium createState() => _Medium();
 }
 
 class _Medium extends State<Medium> {
+  String selectedBgImage = '';
+
+  void RandomBg() {
+    List<String> bgImages = [
+      'assets/images/BgGame.png',
+      'assets/images/BgGame1.png',
+      'assets/images/GbGame2.png',
+    ];
+    Random randomBg = Random();
+    int bgIndex = randomBg.nextInt(bgImages.length);
+    selectedBgImage = bgImages[bgIndex];
+  }
   List<String> picImages = [
     "Pic/Castle.png",
     "Pic/King.png",
@@ -81,6 +94,7 @@ class _Medium extends State<Medium> {
   @override
   void initState() {
     super.initState();
+    RandomBg();
     shuffleCard();
   }
 
@@ -105,17 +119,28 @@ class _Medium extends State<Medium> {
                   children: [
                     Center(
                       child: Text(
-                        matchedCard == DataCountCardMedium.countCard.first.count_card ~/ 2 ? "You Win" : "You Lose",
+                        matchedCard ==
+                                DataCountCardMedium
+                                        .countCard.first.count_card ~/
+                                    2
+                            ? "You Win"
+                            : "You Lose",
                         style: TextStyle(
                           fontSize: 30,
-                          color: matchedCard == DataCountCardMedium.countCard.first.count_card ~/ 2 ? Colors.green : Colors.red,
+                          color: matchedCard ==
+                                  DataCountCardMedium
+                                          .countCard.first.count_card ~/
+                                      2
+                              ? Colors.green
+                              : Colors.red,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     SizedBox(height: 10),
-                    Text("Total flips: ${flips ~/ 2}",
+                    Text(
+                      "Total flips: ${flips ~/ 2}",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.black,
@@ -127,21 +152,21 @@ class _Medium extends State<Medium> {
                     Expanded(
                       child: showWords
                           ? ListView.builder(
-                        itemCount: playedWordsList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(
-                              playedWordsList[index],
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                                fontFamily: 'TonphaiThin',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        },
-                      )
+                              itemCount: playedWordsList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  title: Text(
+                                    playedWordsList[index],
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
                           : SizedBox(),
                     ),
                   ],
@@ -157,7 +182,8 @@ class _Medium extends State<Medium> {
                         onPressed: () {
                           setState(() {
                             showWords = true;
-                            dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                            dialogHeight =
+                                MediaQuery.of(context).size.height * 0.6;
                           });
                         },
                         child: Text(
@@ -218,11 +244,14 @@ class _Medium extends State<Medium> {
   }
 
   void startTimer() {
-    startTimer();
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      initTimer();
+    });
   }
 
   void initTimer() {
-    if (timeLeft <= 0 || matchedCard == DataCountCardMedium.countCard.first.count_card ~/ 2) {
+    if (timeLeft <= 0 ||
+        matchedCard == DataCountCardMedium.countCard.first.count_card ~/ 2) {
       timer?.cancel();
       if (matchedCard == DataCountCardMedium.countCard.first.count_card ~/ 2) {
         showResultDialog(true);
@@ -247,7 +276,6 @@ class _Medium extends State<Medium> {
   void resumeTimer() {
     startTimer();
   }
-
 
   void flipCard(String clickedCard) {
     if (!isPlaying) {
@@ -324,7 +352,8 @@ class _Medium extends State<Medium> {
     Random random = Random();
     List<int> randomPositions = [];
 
-    while (randomPositions.length < DataCountCardMedium.countCard.first.count_card ~/ 2) {
+    while (randomPositions.length <
+        DataCountCardMedium.countCard.first.count_card ~/ 2) {
       int randomPosition = random.nextInt(picImages.length);
       if (!randomPositions.contains(randomPosition)) {
         randomPositions.add(randomPosition);
@@ -335,11 +364,15 @@ class _Medium extends State<Medium> {
     List<String> shuffledWordImages = [];
     List<bool> isPic = [];
 
-    for (int i = 0; i < DataCountCardMedium.countCard.first.count_card ~/ 2; i++) {
+    for (int i = 0;
+        i < DataCountCardMedium.countCard.first.count_card ~/ 2;
+        i++) {
       isPic.add(random.nextBool());
     }
 
-    for (int i = 0; i < DataCountCardMedium.countCard.first.count_card ~/ 2; i++) {
+    for (int i = 0;
+        i < DataCountCardMedium.countCard.first.count_card ~/ 2;
+        i++) {
       if (isPic[i]) {
         shuffledPicImages.add(picImages[randomPositions[i]]);
         shuffledWordImages.add(wordImages[randomPositions[i]]);
@@ -359,7 +392,8 @@ class _Medium extends State<Medium> {
       cardTwo = "";
       timer?.cancel();
       isPlaying = false;
-      isFlipped = List.filled(DataCountCardMedium.countCard.first.count_card, false);
+      isFlipped =
+          List.filled(DataCountCardMedium.countCard.first.count_card, false);
     });
   }
 
@@ -368,7 +402,7 @@ class _Medium extends State<Medium> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Easy Mode',
+          'Medium Mode',
           style: TextStyle(
             color: Colors.black,
             fontSize: 40.0,
@@ -386,13 +420,15 @@ class _Medium extends State<Medium> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   alignment: Alignment.center,
-                  title: Text("Menu",
+                  title: Text(
+                    "Menu",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 30.0,
                       fontFamily: 'TonphaiThin',
                       fontWeight: FontWeight.bold,
-                    ),),
+                    ),
+                  ),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -401,13 +437,15 @@ class _Medium extends State<Medium> {
                           Navigator.pop(context);
                           resumeTimer();
                         },
-                        child: Text('Resume',
+                        child: Text(
+                          'Resume',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
-                          ),),
+                          ),
+                        ),
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -418,13 +456,15 @@ class _Medium extends State<Medium> {
                             MaterialPageRoute(builder: (context) => Level()),
                           );
                         },
-                        child: Text('Back To Menu',
+                        child: Text(
+                          'Back To Menu',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20.0,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
-                          ),),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -438,7 +478,7 @@ class _Medium extends State<Medium> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/BgGame.png',
+              selectedBgImage,
               fit: BoxFit.cover,
             ),
           ),
@@ -453,12 +493,28 @@ class _Medium extends State<Medium> {
                     border: Border.all(color: Colors.black, width: 2.0),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child: Text(
-                    'Time: $timeLeft',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontFamily: 'TonphaiThin',
-                      fontWeight: FontWeight.bold,
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Time: ',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '$timeLeft',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                            color: timeLeft < 6 ? Colors.red : Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -471,7 +527,8 @@ class _Medium extends State<Medium> {
                   ),
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: DataColumCardMedium.count.first.column_card,
+                      crossAxisCount:
+                          DataColumCardMedium.count.first.column_card,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 30,
                     ),
@@ -495,13 +552,13 @@ class _Medium extends State<Medium> {
                             child: InkWell(
                               child: isFlipped[index]
                                   ? Image.asset(
-                                getImagePath((index + 1).toString()),
-                                fit: BoxFit.cover,
-                              )
+                                      getImagePath((index + 1).toString()),
+                                      fit: BoxFit.cover,
+                                    )
                                   : Image.asset(
-                                'assets/BgCard/Star.png',
-                                fit: BoxFit.cover,
-                              ),
+                                      'assets/BgCard/Star.png',
+                                      fit: BoxFit.cover,
+                                    ),
                             ),
                           ),
                         ),

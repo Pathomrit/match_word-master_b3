@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:match_word/login/Single_Multi.dart';
 import 'package:match_word/single/Easy.dart';
 import 'package:match_word/single/Hard.dart';
 import 'package:match_word/single/Medium.dart';
 import 'package:match_word/setting/DataSinglePlayer.dart';
+import 'package:match_word/single/ex.dart';
+
 class Level extends StatefulWidget {
   Level({Key? key}) : super(key: key);
 
@@ -15,6 +18,16 @@ class _Level extends State<Level> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => SingleOrMulti()),
+            );
+          },
+        ),
       ),
       body: Stack(
         children: [
@@ -59,7 +72,9 @@ class _Level extends State<Level> {
                   buttonWidth: 250.0,
                   buttonHeight: 50.0,
                 ),
-                SizedBox(height: 30,),
+                SizedBox(
+                  height: 30,
+                ),
                 RoundedButton(
                   'Medium',
                       () {
@@ -79,7 +94,9 @@ class _Level extends State<Level> {
                   buttonWidth: 250.0,
                   buttonHeight: 50.0,
                 ),
-                SizedBox(height: 30,),
+                SizedBox(
+                  height: 30,
+                ),
                 RoundedButton(
                   'Hard',
                       () {
@@ -100,18 +117,24 @@ class _Level extends State<Level> {
                   buttonHeight: 50.0,
                 ),
                 SizedBox(height: 30),
-                IconButton(
-                  icon: Icon(Icons.settings_applications_outlined),
-                  iconSize: 60,
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => SinglePlayerSetting()),
-                    );
-                  },
-                ),
               ],
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 20,
+            child: IconButton(
+              icon: Icon(Icons.settings_applications_outlined),
+              iconSize: 70,
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SinglePlayerSetting(),
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -129,7 +152,15 @@ class GamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Game - $level'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => SingleOrMulti()),
+            );
+          },
+        ),
       ),
       body: Center(
         child: Text(
@@ -151,13 +182,14 @@ class RoundedButton extends StatelessWidget {
   final double borderWidth;
 
   RoundedButton(
-      this.label, this.onPressed, {
-        required this.textStyle,
-        required this.buttonWidth,
-        required this.buttonHeight,
-        required this.borderColor,
-        required this.borderWidth,
-      });
+    this.label,
+    this.onPressed, {
+    required this.textStyle,
+    required this.buttonWidth,
+    required this.buttonHeight,
+    required this.borderColor,
+    required this.borderWidth,
+  });
 
   @override
   Widget build(BuildContext context) {
