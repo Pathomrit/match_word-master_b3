@@ -16,12 +16,11 @@ class _SelectPeople extends State<SelectPeople> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Stack(
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/bluegradient.jpg',
+              'assets/images/bgMulti.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -35,8 +34,15 @@ class _SelectPeople extends State<SelectPeople> {
                     'Select People',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 40.0,
+                      fontSize: 60.0,
                       fontFamily: 'TonphaiThin',
+                      shadows: [
+                        Shadow(
+                          blurRadius: 60,
+                          color: Colors.white,
+                          offset: Offset(0, 0),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -108,12 +114,35 @@ class _SelectPeople extends State<SelectPeople> {
               ],
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(width: 10),
+              IconButton(
+                padding: EdgeInsets.only(top: 30),
+                icon: Image.asset(
+                  'assets/images/arrowBack.png',
+                  width: 50,
+                  height: 50,
+                ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => SingleOrMulti()),
+                  );
+                },
+              ),
+            ],
+          ),
           Positioned(
             bottom: 20,
             left: 20,
             child: IconButton(
-              icon: Icon(Icons.settings_applications_outlined),
-              iconSize: 70,
+              icon: Image.asset(
+                'assets/images/settings.png',
+                width: 50,
+                height: 50,
+              ),
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.pushReplacement(
@@ -126,35 +155,6 @@ class _SelectPeople extends State<SelectPeople> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class GamePage extends StatelessWidget {
-  final String level;
-
-  GamePage({required this.level});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => SingleOrMulti()),
-            );
-          },
-        ),
-      ),
-      body: Center(
-        child: Text(
-          'This is the $level level game.',
-          style: TextStyle(fontSize: 24),
-        ),
       ),
     );
   }

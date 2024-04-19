@@ -48,8 +48,8 @@ class _PlayPageState extends State<PlayPage> {
                             child: ClipOval(
                               child: Image.asset(
                                 'assets/images/Logo_MatchCard.png',
-                                width: 200.0,
-                                height: 200.0,
+                                width: 250.0,
+                                height: 250.0,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -57,31 +57,19 @@ class _PlayPageState extends State<PlayPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 50.0),
+                    SizedBox(height: 35.0),
                     RichText(
                       text: TextSpan(
+                        text: ' Matching Card',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 30.0,
                           fontFamily: 'TonphaiThin',
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
                         ),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: 'Welcome to ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                          TextSpan(
-                            text: ' Matching Card',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
                       ),
                     ),
-                    SizedBox(height: 80.0),
+                    SizedBox(height: 40.0),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

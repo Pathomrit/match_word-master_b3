@@ -16,22 +16,11 @@ class _SingleOrMulti extends State<SingleOrMulti> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PlayPage()),
-              );
-            },
-          ),
-        ),
         body: Stack(
           children: [
             Positioned.fill(
               child: Image.asset(
-                'assets/images/bluegradient.jpg',
+                'assets/images/bgSetting.png',
                 fit: BoxFit.cover,
               ),
             ),
@@ -44,14 +33,24 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                     child: Text(
                       'Select Mode',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 40.0,
+                        fontSize: 60.0,
                         fontFamily: 'TonphaiThin',
                         fontWeight: FontWeight.bold,
+                        foreground: Paint()
+                          ..style = PaintingStyle.stroke
+                          ..strokeWidth = 2
+                          ..color = Colors.white,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 20,
+                            color: Colors.black,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: 25),
                   RoundedButton(
                     'Single Player',
                     () {
@@ -71,7 +70,7 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                     buttonWidth: 250.0,
                     buttonHeight: 50.0,
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 25),
                   RoundedButton(
                     'Multi player',
                     () {
@@ -93,6 +92,26 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                   ),
                 ],
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(width: 10),
+                IconButton(
+                  padding: EdgeInsets.only(top: 30),
+                  icon: Image.asset(
+                    'assets/images/arrowBack.png',
+                    width: 50,
+                    height: 50,
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => PlayPage()),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),

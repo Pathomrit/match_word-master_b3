@@ -409,81 +409,6 @@ class _Two extends State<Two> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Two Player',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 40.0,
-            fontFamily: 'TonphaiThin',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.settings),
-          onPressed: () {
-            pauseTimer();
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  alignment: Alignment.center,
-                  title: Text(
-                    "Menu",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 30.0,
-                      fontFamily: 'TonphaiThin',
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          resumeTimer();
-                        },
-                        child: Text(
-                          'Resume',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.0,
-                            fontFamily: 'TonphaiThin',
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          resumeTimer();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SelectPeople()),
-                          );
-                        },
-                        child: Text(
-                          'Back To Menu',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.0,
-                            fontFamily: 'TonphaiThin',
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -518,7 +443,7 @@ class _Two extends State<Two> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 20),
+                      margin: EdgeInsets.only(right: 20),
                       decoration: BoxDecoration(
                         color: currentPlayer == 'Player 2' ? Colors.red : Colors.white,
                         borderRadius: BorderRadius.circular(10),
@@ -573,7 +498,7 @@ class _Two extends State<Two> {
                   margin: EdgeInsets.all(20.0),
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2.0),
+                    border: Border.all(color: Colors.black, width: 3.0),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: GridView.builder(
@@ -596,19 +521,17 @@ class _Two extends State<Two> {
                             });
                           }
                         },
-                        child: Container(
-                          child: Transform.scale(
-                            scale: 1.1,
-                            child: InkWell(
-                              child: isFlipped[index]
-                                  ? Image.asset(
-                                      getImagePath((index + 1).toString()),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.asset(
-                                      'assets/BgCard/Star.png',
-                                      fit: BoxFit.cover,
-                                    ),
+                        child:ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: InkWell(
+                            child: isFlipped[index]
+                                ? Image.asset(
+                              getImagePath((index + 1).toString()),
+                              fit: BoxFit.cover,
+                            )
+                                : Image.asset(
+                              'assets/BgCard/bgCard.png',
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -618,6 +541,94 @@ class _Two extends State<Two> {
                 ),
               ],
             ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(width: 10),
+              IconButton(
+                padding: EdgeInsets.only(top: 30),
+                icon: Image.asset(
+                  'assets/images/pause.png',
+                  width: 40,
+                  height: 40,
+                ),
+                onPressed: () {
+                  pauseTimer();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        alignment: Alignment.center,
+                        title: Text(
+                          "Menu",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 30.0,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                resumeTimer();
+                              },
+                              child: Text(
+                                'Resume',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                resumeTimer();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SelectPeople()),
+                                );
+                              },
+                              child: Text(
+                                'Back To Menu',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+              SizedBox(width: 60),
+              Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Text(
+                  'Two Player',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 40.0,
+                    fontFamily: 'TonphaiThin',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
