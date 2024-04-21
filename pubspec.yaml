@@ -69,6 +69,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - assets/Example.sqlite
     - assets/images/
     - assets/BgCard/
     - assets/Pic/

@@ -169,17 +169,6 @@ class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => SingleOrMulti()),
-            );
-          },
-        ),
-      ),
       body: Center(
         child: Text(
           'This is the $level level game.',

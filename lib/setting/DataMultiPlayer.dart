@@ -20,7 +20,7 @@ class DataCountCardTwo {
 }
 
 class DataColumCardThree {
-  static List<InputColumnThree> count = [InputColumnThree(column_card: 5)];
+  static List<InputColumnThree> count = [InputColumnThree(column_card: 6)];
 }
 
 class DataCountCardThree {
@@ -66,12 +66,13 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                     Text("Two Player Mode Setting",
                         style: TextStyle(
                             fontSize: 30,
+                          color: Colors.white,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
                           shadows: [
                             Shadow(
                               blurRadius: 60,
-                              color: Colors.white,
+                              color: Colors.black,
                               offset: Offset(0, 0),
                             ),
                           ],
@@ -147,12 +148,13 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                     Text("Three Player Mode Setting",
                         style: TextStyle(
                             fontSize: 30,
+                          color: Colors.white,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
                           shadows: [
                             Shadow(
                               blurRadius: 60,
-                              color: Colors.white,
+                              color: Colors.black,
                               offset: Offset(0, 0),
                             ),
                           ],
@@ -228,12 +230,13 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                     Text("Four Player Mode Setting",
                         style: TextStyle(
                             fontSize: 30,
+                          color: Colors.white,
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
                           shadows: [
                             Shadow(
                               blurRadius: 60,
-                              color: Colors.white,
+                              color: Colors.black,
                               offset: Offset(0, 0),
                             ),
                           ],
@@ -322,7 +325,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                             String columnTextThree =
                                 _columnControllerThree.text.isNotEmpty
                                     ? _columnControllerThree.text
-                                    : "5";
+                                    : "6";
                             String countTextThree =
                                 _countControllerThree.text.isNotEmpty
                                     ? _countControllerThree.text
@@ -411,7 +414,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                             ];
                             _countControllerTwo.clear();
                             InputColumnThree defaultInputDataThree =
-                                InputColumnThree(column_card: 5);
+                                InputColumnThree(column_card: 6);
                             DataColumCardThree.count = [defaultInputDataThree];
                             _columnControllerThree.clear();
                             InputCardThree defaultInputDataCardThree =

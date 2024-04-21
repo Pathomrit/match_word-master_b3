@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:match_word/login/Home_Play.dart';
 
 class Request extends StatefulWidget {
   Request({Key? key}) : super(key: key);
@@ -13,8 +14,6 @@ class Request extends StatefulWidget {
 class _RequestState extends State<Request> {
   File? _image1;
   File? _image2;
-  String? _imageName1;
-  String? _imageName2;
   TextEditingController _textFieldController1 = TextEditingController();
   TextEditingController _textFieldController2 = TextEditingController();
 
@@ -26,10 +25,8 @@ class _RequestState extends State<Request> {
       setState(() {
         if (imageNumber == 1) {
           _image1 = File(pickedFile.path);
-          _imageName1 = imageName ?? pickedFile.path.split('/').last;
         } else if (imageNumber == 2) {
           _image2 = File(pickedFile.path);
-          _imageName2 = imageName ?? pickedFile.path.split('/').last;
         }
       });
     }
@@ -42,14 +39,8 @@ class _RequestState extends State<Request> {
       // and rename them with the provided image names.
 
       // Copy image 1
-      final String destinationPath1 =
-          'your_destination_directory/${_imageName1}';
-      _image1!.copy(destinationPath1);
 
       // Copy image 2
-      final String destinationPath2 =
-          'C:\Users\d9_ca\Desktop\match_word-master\match_word-master\assets/${_imageName2}';
-      _image2!.copy(destinationPath2);
 
       // Display a message to indicate successful saving
       ScaffoldMessenger.of(context).showSnackBar(
@@ -71,173 +62,230 @@ class _RequestState extends State<Request> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Setting",
       home: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+        floatingActionButton: IconButton(
+          icon: Image.asset(
+            'assets/images/arrowBack.png',
+            width: 50,
+            height: 50,
           ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => PlayPage()),
+            );
+          },
         ),
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/bluegradient.jpg'),
-              fit: BoxFit.cover,
+        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/bgLevel.png'),
+                  fit: BoxFit.fill,
+                ),
+              ),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Text(
-                                "Take Picture",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.black,
-                                  fontFamily: 'TonphaiThin',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            _image1 != null
-                                ? Image.file(
-                                    _image1!,
-                                    height: 200,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Container(
-                                    height: 200,
-                                    color: Colors.grey,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.image,
-                                        size: 100,
-                                        color: Colors.white,
-                                      ),
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20.0, 120.0, 30.0, 8.0),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Text(
+                                    "Word",
+                                    style: TextStyle(
+                                      fontSize: 35,
+                                      color: Colors.black,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                            TextFormField(
-                              controller: _textFieldController1,
-                              decoration: InputDecoration(
-                                hintText: 'Enter Image Name 1',
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                _getImageFromGallery(
-                                    1, _textFieldController1.text);
-                              },
-                              child: Text(
-                                "Select Image 1",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black,
-                                  fontFamily: 'TonphaiThin',
-                                  fontWeight: FontWeight.bold,
                                 ),
-                              ),
+                                _image1 != null
+                                    ? Image.file(
+                                  _image1!,
+                                  height: 200,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                )
+                                    : Container(
+                                  height: 200,
+                                  color: Colors.grey,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.image,
+                                      size: 80,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _getImageFromGallery(
+                                        1, _textFieldController1.text);
+                                  },
+                                  child: Text(
+                                    "Select Image",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20.0, 120.0, 30.0, 8.0),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Text(
+                                    "Picture",
+                                    style: TextStyle(
+                                      fontSize: 35,
+                                      color: Colors.black,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                _image2 != null
+                                    ? Image.file(
+                                  _image2!,
+                                  height: 200,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                )
+                                    : Container(
+                                  height: 200,
+                                  color: Colors.grey,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.image,
+                                      size: 80,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _getImageFromGallery(
+                                        2, _textFieldController2.text);
+                                  },
+                                  child: Text(
+                                    "Select Image",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: TextField(
+                        controller: _textFieldController1,
+                        decoration: InputDecoration(
+                          labelText: 'Name Picture',
+                          hintText: 'Enter Name Picture',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20.0),
+                            ),
+                            borderSide: BorderSide(color: Colors.black),
+                          ), filled: true,
+                          fillColor: Colors.white,
+                          labelStyle: TextStyle(
+                            fontFamily: 'TonphaiThin',
+                            color: Colors.black,
+                          ),
+                          hintStyle: TextStyle( // ตั้งค่ารูปแบบของ Hint Text ที่นี่
+                            fontFamily: 'TonphaiThin',
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(width: 16),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Text(
-                                "Take Picture",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.black,
-                                  fontFamily: 'TonphaiThin',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                    SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: TextField(
+                        controller: _textFieldController2,
+                        decoration: InputDecoration(
+                          labelText: 'Meaning',
+                          hintText: 'Enter Meaning',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20.0),
                             ),
-                            _image2 != null
-                                ? Image.file(
-                                    _image2!,
-                                    height: 200,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Container(
-                                    height: 200,
-                                    color: Colors.grey,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.image,
-                                        size: 100,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                            TextFormField(
-                              controller: _textFieldController2,
-                              decoration: InputDecoration(
-                                hintText: 'Enter Image Name 2',
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                _getImageFromGallery(
-                                    2, _textFieldController2.text);
-                              },
-                              child: Text(
-                                "Select Image 2",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black,
-                                  fontFamily: 'TonphaiThin',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                            borderSide:
+                            BorderSide(color: Colors.black),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelStyle: TextStyle(
+                            fontFamily: 'TonphaiThin',
+                            color: Colors.black,
+                          ),
+                          hintStyle: TextStyle( // ตั้งค่ารูปแบบของ Hint Text ที่นี่
+                            fontFamily: 'TonphaiThin',
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        _saveImages();
+                      },
+                      child: Text(
+                        "Save",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
                   ],
                 ),
               ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  _saveImages();
-                },
-                child: Text(
-                  "Save",
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black,
-                    fontFamily: 'TonphaiThin',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ),
-    );
+        ),
+      );
   }
 }
