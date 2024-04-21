@@ -300,15 +300,12 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                           InputColumnHard inputDataHard = InputColumnHard(
                               column_card: int.parse(columnTextHard));
                           DataColumCardHard.count = [inputDataHard];
-<<<<<<<<< Temporary merge branch 1
                           InputCardHard inputDataCardHard = InputCardHard(count_card: int.parse(countTextHard));
                           DataCountCardHard.countCard = [inputDataCardHard];
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) => Level()),
                           );
-=========
->>>>>>>>> Temporary merge branch 2
                         },
                         child: Text(
                           "Save",
