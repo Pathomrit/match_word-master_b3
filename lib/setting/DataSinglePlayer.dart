@@ -19,7 +19,7 @@ class DataCountCardEasy {
 }
 
 class DataColumCardMedium {
-  static List<InputColumnMedium> count = [InputColumnMedium(column_card: 4)];
+  static List<InputColumnMedium> count = [InputColumnMedium(column_card: 5)];
 }
 
 class DataCountCardMedium {
@@ -27,7 +27,7 @@ class DataCountCardMedium {
 }
 
 class DataColumCardHard {
-  static List<InputColumnHard> count = [InputColumnHard(column_card: 4)];
+  static List<InputColumnHard> count = [InputColumnHard(column_card: 6)];
 }
 
 class DataCountCardHard {
