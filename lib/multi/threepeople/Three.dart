@@ -1,8 +1,53 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:match_word/setting/DataMultiPlayer.dart';
+import 'package:match_word/single/Level.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart' show join, getDatabasesPath;
+import 'package:flutter/services.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:match_word/multi/SelectPeople.dart';
+import 'package:match_word/setting/DataMultiPlayer.dart';
+
+class DatabaseHelper {
+  static Database? _database;
+  static const String dbName = 'Vword3.sqlite';
+
+  Future<Database> get database async {
+    if (_database != null) {
+      return _database!;
+    }
+
+    _database = await initDatabase();
+    return _database!;
+  }
+
+  Future<Database> initDatabase() async {
+    String path = join(await getDatabasesPath(), dbName);
+    print('Database path: $path');
+    await _copyDatabase(dbName);
+    return await openDatabase(path, version: 1);
+  }
+
+  Future<void> _copyDatabase(String dbName) async {
+    String path = join(await getDatabasesPath(), dbName);
+    if (FileSystemEntity.typeSync(path) == FileSystemEntityType.notFound) {
+      ByteData data = await rootBundle.load('assets/$dbName');
+      List<int> bytes =
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      await File(path).writeAsBytes(bytes, flush: true);
+    }
+  }
+}
+
+class CardData {
+  String word;
+  String imageData;
+
+  CardData({required this.word, required this.imageData});
+}
 
 class Three extends StatefulWidget {
   @override
@@ -10,6 +55,54 @@ class Three extends StatefulWidget {
 }
 
 class _Three extends State<Three> {
+  DatabaseHelper databaseHelper = DatabaseHelper();
+
+  Future<void> initDatabase() async {
+    await databaseHelper.initDatabase();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchRandomData() async {
+    final Database db = await databaseHelper.database;
+    final List<Map<String, dynamic>> data = await db.query(
+      'Hard',
+      columns: ['Word', 'picImages', 'wordImages', 'Meaning'],
+    );
+
+    List<int> indices = List<int>.generate(data.length, (int index) => index);
+    indices.shuffle();
+    List<String> randomWords = [];
+    List<String> randomPicImages = [];
+    List<String> randomWordImages = [];
+    List<String> randomMeanings = [];
+
+    for (int i = 0;
+        i < DataCountCardThree.countCard.first.count_card ~/ 2;
+        i++) {
+      int currentIndex = indices[i];
+      randomWords.add(data[currentIndex]['Word']);
+      Uint8List picBytes = data[currentIndex]['picImages'];
+      String picImageData = base64Encode(picBytes);
+      randomPicImages.add(picImageData);
+      Uint8List wordBytes = data[currentIndex]['wordImages'];
+      String wordImageData = base64Encode(wordBytes);
+      randomWordImages.add(wordImageData);
+      randomMeanings.add(data[currentIndex]['Meaning']);
+    }
+    List<Map<String, dynamic>> randomData = [];
+    for (int i = 0;
+        i < DataCountCardThree.countCard.first.count_card ~/ 2;
+        i++) {
+      randomData.add({
+        'Word': randomWords[i],
+        'picImages': randomPicImages[i],
+        'wordImages': randomWordImages[i],
+        'Meaning': randomMeanings[i],
+      });
+    }
+
+    return randomData;
+  }
+
   String selectedBgImage = '';
 
   void RandomBg() {
@@ -22,64 +115,13 @@ class _Three extends State<Three> {
     int bgIndex = randomBg.nextInt(bgImages.length);
     selectedBgImage = bgImages[bgIndex];
   }
-  List<String> picImages = [
-    "Pic/Castle.png",
-    "Pic/King.png",
-    "Pic/Queen.png",
-    "Pic/Wizard.png",
-    "Pic/Knight.png",
-    "Pic/Kid.png",
-    "Pic/archer.png",
-    "Pic/Castle.png",
-    "Pic/King.png",
-    "Pic/Queen.png",
-    "Pic/Wizard.png",
-    "Pic/Knight.png",
-    "Pic/Kid.png",
-    "Pic/archer.png",
-    "Pic/Castle.png",
-    "Pic/King.png",
-    "Pic/Queen.png",
-    "Pic/Wizard.png",
-    "Pic/Knight.png",
-    "Pic/Kid.png",
-    "Pic/archer.png",
-  ];
 
-  List<String> wordImages = [
-    "Word/Castle.png",
-    "Word/King.png",
-    "Word/Queen.png",
-    "Word/Wizard.png",
-    "Word/Knight.png",
-    "Word/Kid.png",
-    "Word/archer.png",
-    "Word/Castle.png",
-    "Word/King.png",
-    "Word/Queen.png",
-    "Word/Wizard.png",
-    "Word/Knight.png",
-    "Word/Kid.png",
-    "Word/archer.png",
-    "Word/Castle.png",
-    "Word/King.png",
-    "Word/Queen.png",
-    "Word/Wizard.png",
-    "Word/Knight.png",
-    "Word/Kid.png",
-    "Word/archer.png",
-  ];
-
-  List<String> playedWords = [
-    "Castle",
-    "King",
-    "Queen",
-    "Wizard",
-    "Knight",
-    "Kid",
-    "Archer",
-  ];
-
+  List<int> selectedCards = [];
+  List<String> picImages = [];
+  List<String> wordImages = [];
+  List<String> playedWords = [];
+  List<String> word = [];
+  List<String> meaning = [];
   List<bool> isFlipped = [];
   int maxTime = 30;
   int timeLeft = 0;
@@ -90,15 +132,75 @@ class _Three extends State<Three> {
   String cardOne = "";
   String cardTwo = "";
   Timer? timer;
+  List<String> picGame = [];
 
   @override
   void initState() {
     super.initState();
     RandomBg();
     shuffleCard();
+    startTimer();
   }
 
-  void showResultDialog(bool isWin) {
+  void shuffleCard() {
+    fetchRandomData().then((data) {
+      List<String> fetchedWords = [];
+      List<String> fetchedPicImages = [];
+      List<String> fetchedWordImages = [];
+      List<String> fetchedMeaning = [];
+      data.forEach((item) {
+        fetchedWords.add(item['Word']);
+        Uint8List picBytes = base64Decode(item['picImages']);
+        String picImageData = base64Encode(picBytes);
+        fetchedPicImages.add(picImageData);
+        Uint8List wordBytes = base64Decode(item['wordImages']);
+        String wordImageData = base64Encode(wordBytes);
+        fetchedWordImages.add(wordImageData);
+        fetchedMeaning.add(item['Meaning']);
+        word.add(item['Word']);
+        meaning.add(item['Meaning']);
+      });
+      List<int> indices =
+          List<int>.generate(fetchedWords.length, (int index) => index);
+      indices.shuffle();
+      List<String> shuffledWords = [];
+      List<String> shuffledPicImages = [];
+      List<String> shuffledWordImages = [];
+      for (int i = 0; i < indices.length; i++) {
+        shuffledWords.add(fetchedWords[indices[i]]);
+        shuffledPicImages.add(fetchedPicImages[indices[i]]);
+        shuffledWordImages.add(fetchedWordImages[indices[i]]);
+      }
+      setState(() {
+        timeLeft = maxTime;
+        picImages = shuffledPicImages
+            .take(DataCountCardThree.countCard.first.count_card ~/ 2)
+            .toList();
+        wordImages = shuffledWordImages
+            .take(DataCountCardThree.countCard.first.count_card ~/ 2)
+            .toList();
+        List<CardData> combinedData = [];
+        for (int i = 0; i < picImages.length; i++) {
+          combinedData.add(CardData(
+              word: shuffledWords[i], imageData: shuffledPicImages[i]));
+          combinedData.add(CardData(
+              word: shuffledWords[i], imageData: shuffledWordImages[i]));
+        }
+        combinedData.shuffle();
+        picGame = combinedData.map((data) => data.imageData).toList();
+        playedWords = combinedData.map((data) => data.word).toList();
+        isFlipped = List<bool>.filled(picGame.length, false);
+        timer?.cancel();
+        isPlaying = false;
+        flips = 0;
+        matchedCard = 0;
+      });
+    });
+  }
+
+  String currentPlayer = 'Player 1';
+
+  void showResultDialog(bool isWin) async {
     String winner;
     if (currentPlayer == 'Player 1') {
       winner = 'Player 1';
@@ -107,10 +209,11 @@ class _Three extends State<Three> {
     } else {
       winner = 'Player 3';
     }
-    List<String> playedWordsList = isWin ? playedWords : picImages;
     bool showWords = false;
     double dialogHeight = MediaQuery.of(context).size.height * 0.2;
-
+    if (word.isEmpty || meaning.isEmpty) {
+      await fetchRandomData();
+    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -130,7 +233,7 @@ class _Three extends State<Three> {
                         matchedCard ==
                                 DataCountCardThree.countCard.first.count_card ~/
                                     2
-                            ? "$winner Wins"
+                            ? "$winner Win"
                             : "You Lose",
                         style: TextStyle(
                           fontSize: 30,
@@ -147,7 +250,7 @@ class _Three extends State<Three> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      "Total flips: ${flips ~/ 2}",
+                      "Card can flips ${matchedCard} from ${flips ~/ 2}",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.black,
@@ -159,11 +262,11 @@ class _Three extends State<Three> {
                     Expanded(
                       child: showWords
                           ? ListView.builder(
-                              itemCount: playedWordsList.length,
+                              itemCount: word.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return ListTile(
                                   title: Text(
-                                    playedWordsList[index],
+                                    '${word[index]} - ${meaning[index]}',
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.black,
@@ -208,7 +311,14 @@ class _Three extends State<Three> {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
+                        setState(() {
+                          isResultDialogShowing = false;
+                          timeLeft = maxTime;
+                          timerValueNotifier.value = timeLeft;
+                          RandomBg();
+                        });
                         shuffleCard();
+                        startTimer(); // Start the timer after retrying
                       },
                       child: Text(
                         "Retry",
@@ -223,12 +333,13 @@ class _Three extends State<Three> {
                     SizedBox(width: 5),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context);
-                        resumeTimer();
+                        Navigator.of(context).pop();
+                        setState(() {
+                          isResultDialogShowing = false;
+                        });
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => SelectPeople()),
+                          MaterialPageRoute(builder: (context) => Level()),
                         );
                       },
                       child: Text(
@@ -257,60 +368,39 @@ class _Three extends State<Three> {
     });
   }
 
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  bool isResultDialogShowing = false;
+  ValueNotifier<int> timerValueNotifier = ValueNotifier<int>(30);
+
   void initTimer() {
+    if (!mounted) return;
     if (timeLeft <= 0 ||
         matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2) {
       timer?.cancel();
-      if (matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2) {
-        showResultDialog(true);
-      } else {
-        disableDeck = true;
-        showResultDialog(false);
-        Future.delayed(Duration(milliseconds: 500), () {
-          disableDeck = false;
-        });
+      if (mounted && !isResultDialogShowing) {
+        isResultDialogShowing = true;
+        if (matchedCard == DataCountCardThree.countCard.first.count_card ~/ 2) {
+          showResultDialog(true);
+        } else {
+          disableDeck = true;
+          showResultDialog(false);
+          Future.delayed(Duration(milliseconds: 500), () {
+            if (mounted) {
+              disableDeck = false;
+              isResultDialogShowing = false;
+            }
+          });
+        }
       }
       return;
     }
-    setState(() {
-      timeLeft--;
-    });
-  }
-
-  void showEnlargedImages(String imagePath1, String imagePath2) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Image.asset(
-                  imagePath1,
-                  height: 200,
-                  width: 150,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Image.asset(
-                  imagePath2,
-                  height: 200,
-                  width: 150,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+    timeLeft--;
+    timerValueNotifier.value = timeLeft;
   }
 
   void pauseTimer() {
@@ -321,136 +411,118 @@ class _Three extends State<Three> {
     startTimer();
   }
 
-  String currentPlayer = 'Player 1';
+  void showEnlargedImage(String base64Image) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: Image.memory(
+              base64Decode(base64Image),
+              fit: BoxFit.contain,
+            ),
+          ),
+        );
+      },
+    );
+  }
 
-  void flipCard(String clickedCard) {
-    if (!isPlaying && !disableDeck) {
-      isPlaying = true;
-      startTimer();
-    }
-
-    setState(() {
-      flips++;
-    });
-
-    if (clickedCard != cardOne && !disableDeck && timeLeft > 0) {
-      if (cardOne.isEmpty) {
-        setState(() {
-          cardOne = clickedCard;
-        });
-      } else {
-        setState(() {
-          cardTwo = clickedCard;
-          disableDeck = true;
-        });
-        String cardOneImg = getImagePath(cardOne);
-        String cardTwoImg = getImagePath(cardTwo);
-
-        showEnlargedImages(cardOneImg, cardTwoImg);
-        Future.delayed(Duration(milliseconds: 500), () {
-          matchCards(cardOneImg, cardTwoImg);
-          Navigator.of(context).pop();
+  void onTapCard(int index) async {
+    if (!disableDeck &&
+        !isFlipped[index] &&
+        index >= 0 &&
+        index < picGame.length &&
+        timeLeft > 0) {
+      if (!isPlaying) {
+        isPlaying = true;
+        timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+          initTimer();
         });
       }
-    }
-  }
 
-  String getImagePath(String cardIndex) {
-    int index = int.parse(cardIndex);
-    if (index <= picImages.length) {
-      return 'assets/${picImages[index - 1]}';
-    } else {
-      return 'assets/${wordImages[index - picImages.length - 1]}';
-    }
-  }
-
-  void matchCards(String img1, String img2) {
-    List<String> img1Parts = img1.split('/');
-    List<String> img2Parts = img2.split('/');
-
-    if (img1Parts.last == img2Parts.last) {
-      matchedCard++;
       setState(() {
-        cardOne = "";
-        cardTwo = "";
-        disableDeck = false;
+        flips += 1;
+        isFlipped[index] = true;
+        selectedCards.add(index);
       });
-    } else {
-      Future.delayed(Duration(milliseconds: 500), () {
-        if (isFlipped[int.parse(cardOne) - 1]) {
+
+      // Show enlarged image
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return FutureBuilder(
+            future: Future.delayed(Duration(milliseconds: 300)),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                Navigator.of(context).pop();
+                return SizedBox(); // Return an empty widget once the delay is over
+              }
+              return Dialog(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  child: Image.memory(
+                    base64Decode(picGame[index]),
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
+
+      if (cardOne.isEmpty) {
+        cardOne = playedWords[index];
+      } else if (cardTwo.isEmpty) {
+        cardTwo = playedWords[index];
+        print("Card One: $cardOne");
+        print("Card Two: $cardTwo");
+
+        if (cardOne != cardTwo) {
+          await Future.delayed(Duration(milliseconds: 300));
           setState(() {
-            isFlipped[int.parse(cardOne) - 1] = false;
+            for (int selectedIndex in selectedCards) {
+              isFlipped[selectedIndex] = false;
+            }
+            timeLeft = maxTime;
+            timerValueNotifier.value = timeLeft;
+            if (currentPlayer == 'Player 1') {
+              currentPlayer = 'Player 2';
+            } else if (currentPlayer == 'Player 2') {
+              currentPlayer = 'Player 3';
+            } else {
+              currentPlayer = 'Player 1';
+            }
           });
+        } else {
+          matchedCard += 1;
+          print(matchedCard);
+          if (matchedCard ==
+              DataCountCardThree.countCard.first.count_card ~/ 2) {
+            if (!isResultDialogShowing) {
+              isResultDialogShowing = true;
+              await Future.delayed(Duration(milliseconds: 300));
+              showResultDialog(true);
+            }
+          }
         }
-        if (isFlipped[int.parse(cardTwo) - 1]) {
-          setState(() {
-            isFlipped[int.parse(cardTwo) - 1] = false;
-          });
-        }
+        await Future.delayed(Duration(milliseconds: 300));
         setState(() {
           cardOne = "";
           cardTwo = "";
-          disableDeck = false;
-          if (currentPlayer == 'Player 1') {
-            currentPlayer = 'Player 2';
-          } else if (currentPlayer == 'Player 2') {
-            currentPlayer = 'Player 3';
-          } else {
-            currentPlayer = 'Player 1';
-          }
-          timeLeft = maxTime;
+          selectedCards.clear();
         });
-      });
-    }
-  }
-
-  void shuffleCard() {
-    Random random = Random();
-    List<int> randomPositions = [];
-
-    while (randomPositions.length <
-        DataCountCardThree.countCard.first.count_card ~/ 2) {
-      int randomPosition = random.nextInt(picImages.length);
-      if (!randomPositions.contains(randomPosition)) {
-        randomPositions.add(randomPosition);
       }
     }
-
-    List<String> shuffledPicImages = [];
-    List<String> shuffledWordImages = [];
-    List<bool> isPic = [];
-
-    for (int i = 0;
-        i < DataCountCardThree.countCard.first.count_card ~/ 2;
-        i++) {
-      isPic.add(random.nextBool());
-    }
-
-    for (int i = 0;
-        i < DataCountCardThree.countCard.first.count_card ~/ 2;
-        i++) {
-      if (isPic[i]) {
-        shuffledPicImages.add(picImages[randomPositions[i]]);
-        shuffledWordImages.add(wordImages[randomPositions[i]]);
-      } else {
-        shuffledPicImages.add(wordImages[randomPositions[i]]);
-        shuffledWordImages.add(picImages[randomPositions[i]]);
-      }
-    }
-
-    setState(() {
-      picImages = shuffledPicImages;
-      wordImages = shuffledWordImages;
-      timeLeft = maxTime;
-      flips = 0;
-      matchedCard = 0;
-      cardOne = "";
-      cardTwo = "";
-      timer?.cancel();
-      isPlaying = false;
-      isFlipped =
-          List.filled(DataCountCardThree.countCard.first.count_card, false);
-    });
   }
 
   @override
@@ -474,7 +546,9 @@ class _Three extends State<Three> {
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 1' ? Colors.red : Colors.white,
+                        color: currentPlayer == 'Player 1'
+                            ? Colors.red
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.black, width: 2),
                       ),
@@ -485,14 +559,18 @@ class _Three extends State<Three> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 1' ? Colors.black : Colors.black,
+                          color: currentPlayer == 'Player 1'
+                              ? Colors.black
+                              : Colors.black,
                         ),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(right: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 2' ? Colors.red : Colors.white,
+                        color: currentPlayer == 'Player 2'
+                            ? Colors.red
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.black, width: 2),
                       ),
@@ -503,7 +581,9 @@ class _Three extends State<Three> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 2' ? Colors.black : Colors.black,
+                          color: currentPlayer == 'Player 2'
+                              ? Colors.black
+                              : Colors.black,
                         ),
                       ),
                     ),
@@ -513,32 +593,37 @@ class _Three extends State<Three> {
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(color: Colors.black, width: 3.0),
+                    border: Border.all(color: Colors.black, width: 2.0),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Time: ',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontFamily: 'TonphaiThin',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                  child: ValueListenableBuilder<int>(
+                    valueListenable: timerValueNotifier,
+                    builder: (context, value, child) {
+                      return RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Time: ',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: 'TonphaiThin',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '$value',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: 'TonphaiThin',
+                                fontWeight: FontWeight.bold,
+                                color: value < 6 ? Colors.red : Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
-                        TextSpan(
-                          text: '$timeLeft',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontFamily: 'TonphaiThin',
-                            fontWeight: FontWeight.bold,
-                            color: timeLeft < 6 ? Colors.red : Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
                 Container(
@@ -555,33 +640,24 @@ class _Three extends State<Three> {
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 30,
                     ),
-                    itemCount: DataCountCardThree.countCard.first.count_card,
+                    itemCount: picGame.length,
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
-                          if (index < picImages.length + wordImages.length &&
-                              !disableDeck &&
-                              !isFlipped[index]) {
-                            flipCard((index + 1).toString());
-                            setState(() {
-                              isFlipped[index] = true;
-                            });
-                          }
+                          onTapCard(index);
                         },
-                        child:ClipRRect(
+                        child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
-                          child: InkWell(
-                            child: isFlipped[index]
-                                ? Image.asset(
-                              getImagePath((index + 1).toString()),
-                              fit: BoxFit.cover,
-                            )
-                                : Image.asset(
-                              'assets/BgCard/bgCard.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                          child: isFlipped[index]
+                              ? Image.memory(
+                                  base64Decode(picGame[index]),
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  'assets/BgCard/bgCard.png',
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       );
                     },
@@ -593,7 +669,9 @@ class _Three extends State<Three> {
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 3' ? Colors.red : Colors.white,
+                        color: currentPlayer == 'Player 3'
+                            ? Colors.red
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.black, width: 2),
                       ),
@@ -604,7 +682,9 @@ class _Three extends State<Three> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 3' ? Colors.black : Colors.black,
+                          color: currentPlayer == 'Player 3'
+                              ? Colors.black
+                              : Colors.black,
                         ),
                       ),
                     ),
@@ -666,7 +746,8 @@ class _Three extends State<Three> {
                                 resumeTimer();
                                 Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (context) => SelectPeople()),
+                                  MaterialPageRoute(
+                                      builder: (context) => SelectPeople()),
                                 );
                               },
                               child: Text(

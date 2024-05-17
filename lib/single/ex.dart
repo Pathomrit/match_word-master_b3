@@ -1,12 +1,17 @@
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:match_word/setting/DataSinglePlayer.dart';
+import 'package:match_word/single/Level.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart'show join, getDatabasesPath;
 import 'package:flutter/services.dart';
 import 'dart:io';
-
+import 'dart:convert';
+import 'dart:typed_data';
 class DatabaseHelper {
   static Database? _database;
-  static const String dbName = 'Example.sqlite';
+  static const String dbName = 'Vword3.sqlite';
 
   Future<Database> get database async {
     if (_database != null) {
@@ -19,96 +24,652 @@ class DatabaseHelper {
 
   Future<Database> initDatabase() async {
     String path = join(await getDatabasesPath(), dbName);
-    print('Database path: $path'); // พิมพ์เส้นทางฐานข้อมูลเพื่อตรวจสอบ
-    await _copyDatabase(dbName); // เรียกใช้เมธอดเพื่อคัดลอกฐานข้อมูล
+    print('Database path: $path');
+    await _copyDatabase(dbName);
     return await openDatabase(path, version: 1);
   }
 
-  // เมธอดสำหรับคัดลอกฐานข้อมูลจาก assets
   Future<void> _copyDatabase(String dbName) async {
     String path = join(await getDatabasesPath(), dbName);
     if (FileSystemEntity.typeSync(path) == FileSystemEntityType.notFound) {
-      // คัดลอกฐานข้อมูลจาก assets ไปยังพาธ path
       ByteData data = await rootBundle.load('assets/$dbName');
       List<int> bytes =
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes, flush: true);
     }
   }
 }
+class CardData {
+  String word;
+  String imageData;
 
-class Example extends StatefulWidget {
+  CardData({required this.word, required this.imageData});
+}
+class ex extends StatefulWidget {
   @override
-  _ExampleState createState() => _ExampleState();
+  _ex createState() => _ex();
 }
 
-class _ExampleState extends State<Example> {
-  AsyncSnapshot<List<Map<String, dynamic>>>? _snapshot;
-  DatabaseHelper _databaseHelper = DatabaseHelper();
-  late AsyncSnapshot<List<Map<String, dynamic>>> snapshot;
-  late List<Map<String, dynamic>> words;
-  @override
-  Widget build(BuildContext context) {
+class _ex extends State<ex> {
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  Future<void> initDatabase() async {
+    await databaseHelper.initDatabase();
+  }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Words'),
-      ),
-      body: Stack(
-        children: [
-          if (snapshot.connectionState == ConnectionState.waiting)
-            Center(
-              child: CircularProgressIndicator(),
-            )
-          else if (snapshot.hasError)
-            Center(
-              child: Text('Error: ${snapshot.error}'),
-            )
-          else
-            ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                // รายการเดียวของ ListView.builder
-                Uint8List imageData = words[index]
-                    ['picImages']; // สมมติว่าชื่อคอลัมน์ของรูปภาพคือ 'Image'
-                Uint8List imageData1 = words[index]['wordImages'];
-                Image image = Image.memory(imageData);
-                Image image1 = Image.memory(imageData1);
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        // ทำสิ่งที่ต้องการเมื่อคลิกที่ตัวการ์ด
-                      },
-                      child: Row(
-                        children: [
-                          // แสดงรูปภาพ image1
-                          Expanded(
-                            child: Column(
-                              children: [
-                                image1,
-                                // แทรกตรงนี้ถ้าต้องการแสดงปุ่ม หรือสิ่งอื่น ๆ
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          // เพิ่มระยะห่างระหว่างรูปภาพและปุ่ม
-                          // แสดงรูปภาพ image
-                          Expanded(
-                            child: Column(
-                              children: [
-                                image,
-                                // แทรกตรงนี้ถ้าต้องการแสดงปุ่ม หรือสิ่งอื่น ๆ
-                              ],
-                            ),
-                          ),
-                        ],
+  Future<List<Map<String, dynamic>>> fetchRandomData() async {
+    final Database db = await databaseHelper.database;
+    final List<Map<String, dynamic>> data = await db.query(
+      'Easy',
+      columns: ['Word', 'picImages', 'wordImages', 'Meaning'],
+    );
+
+    List<int> indices = List<int>.generate(data.length, (int index) => index);
+    indices.shuffle();
+    List<String> randomWords = [];
+    List<String> randomPicImages = [];
+    List<String> randomWordImages = [];
+    List<String> randomMeanings = [];
+
+    for (int i = 0; i <
+        DataCountCardEasy.countCard.first.count_card ~/ 2; i++) {
+      int currentIndex = indices[i];
+      randomWords.add(data[currentIndex]['Word']);
+      Uint8List picBytes = data[currentIndex]['picImages'];
+      String picImageData = base64Encode(picBytes);
+      randomPicImages.add(picImageData);
+      Uint8List wordBytes = data[currentIndex]['wordImages'];
+      String wordImageData = base64Encode(wordBytes);
+      randomWordImages.add(wordImageData);
+      randomMeanings.add(data[currentIndex]['Meaning']);
+    }
+    List<Map<String, dynamic>> randomData = [];
+    for (int i = 0; i <
+        DataCountCardEasy.countCard.first.count_card ~/ 2; i++) {
+      randomData.add({
+        'Word': randomWords[i],
+        'picImages': randomPicImages[i],
+        'wordImages': randomWordImages[i],
+        'Meaning': randomMeanings[i],
+      });
+    }
+
+    return randomData;
+  }
+
+
+  String selectedBgImage = '';
+
+  void RandomBg() {
+    List<String> bgImages = [
+      'assets/images/BgGame.png',
+      'assets/images/BgGame1.png',
+      'assets/images/GbGame2.png',
+    ];
+    Random randomBg = Random();
+    int bgIndex = randomBg.nextInt(bgImages.length);
+    selectedBgImage = bgImages[bgIndex];
+  }
+
+  List<int> selectedCards = [];
+  List<String> picImages = [];
+  List<String> wordImages = [];
+  List<String> playedWords = [];
+  List<String> word = [];
+  List<String> meaning = [];
+  List<bool> isFlipped = [];
+  int maxTime = 30;
+  int timeLeft = 0;
+  int flips = 0;
+  int matchedCard = 0;
+  bool disableDeck = false;
+  bool isPlaying = false;
+  String cardOne = "";
+  String cardTwo = "";
+  Timer? timer;
+  List<String> picGame = [];
+
+  @override
+  void initState() {
+    super.initState();
+    RandomBg();
+    shuffleCard();
+    startTimer();
+  }
+
+  void shuffleCard() {
+    fetchRandomData().then((data) {
+      List<String> fetchedWords = [];
+      List<String> fetchedPicImages = [];
+      List<String> fetchedWordImages = [];
+      List<String> fetchedMeaning = [];
+      data.forEach((item) {
+        fetchedWords.add(item['Word']);
+        Uint8List picBytes = base64Decode(item['picImages']);
+        String picImageData = base64Encode(picBytes);
+        fetchedPicImages.add(picImageData);
+        Uint8List wordBytes = base64Decode(item['wordImages']);
+        String wordImageData = base64Encode(wordBytes);
+        fetchedWordImages.add(wordImageData);
+        fetchedMeaning.add(item['Meaning']);
+        word.add(item['Word']);
+        meaning.add(item['Meaning']);
+      });
+      List<int> indices = List<int>.generate(
+          fetchedWords.length, (int index) => index);
+      indices.shuffle();
+      List<String> shuffledWords = [];
+      List<String> shuffledPicImages = [];
+      List<String> shuffledWordImages = [];
+      for (int i = 0; i < indices.length; i++) {
+        shuffledWords.add(fetchedWords[indices[i]]);
+        shuffledPicImages.add(fetchedPicImages[indices[i]]);
+        shuffledWordImages.add(fetchedWordImages[indices[i]]);
+      }
+      setState(() {
+        timeLeft = maxTime;
+        picImages = shuffledPicImages.take(
+            DataCountCardEasy.countCard.first.count_card ~/ 2).toList();
+        wordImages = shuffledWordImages.take(
+            DataCountCardEasy.countCard.first.count_card ~/ 2).toList();
+        List<CardData> combinedData = [];
+        for (int i = 0; i < picImages.length; i++) {
+          combinedData.add(CardData(
+              word: shuffledWords[i], imageData: shuffledPicImages[i]));
+          combinedData.add(CardData(
+              word: shuffledWords[i], imageData: shuffledWordImages[i]));
+        }
+        combinedData.shuffle();
+        picGame = combinedData.map((data) => data.imageData).toList();
+        playedWords = combinedData.map((data) => data.word).toList();
+        isFlipped = List<bool>.filled(picGame.length, false);
+        timer?.cancel();
+        isPlaying = false;
+        flips = 0;
+        matchedCard = 0;
+      });
+    });
+  }
+
+  void showResultDialog(bool isWin) {
+    bool showWords = false;
+    double dialogHeight = MediaQuery.of(context).size.height * 0.2;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                padding: EdgeInsets.all(20.0),
+                width: MediaQuery.of(context).size.width * 0.1,
+                height: dialogHeight,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        matchedCard ==
+                            DataCountCardEasy
+                                .countCard.first.count_card ~/ 2
+                            ? "You Win"
+                            : "You Lose",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: matchedCard ==
+                              DataCountCardEasy
+                                  .countCard.first.count_card ~/ 2
+                              ? Colors.green
+                              : Colors.red,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                    SizedBox(height: 10),
+                    Text(
+                      "Card can flips ${matchedCard} from ${flips ~/ 2}",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontFamily: 'TonphaiThin',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: showWords
+                          ? ListView.builder(
+                        itemCount: word.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            title: Text(
+                              '${word[index]} - ${meaning[index]}',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                                fontFamily: 'TonphaiThin',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                          : SizedBox(),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Visibility(
+                      visible: !showWords,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            showWords = true;
+                            dialogHeight =
+                                MediaQuery.of(context).size.height * 0.6;
+                          });
+                        },
+                        child: Text(
+                          "Words",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          isResultDialogShowing = false;
+                        });
+                        shuffleCard();
+                        startTimer(); // Start the timer after retrying
+                      },
+                      child: Text(
+                        "Retry",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          isResultDialogShowing = false;
+                        });
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => Level()),
+                        );
+                      },
+                      child: Text(
+                        "Back",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+  void startTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      initTimer();
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel(); // ยกเลิกตัวจับเวลา
+    super.dispose();
+  }
+
+  bool isResultDialogShowing = false;
+  ValueNotifier<int> timerValueNotifier = ValueNotifier<int>(30);
+
+  void initTimer() {
+    if (!mounted) return;
+    if (timeLeft <= 0 || matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2) {
+      timer?.cancel();
+      if (mounted && !isResultDialogShowing) {
+        isResultDialogShowing = true;
+        if (matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2) {
+          showResultDialog(true);
+        } else {
+          disableDeck = true;
+          showResultDialog(false);
+          Future.delayed(Duration(milliseconds: 500), () {
+            if (mounted) {
+              disableDeck = false;
+              isResultDialogShowing = false;
+            }
+          });
+        }
+      }
+      return;
+    }
+    timeLeft--;
+    timerValueNotifier.value = timeLeft; // อัปเดตค่าใน ValueNotifier
+  }
+
+  void pauseTimer() {
+    timer?.cancel();
+  }
+
+  void resumeTimer() {
+    startTimer();
+  }
+  void showEnlargedImage(String base64Image) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
             ),
+            child: Image.memory(
+              base64Decode(base64Image),
+              fit: BoxFit.contain,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void onTapCard(int index) async {
+    if (!disableDeck && !isFlipped[index] && index >= 0 && index < picGame.length && timeLeft > 0) {
+      if (!isPlaying) {
+        isPlaying = true;
+        timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+          initTimer();
+        });
+      }
+
+      setState(() {
+        isFlipped[index] = true;
+        selectedCards.add(index);
+      });
+
+      // Show enlarged image
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return FutureBuilder(
+            future: Future.delayed(Duration(milliseconds: 300)),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                Navigator.of(context).pop();
+                return SizedBox(); // Return an empty widget once the delay is over
+              }
+              return Dialog(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  child: Image.memory(
+                    base64Decode(picGame[index]),
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
+
+      if (cardOne.isEmpty) {
+        cardOne = playedWords[index];
+      } else if (cardTwo.isEmpty) {
+        cardTwo = playedWords[index];
+        print("Card One: $cardOne");
+        print("Card Two: $cardTwo");
+
+        if (cardOne != cardTwo) {
+          await Future.delayed(Duration(milliseconds: 300));
+          setState(() {
+            for (int selectedIndex in selectedCards) {
+              isFlipped[selectedIndex] = false;
+            }
+            flips += 1;
+          });
+        } else {
+          matchedCard += 1;
+          print(matchedCard);
+          if (matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2) {
+            if (!isResultDialogShowing) {
+              isResultDialogShowing = true;
+              await Future.delayed(Duration(milliseconds: 300));
+              showResultDialog(true);
+            }
+          }
+        }
+        await Future.delayed(Duration(milliseconds: 300));
+        setState(() {
+          cardOne = "";
+          cardTwo = "";
+          selectedCards.clear();
+          flips += 1;
+        });
+      }
+    }
+  }
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              selectedBgImage,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black, width: 2.0),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: ValueListenableBuilder<int>(
+                    valueListenable: timerValueNotifier,
+                    builder: (context, value, child) {
+                      return RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Time: ',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: 'TonphaiThin',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '$value',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: 'TonphaiThin',
+                                fontWeight: FontWeight.bold,
+                                color: value < 6 ? Colors.red : Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 30),
+                Container(
+                  margin: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 3.0),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: DataColumCardEasy.count.first.column_card,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 30,
+                    ),
+                    itemCount: picGame.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          onTapCard(index);
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: isFlipped[index]
+                              ? Image.memory(
+                            base64Decode(picGame[index]),
+                            fit: BoxFit.cover,
+                          )
+                              : Image.asset(
+                            'assets/BgCard/bgCard.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(width: 10),
+              IconButton(
+                padding: EdgeInsets.only(top: 30),
+                icon: Image.asset(
+                  'assets/images/pause.png',
+                  width: 40,
+                  height: 40,
+                ),
+                onPressed: () {
+                  pauseTimer();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        alignment: Alignment.center,
+                        title: Text(
+                          "Menu",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 30.0,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                resumeTimer();
+                              },
+                              child: Text(
+                                'Resume',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                resumeTimer();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Level()),
+                                );
+                              },
+                              child: Text(
+                                'Back To Menu',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+              SizedBox(width: 60),
+              Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Text(
+                  'Easy Mode',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 40.0,
+                    fontFamily: 'TonphaiThin',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
