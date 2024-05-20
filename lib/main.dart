@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:match_word/login/Home_Play.dart';
 import 'dart:async';
-import 'dart:math';
-import 'package:flutter/material.dart';
-import 'package:match_word/setting/DataSinglePlayer.dart';
-import 'package:match_word/single/Level.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart' show join, getDatabasesPath;
-import 'package:flutter/services.dart';
 import 'dart:io';
-import 'dart:convert';
-import 'dart:typed_data';
-
+import 'package:flutter/services.dart';
+import 'package:path/path.dart' show join, getDatabasesPath;
+import 'package:sqflite/sqflite.dart';
+import 'package:match_word/login/Home_Play.dart';
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -21,9 +14,34 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: PlayPage(),
+    return FutureBuilder(
+      future: DatabaseHelper().initDatabase(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Scaffold(
+              body: Center(
+                child: Text("Error initializing the database."),
+              ),
+            ),
+          );
+        } else {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: PlayPage(),
+          );
+        }
+      },
     );
   }
 }
@@ -53,8 +71,10 @@ class DatabaseHelper {
     if (FileSystemEntity.typeSync(path) == FileSystemEntityType.notFound) {
       ByteData data = await rootBundle.load('assets/$dbName');
       List<int> bytes =
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes, flush: true);
     }
   }
 }
+
+

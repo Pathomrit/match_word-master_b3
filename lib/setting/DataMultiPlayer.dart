@@ -36,13 +36,12 @@ class DataCountCardFour {
 }
 
 class _MultiPlayerSetting extends State<MultiPlayerSetting> {
-  TextEditingController _columnControllerTwo = TextEditingController();
   TextEditingController _countControllerTwo = TextEditingController();
-  TextEditingController _columnControllerThree = TextEditingController();
   TextEditingController _countControllerThree = TextEditingController();
-  TextEditingController _columnControllerFour = TextEditingController();
   TextEditingController _countControllerFour = TextEditingController();
-
+  int _selectedColumnCardTwo = 4;
+  int _selectedColumnCardThree = 6;
+  int _selectedColumnCardFour = 6;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -86,27 +85,47 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Columns",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
-                                child: TextField(
-                                  controller: _columnControllerTwo,
-                                  keyboardType: TextInputType.number,
+                                child: DropdownButtonFormField<int>(
                                   decoration: InputDecoration(
-                                    labelText: 'Column card',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20.0),
-                                      ),
-                                      borderSide:
-                                          BorderSide(color: Colors.black),
-                                    ),
                                     filled: true,
                                     fillColor: Colors.white,
-                                    labelStyle: TextStyle(
-                                      fontFamily: 'TonphaiThin',
-                                      color: Colors.grey,
-                                    ),
                                   ),
+                                  value: _selectedColumnCardTwo,
+                                  items: [4, 6, 8, 10].map((int value) {
+                                    return DropdownMenuItem<int>(
+                                      value: value,
+                                      child: Text(
+                                        '$value Columns',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (int? value) {
+                                    setState(() {
+                                      _selectedColumnCardTwo = value!;
+                                    });
+                                  },
                                 ),
                               ),
                             ],
@@ -117,6 +136,22 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Cards",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextField(
@@ -168,27 +203,47 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Columns",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
-                                child: TextField(
-                                  controller: _columnControllerThree,
-                                  keyboardType: TextInputType.number,
+                                child: DropdownButtonFormField<int>(
                                   decoration: InputDecoration(
-                                    labelText: 'Column card',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20.0),
-                                      ),
-                                      borderSide:
-                                          BorderSide(color: Colors.black),
-                                    ),
                                     filled: true,
                                     fillColor: Colors.white,
-                                    labelStyle: TextStyle(
-                                      fontFamily: 'TonphaiThin',
-                                      color: Colors.grey,
-                                    ),
                                   ),
+                                  value: _selectedColumnCardThree,
+                                  items: [4, 6, 8, 10].map((int value) {
+                                    return DropdownMenuItem<int>(
+                                      value: value,
+                                      child: Text(
+                                        '$value Columns',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (int? value) {
+                                    setState(() {
+                                      _selectedColumnCardThree = value!;
+                                    });
+                                  },
                                 ),
                               ),
                             ],
@@ -199,6 +254,22 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Cards",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextField(
@@ -250,27 +321,47 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Columns",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
-                                child: TextField(
-                                  controller: _columnControllerFour,
-                                  keyboardType: TextInputType.number,
+                                child: DropdownButtonFormField<int>(
                                   decoration: InputDecoration(
-                                    labelText: 'Column card',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20.0),
-                                      ),
-                                      borderSide:
-                                          BorderSide(color: Colors.black),
-                                    ),
                                     filled: true,
                                     fillColor: Colors.white,
-                                    labelStyle: TextStyle(
-                                      fontFamily: 'TonphaiThin',
-                                      color: Colors.grey,
-                                    ),
                                   ),
+                                  value: _selectedColumnCardFour,
+                                  items: [4, 6, 8, 10].map((int value) {
+                                    return DropdownMenuItem<int>(
+                                      value: value,
+                                      child: Text(
+                                        '$value Columns',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (int? value) {
+                                    setState(() {
+                                      _selectedColumnCardFour = value!;
+                                    });
+                                  },
                                 ),
                               ),
                             ],
@@ -281,6 +372,22 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Cards",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextField(
@@ -314,26 +421,17 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            String columnTextTwo =
-                                _columnControllerTwo.text.isNotEmpty
-                                    ? _columnControllerTwo.text
-                                    : "4";
+                            String columnTextTwo = _selectedColumnCardTwo.toString();
                             String countTextTwo =
                                 _countControllerTwo.text.isNotEmpty
                                     ? _countControllerTwo.text
                                     : "12";
-                            String columnTextThree =
-                                _columnControllerThree.text.isNotEmpty
-                                    ? _columnControllerThree.text
-                                    : "6";
+                            String columnTextThree = _selectedColumnCardThree.toString();
                             String countTextThree =
                                 _countControllerThree.text.isNotEmpty
                                     ? _countControllerThree.text
                                     : "16";
-                            String columnTextFour =
-                                _columnControllerFour.text.isNotEmpty
-                                    ? _columnControllerFour.text
-                                    : "6";
+                            String columnTextFour =  _selectedColumnCardFour.toString();
                             String countTextFour =
                                 _countControllerFour.text.isNotEmpty
                                     ? _countControllerFour.text
@@ -344,7 +442,10 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                             int countCardFour = int.parse(countTextFour);
                             if (countCardTwo % 2 == 0 &&
                                 countCardThree % 2 == 0 &&
-                                countCardFour % 2 == 0) {
+                                countCardFour % 2 == 0 &&
+                                countCardTwo <= 40 &&
+                                countCardThree <= 40 &&
+                                countCardFour <= 40) {
                               InputCardTwo inputDataCardTwo =
                                   InputCardTwo(count_card: countCardTwo);
                               DataCountCardTwo.countCard = [inputDataCardTwo];
@@ -367,7 +468,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: Text("Warning"),
-                                    content: Text("Please enter even number"),
+                                    content: Text("Please enter only even numbers or not more than 40"),
                                     actions: [
                                       TextButton(
                                         onPressed: () {
@@ -404,9 +505,8 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                         ElevatedButton(
                           onPressed: () {
                             InputColumnTwo defaultInputDataTwo =
-                                InputColumnTwo(column_card: 4);
+                                InputColumnTwo(column_card: _selectedColumnCardTwo);
                             DataColumCardTwo.count = [defaultInputDataTwo];
-                            _columnControllerTwo.clear();
                             InputCardTwo defaultInputDataCardTwo =
                                 InputCardTwo(count_card: 12);
                             DataCountCardTwo.countCard = [
@@ -414,9 +514,8 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                             ];
                             _countControllerTwo.clear();
                             InputColumnThree defaultInputDataThree =
-                                InputColumnThree(column_card: 6);
+                                InputColumnThree(column_card: _selectedColumnCardThree);
                             DataColumCardThree.count = [defaultInputDataThree];
-                            _columnControllerThree.clear();
                             InputCardThree defaultInputDataCardThree =
                                 InputCardThree(count_card: 16);
                             DataCountCardThree.countCard = [
@@ -424,9 +523,8 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                             ];
                             _countControllerThree.clear();
                             InputColumnFour defaultInputDataFour =
-                                InputColumnFour(column_card: 6);
+                                InputColumnFour(column_card: _selectedColumnCardFour);
                             DataColumCardFour.count = [defaultInputDataFour];
-                            _columnControllerFour.clear();
                             InputCardFour defaultInputDataCardFour =
                                 InputCardFour(count_card: 20);
                             DataCountCardFour.countCard = [
