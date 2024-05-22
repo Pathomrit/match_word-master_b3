@@ -19,7 +19,7 @@ class DataCountCardEasy {
 }
 
 class DataColumCardMedium {
-  static List<InputColumnMedium> count = [InputColumnMedium(column_card: 5)];
+  static List<InputColumnMedium> count = [InputColumnMedium(column_card: 6)];
 }
 
 class DataCountCardMedium {
@@ -35,13 +35,12 @@ class DataCountCardHard {
 }
 
 class _SinglePlayerSetting extends State<SinglePlayerSetting> {
-  TextEditingController _columnControllerEasy = TextEditingController();
   TextEditingController _countControllerEasy = TextEditingController();
-  TextEditingController _columnControllerMedium = TextEditingController();
   TextEditingController _countControllerMedium = TextEditingController();
-  TextEditingController _columnControllerHard = TextEditingController();
   TextEditingController _countControllerHard = TextEditingController();
-
+  int _selectedColumnCardEasy = 4;
+  int _selectedColumnCardMedium = 6;
+  int _selectedColumnCardHard = 6;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -89,27 +88,47 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Columns",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
-                                child: TextField(
-                                  controller: _columnControllerEasy,
-                                  keyboardType: TextInputType.number,
+                                child: DropdownButtonFormField<int>(
                                   decoration: InputDecoration(
-                                    labelText: 'Column card',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20.0),
-                                      ),
-                                      borderSide:
-                                      BorderSide(color: Colors.black),
-                                    ),
                                     filled: true,
                                     fillColor: Colors.white,
-                                    labelStyle: TextStyle(
-                                      fontFamily: 'TonphaiThin',
-                                      color: Colors.grey,
-                                    ),
                                   ),
+                                  value: _selectedColumnCardEasy,
+                                  items: [4, 6, 8, 10].map((int value) {
+                                    return DropdownMenuItem<int>(
+                                      value: value,
+                                      child: Text(
+                                        '$value Columns',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (int? value) {
+                                    setState(() {
+                                      _selectedColumnCardEasy = value!;
+                                    });
+                                  },
                                 ),
                               ),
                             ],
@@ -120,6 +139,22 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Card",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextField(
@@ -149,19 +184,20 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                       ],
                     ),
                     Text("Medium Mode Setting",
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
-                          fontFamily: 'TonphaiThin',
-                          fontWeight: FontWeight.bold,
-                          shadows: [
-                            Shadow(
-                              blurRadius: 60,
-                              color: Colors.black,
-                              offset: Offset(0, 0),
-                            ),
-                          ],
-                        ),),
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontFamily: 'TonphaiThin',
+                        fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 60,
+                            color: Colors.black,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -170,27 +206,47 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Columns",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
-                                child: TextField(
-                                  controller: _columnControllerMedium,
-                                  keyboardType: TextInputType.number,
+                                child: DropdownButtonFormField<int>(
                                   decoration: InputDecoration(
-                                    labelText: 'Column card',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20.0),
-                                      ),
-                                      borderSide:
-                                      BorderSide(color: Colors.black),
-                                    ),
                                     filled: true,
                                     fillColor: Colors.white,
-                                    labelStyle: TextStyle(
-                                      fontFamily: 'TonphaiThin',
-                                      color: Colors.grey,
-                                    ),
                                   ),
+                                  value: _selectedColumnCardMedium,
+                                  items: [4, 6, 8, 10].map((int value) {
+                                    return DropdownMenuItem<int>(
+                                      value: value,
+                                      child: Text(
+                                        '$value Columns',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (int? value) {
+                                    setState(() {
+                                      _selectedColumnCardMedium = value!;
+                                    });
+                                  },
                                 ),
                               ),
                             ],
@@ -201,6 +257,22 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Cards",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextField(
@@ -230,19 +302,19 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                       ],
                     ),
                     Text("Hard Mode Setting",
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
-                          fontFamily: 'TonphaiThin',
-                          fontWeight: FontWeight.bold,
-                          shadows: [
-                            Shadow(
-                              blurRadius: 60,
-                              color: Colors.black,
-                              offset: Offset(0, 0),
-                            ),
-                          ],
-                        ),
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontFamily: 'TonphaiThin',
+                        fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 60,
+                            color: Colors.black,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 20),
                     Row(
@@ -252,27 +324,47 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Columns",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
-                                child: TextField(
-                                  controller: _columnControllerHard,
-                                  keyboardType: TextInputType.number,
+                                child: DropdownButtonFormField<int>(
                                   decoration: InputDecoration(
-                                    labelText: 'Column card',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20.0),
-                                      ),
-                                      borderSide:
-                                      BorderSide(color: Colors.black),
-                                    ),
                                     filled: true,
                                     fillColor: Colors.white,
-                                    labelStyle: TextStyle(
-                                      fontFamily: 'TonphaiThin',
-                                      color: Colors.grey,
-                                    ),
                                   ),
+                                  value: _selectedColumnCardHard,
+                                  items: [4, 6, 8, 10].map((int value) {
+                                    return DropdownMenuItem<int>(
+                                      value: value,
+                                      child: Text(
+                                        '$value Columns',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (int? value) {
+                                    setState(() {
+                                      _selectedColumnCardHard = value!;
+                                    });
+                                  },
                                 ),
                               ),
                             ],
@@ -283,6 +375,22 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                "Cards",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextField(
@@ -316,26 +424,17 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            String columnTextEasy =
-                            _columnControllerEasy.text.isNotEmpty
-                                ? _columnControllerEasy.text
-                                : "4";
+                            String columnTextEasy = _selectedColumnCardEasy.toString();
                             String countTextEasy =
                             _countControllerEasy.text.isNotEmpty
                                 ? _countControllerEasy.text
                                 : "12";
-                            String columnTextMedium =
-                            _columnControllerMedium.text.isNotEmpty
-                                ? _columnControllerMedium.text
-                                : "5";
+                            String columnTextMedium = _selectedColumnCardMedium.toString();
                             String countTextMedium =
                             _countControllerMedium.text.isNotEmpty
                                 ? _countControllerMedium.text
                                 : "16";
-                            String columnTextHard =
-                            _columnControllerHard.text.isNotEmpty
-                                ? _columnControllerHard.text
-                                : "6";
+                            String columnTextHard = _selectedColumnCardHard.toString();
                             String countTextHard =
                             _countControllerHard.text.isNotEmpty
                                 ? _countControllerHard.text
@@ -346,7 +445,10 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                             int countCardHard = int.parse(countTextHard);
                             if (countCardEasy % 2 == 0 &&
                                 countCardMedium % 2 == 0 &&
-                                countCardHard % 2 == 0) {
+                                countCardHard % 2 == 0 &&
+                                countCardEasy <= 40 &&
+                                countCardMedium <= 40 &&
+                                countCardHard <= 40) {
                               InputCardEasy inputDataCardEasy =
                               InputCardEasy(count_card: countCardEasy);
                               DataCountCardEasy.countCard = [inputDataCardEasy];
@@ -366,17 +468,67 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text("Warning"),
-                                    content: Text("Please enter even number"),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text("OK"),
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    ),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage('assets/images/hamster_coffee.jpg'),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                       ),
-                                    ],
+                                      child: Padding(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Text(
+                                              "Warning",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 40.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              "Please enter only even numbers or not more than 40",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16.0,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            SizedBox(height: 0),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Color(0xFFE4F8BA),
+                                                onPrimary: Colors.black,
+                                                shape: CircleBorder(),
+                                                padding: EdgeInsets.all(10.0),
+                                                minimumSize: Size(16, 16),
+                                              ),
+                                              child: Text(
+                                                'OK',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20.0,
+                                                  fontFamily: 'TonphaiThin',
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   );
                                 },
                               );
@@ -404,10 +556,8 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                         SizedBox(width: 20),
                         ElevatedButton(
                           onPressed: () {
-                            InputColumnEasy defaultInputDataEasy =
-                            InputColumnEasy(column_card: 4);
+                            InputColumnEasy defaultInputDataEasy = InputColumnEasy(column_card: _selectedColumnCardEasy);
                             DataColumCardEasy.count = [defaultInputDataEasy];
-                            _columnControllerEasy.clear();
                             InputCardEasy defaultInputDataCardEasy =
                             InputCardEasy(count_card: 12);
                             DataCountCardEasy.countCard = [
@@ -415,9 +565,8 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                             ];
                             _countControllerEasy.clear();
                             InputColumnMedium defaultInputDataMedium =
-                            InputColumnMedium(column_card: 5);
+                            InputColumnMedium(column_card: _selectedColumnCardMedium);
                             DataColumCardMedium.count = [defaultInputDataMedium];
-                            _columnControllerMedium.clear();
                             InputCardMedium defaultInputDataCardMedium =
                             InputCardMedium(count_card: 16);
                             DataCountCardMedium.countCard = [
@@ -425,9 +574,8 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                             ];
                             _countControllerMedium.clear();
                             InputColumnHard defaultInputDataHard =
-                            InputColumnHard(column_card: 6);
+                            InputColumnHard(column_card: _selectedColumnCardHard);
                             DataColumCardHard.count = [defaultInputDataHard];
-                            _columnControllerHard.clear();
                             InputCardHard defaultInputDataCardHard =
                             InputCardHard(count_card: 20);
                             DataCountCardHard.countCard = [
@@ -462,6 +610,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                     height: 50,
                   ),
                   onPressed: () {
+
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => Level()),
