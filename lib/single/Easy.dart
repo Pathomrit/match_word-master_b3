@@ -9,9 +9,11 @@ import 'package:flutter/services.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:typed_data';
+
 class DatabaseHelper {
   static Database? _database;
   static const String dbName = 'Vword3.sqlite';
+
   Future<Database> get database async {
     if (_database != null) {
       return _database!;
@@ -38,6 +40,7 @@ class DatabaseHelper {
     }
   }
 }
+
 class CardData {
   String word;
   String imageData;
@@ -52,6 +55,7 @@ class Easy extends StatefulWidget {
 
 class _Easy extends State<Easy> {
   DatabaseHelper databaseHelper = DatabaseHelper();
+
   Future<void> initDatabase() async {
     await databaseHelper.initDatabase();
   }
@@ -207,53 +211,46 @@ class _Easy extends State<Easy> {
             return AlertDialog(
               contentPadding: EdgeInsets.zero,
               content: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
+                padding: EdgeInsets.all(20.0),
+                width: MediaQuery.of(context).size.width * 0.1,
                 height: dialogHeight,
-                child: Stack(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Positioned.fill(
-                      child: Image.asset(
-                        'assets/images/kid_ontheground.jpg',
-                        fit: BoxFit.cover,
+                    Center(
+                      child: Text(
+                        matchedCard ==
+                                DataCountCardEasy.countCard.first.count_card ~/
+                                    2
+                            ? "You Win"
+                            : "You Lose",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: matchedCard ==
+                                  DataCountCardEasy
+                                          .countCard.first.count_card ~/
+                                      2
+                              ? Colors.green
+                              : Colors.red,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Text(
-                              matchedCard ==
-                                  DataCountCardEasy.countCard.first.count_card ~/ 2
-                                  ? "You Win"
-                                  : "You Lose",
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: matchedCard ==
-                                    DataCountCardEasy
-                                        .countCard.first.count_card ~/ 2
-                                    ? Colors.green
-                                    : Colors.red,
-                                fontFamily: 'TonphaiThin',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            "Card can flips ${matchedCard} from ${flips ~/ 2}",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontFamily: 'TonphaiThin',
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Expanded(
-                            child: showWords
-                                ? ListView.builder(
+                    SizedBox(height: 10),
+                    Text(
+                      "Card can flips ${matchedCard} from ${flips ~/ 2}",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontFamily: 'TonphaiThin',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: showWords
+                          ? ListView.builder(
                               itemCount: word.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return ListTile(
@@ -269,96 +266,84 @@ class _Easy extends State<Easy> {
                                 );
                               },
                             )
-                                : SizedBox(),
+                          : SizedBox(),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Visibility(
+                      visible: !showWords,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            showWords = true;
+                            dialogHeight =
+                                MediaQuery.of(context).size.height * 0.6;
+                          });
+                        },
+                        child: Text(
+                          "Words",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
                           ),
-                          showWords
-                              ? SizedBox(height: 20)
-                              : SizedBox(),
-                        ],
+                        ),
                       ),
                     ),
-                    // Action Buttons
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Visibility(
-                              visible: !showWords,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    showWords = true;
-                                    dialogHeight = MediaQuery.of(context).size.height * 0.6;
-                                  });
-                                },
-                                child: Text(
-                                  "Words",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                    fontFamily: 'TonphaiThin',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  isResultDialogShowing = false;
-                                  timeLeft = maxTime;
-                                  timerValueNotifier.value = timeLeft;
-                                  RandomBg();
-                                });
-                                shuffleCard();
-                                startTimer(); // Start the timer after retrying
-                              },
-                              child: Text(
-                                "Retry",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontFamily: 'TonphaiThin',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  isResultDialogShowing = false;
-                                });
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => Level()),
-                                );
-                              },
-                              child: Text(
-                                "Back",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontFamily: 'TonphaiThin',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                    SizedBox(width: 5),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          isResultDialogShowing = false;
+                          timeLeft = maxTime;
+                          timerValueNotifier.value = timeLeft;
+                          RandomBg();
+                        });
+                        shuffleCard();
+                        startTimer(); // Start the timer after retrying
+                      },
+                      child: Text(
+                        "Retry",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          isResultDialogShowing = false;
+                        });
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => Level()),
+                        );
+                      },
+                      child: Text(
+                        "Back",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontFamily: 'TonphaiThin',
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
+              ],
             );
           },
         );
@@ -629,88 +614,57 @@ class _Easy extends State<Easy> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return Dialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      return AlertDialog(
+                        alignment: Alignment.center,
+                        title: Text(
+                          "Menu",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 30.0,
+                            fontFamily: 'TonphaiThin',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/kid_colorful.png'),
-                              fit: BoxFit.cover,
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                resumeTimer();
+                              },
+                              child: Text(
+                                'Resume',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text(
-                                  "Menu",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 50.0,
-                                    fontFamily: 'TonphaiThin',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                resumeTimer();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Level()),
+                                );
+                              },
+                              child: Text(
+                                'Back To Menu',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                SizedBox(height: 10),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    resumeTimer();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Color(0xFFE4F8BA),
-                                    onPrimary: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-                                  ),
-                                  child: Text(
-                                    'Resume',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20.0,
-                                      fontFamily: 'TonphaiThin',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    resumeTimer();
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => Level()),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Color(0xFFE4F8BA),
-                                    onPrimary: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-                                  ),
-                                  child: Text(
-                                    'Back To Menu',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20.0,
-                                      fontFamily: 'TonphaiThin',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       );
                     },
