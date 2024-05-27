@@ -88,7 +88,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                               Text(
                                 "Columns",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -139,7 +139,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                               Text(
                                 "Cards",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -206,7 +206,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                               Text(
                                 "Columns",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -257,7 +257,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                               Text(
                                 "Cards",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -324,7 +324,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                               Text(
                                 "Columns",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -375,7 +375,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                               Text(
                                 "Cards",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -466,17 +466,67 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text("Warning"),
-                                    content: Text("Please enter only even numbers or not more than 40"),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text("OK"),
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                    ),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage('assets/images/hamster_coffee.jpg'),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
                                       ),
-                                    ],
+                                      child: Padding(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Text(
+                                              "Warning",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 40.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              "Please enter only even numbers or not more than 40",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16.0,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            SizedBox(height: 0),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                primary: Color(0xFFE4F8BA),
+                                                onPrimary: Colors.black,
+                                                shape: CircleBorder(),
+                                                padding: EdgeInsets.all(10.0),
+                                                minimumSize: Size(16, 16),
+                                              ),
+                                              child: Text(
+                                                'OK',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20.0,
+                                                  fontFamily: 'TonphaiThin',
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   );
                                 },
                               );

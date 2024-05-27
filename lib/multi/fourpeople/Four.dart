@@ -214,140 +214,173 @@ class _Four extends State<Four> {
           builder: (context, setState) {
             return AlertDialog(
               contentPadding: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
               content: Container(
-                padding: EdgeInsets.all(20.0),
-                width: MediaQuery.of(context).size.width * 0.1,
+                width: MediaQuery.of(context).size.width * 0.9,
                 height: dialogHeight,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Stack(
                   children: [
-                    Center(
-                      child: Text(
-                        matchedCard ==
-                            DataCountCardFour.countCard.first.count_card ~/
-                                2
-                            ? "$winner Win"
-                            : "You Lose",
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: matchedCard ==
-                              DataCountCardFour
-                                  .countCard.first.count_card ~/
-                                  2
-                              ? Colors.green
-                              : Colors.red,
-                          fontFamily: 'TonphaiThin',
-                          fontWeight: FontWeight.bold,
+                    Positioned.fill(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                          bottomLeft: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                        ),
+                        child: Image.asset(
+                          'assets/images/kid_ontheground.jpg',
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Card can flips ${matchedCard} from ${flips ~/ 2}",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontFamily: 'TonphaiThin',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Expanded(
-                      child: showWords
-                          ? ListView.builder(
-                        itemCount: word.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(
-                              '${word[index]} - ${meaning[index]}',
+                    Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Text(
+                              matchedCard ==
+                                  DataCountCardTwo.countCard.first.count_card ~/ 2
+                                  ? "$winner Win"
+                                  : "You Lose",
                               style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
+                                fontSize: 30,
+                                color: matchedCard ==
+                                    DataCountCardTwo.countCard.first.count_card ~/ 2
+                                    ? Colors.green
+                                    : Colors.red,
                                 fontFamily: 'TonphaiThin',
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          );
-                        },
-                      )
-                          : SizedBox(),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            "Card can flips ${matchedCard} from ${flips ~/ 2}",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontFamily: 'TonphaiThin',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Expanded(
+                            child: showWords
+                                ? ListView.builder(
+                              itemCount: word.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  title: Text(
+                                    '${word[index]} - ${meaning[index]}',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                                : SizedBox(),
+                          ),
+                          showWords
+                              ? SizedBox(height: 20)
+                              : SizedBox(),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Visibility(
+                              visible: !showWords,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    showWords = true;
+                                    dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                                  });
+                                },
+                                child: Text(
+                                  "Words",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                    fontFamily: 'TonphaiThin',
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  isResultDialogShowing = false;
+                                  timeLeft = maxTime;
+                                  timerValueNotifier.value = timeLeft;
+                                  RandomBg();
+                                });
+                                shuffleCard();
+                                startTimer();
+                              },
+                              child: Text(
+                                "Retry",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  isResultDialogShowing = false;
+                                });
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SelectPeople()),
+                                );
+                              },
+                              child: Text(
+                                "Back",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-              actions: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Visibility(
-                      visible: !showWords,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            showWords = true;
-                            dialogHeight =
-                                MediaQuery.of(context).size.height * 0.6;
-                          });
-                        },
-                        child: Text(
-                          "Words",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black,
-                            fontFamily: 'TonphaiThin',
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        setState(() {
-                          isResultDialogShowing = false;
-                          timeLeft = maxTime;
-                          timerValueNotifier.value = timeLeft;
-                          RandomBg();
-                        });
-                        shuffleCard();
-                        startTimer(); // Start the timer after retrying
-                      },
-                      child: Text(
-                        "Retry",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.black,
-                          fontFamily: 'TonphaiThin',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        setState(() {
-                          isResultDialogShowing = false;
-                        });
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => Level()),
-                        );
-                      },
-                      child: Text(
-                        "Back",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.black,
-                          fontFamily: 'TonphaiThin',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
             );
           },
         );
@@ -450,7 +483,7 @@ class _Four extends State<Four> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 Navigator.of(context).pop();
-                return SizedBox(); // Return an empty widget once the delay is over
+                return SizedBox();
               }
               return Dialog(
                 child: Container(
@@ -708,56 +741,88 @@ class _Four extends State<Four> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return AlertDialog(
-                        alignment: Alignment.center,
-                        title: Text(
-                          "Menu",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 30.0,
-                            fontFamily: 'TonphaiThin',
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
                         ),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                resumeTimer();
-                              },
-                              child: Text(
-                                'Resume',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.0,
-                                  fontFamily: 'TonphaiThin',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/kid_colorful.png'),
+                              fit: BoxFit.cover,
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                resumeTimer();
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => SelectPeople()),
-                                );
-                              },
-                              child: Text(
-                                'Back To Menu',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.0,
-                                  fontFamily: 'TonphaiThin',
-                                  fontWeight: FontWeight.bold,
+                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  "Menu",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 50.0,
+                                    fontFamily: 'TonphaiThin',
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                              ),
+                                SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    resumeTimer();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFFE4F8BA),
+                                    onPrimary: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                  ),
+                                  child: Text(
+                                    'Resume',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20.0,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    resumeTimer();
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => Level()),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFFE4F8BA),
+                                    onPrimary: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                  ),
+                                  child: Text(
+                                    'Back To Menu',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20.0,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       );
                     },

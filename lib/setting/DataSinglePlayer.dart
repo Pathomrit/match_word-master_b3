@@ -91,7 +91,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                               Text(
                                 "Columns",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -142,7 +142,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                               Text(
                                 "Card",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -209,7 +209,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                               Text(
                                 "Columns",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -260,7 +260,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                               Text(
                                 "Cards",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -327,7 +327,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                               Text(
                                 "Columns",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -378,7 +378,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                               Text(
                                 "Cards",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
                                   color: Colors.white,
                                   fontFamily: 'TonphaiThin',
                                   fontWeight: FontWeight.bold,
@@ -470,7 +470,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                                 builder: (BuildContext context) {
                                   return Dialog(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
                                     ),
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -478,7 +478,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                                           image: AssetImage('assets/images/hamster_coffee.jpg'),
                                           fit: BoxFit.cover,
                                         ),
-                                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
                                       ),
                                       child: Padding(
                                         padding: EdgeInsets.all(16.0),

@@ -95,7 +95,7 @@ class _PlayPageState extends State<PlayPage> {
                         ),
                         SizedBox(height: 15.0),
                         RoundedButton(
-                          '⚙️ Setting',
+                          'Options',
                           () {
                             Navigator.push(
                               context,
@@ -116,7 +116,7 @@ class _PlayPageState extends State<PlayPage> {
                         ),
                         SizedBox(height: 15.0),
                         RoundedButton(
-                          'Exit',
+                          'Quit',
                           () {
                             SystemNavigator.pop();
                           },

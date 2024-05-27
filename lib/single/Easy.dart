@@ -206,15 +206,31 @@ class _Easy extends State<Easy> {
           builder: (context, setState) {
             return AlertDialog(
               contentPadding: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
               content: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: dialogHeight,
                 child: Stack(
                   children: [
                     Positioned.fill(
-                      child: Image.asset(
-                        'assets/images/kid_ontheground.jpg',
-                        fit: BoxFit.cover,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                          bottomLeft: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                        ),
+                        child: Image.asset(
+                          'assets/images/kid_ontheground.jpg',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     Padding(
@@ -277,7 +293,6 @@ class _Easy extends State<Easy> {
                         ],
                       ),
                     ),
-                    // Action Buttons
                     Positioned(
                       left: 0,
                       right: 0,
@@ -318,7 +333,7 @@ class _Easy extends State<Easy> {
                                   RandomBg();
                                 });
                                 shuffleCard();
-                                startTimer(); // Start the timer after retrying
+                                startTimer();
                               },
                               child: Text(
                                 "Retry",
@@ -365,6 +380,8 @@ class _Easy extends State<Easy> {
       },
     );
   }
+
+
 
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
@@ -455,7 +472,6 @@ class _Easy extends State<Easy> {
         selectedCards.add(index);
       });
 
-      // Show enlarged image
       await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -464,7 +480,7 @@ class _Easy extends State<Easy> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 Navigator.of(context).pop();
-                return SizedBox(); // Return an empty widget once the delay is over
+                return SizedBox();
               }
               return Dialog(
                 child: Container(
@@ -631,7 +647,7 @@ class _Easy extends State<Easy> {
                     builder: (BuildContext context) {
                       return Dialog(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
                         ),
                         child: Container(
                           decoration: BoxDecoration(
@@ -639,7 +655,7 @@ class _Easy extends State<Easy> {
                               image: AssetImage('assets/images/kid_colorful.png'),
                               fit: BoxFit.cover,
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),

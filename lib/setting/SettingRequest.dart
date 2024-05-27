@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:match_word/login/Home_Play.dart';
@@ -92,13 +91,13 @@ class _RequestState extends State<Request> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(height: 16),
+                    SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20.0, 120.0, 30.0, 8.0),
+                            padding: const EdgeInsets.fromLTRB(20.0, 5.0, 30.0, 8.0),
                             child: Column(
                               children: [
                                 Padding(
@@ -106,11 +105,20 @@ class _RequestState extends State<Request> {
                                   child: Text(
                                     "Word",
                                     style: TextStyle(
-                                      fontSize: 35,
+                                      fontSize: 40,
                                       color: Colors.black,
-                                      fontFamily: 'TonphaiThin',
+                                      fontFamily: 'PandaThin',
                                       fontWeight: FontWeight.bold,
+                                      shadows: [
+                                        Shadow(
+                                          offset: Offset(2.0, 2.0),
+                                          blurRadius: 2.0,
+                                          color: Color.fromARGB(
+                                              255, 231, 116, 150),
+                                        ),
+                                      ],
                                     ),
+
                                   ),
                                 ),
                                 _image1 != null
@@ -120,23 +128,33 @@ class _RequestState extends State<Request> {
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                 )
-                                    : Container(
-                                  height: 200,
-                                  color: Colors.grey,
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.image,
-                                      size: 80,
-                                      color: Colors.white,
+                                    : ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Container(
+                                    height: 200,
+                                    color: Colors.purple.shade100,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.image,
+                                        size: 80,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 16),
+                                SizedBox(height: 20),
                                 ElevatedButton(
                                   onPressed: () {
                                     _getImageFromGallery(
                                         1, _textFieldController1.text);
                                   },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(Color(
+                                        0xFF8ED2B2)),
+                                    padding: MaterialStateProperty.all(
+                                      EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+                                    ),
+                                  ),
                                   child: Text(
                                     "Select Image",
                                     style: TextStyle(
@@ -154,7 +172,7 @@ class _RequestState extends State<Request> {
                         SizedBox(width: 16),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20.0, 120.0, 30.0, 8.0),
+                            padding: const EdgeInsets.fromLTRB(20.0, 5.0, 30.0, 8.0),
                             child: Column(
                               children: [
                                 Padding(
@@ -162,10 +180,17 @@ class _RequestState extends State<Request> {
                                   child: Text(
                                     "Picture",
                                     style: TextStyle(
-                                      fontSize: 35,
+                                      fontSize: 40,
                                       color: Colors.black,
-                                      fontFamily: 'TonphaiThin',
+                                      fontFamily: 'PandaThin',
                                       fontWeight: FontWeight.bold,
+                                      shadows: [
+                                        Shadow(
+                                          offset: Offset(2.0, 2.0),
+                                          blurRadius: 2.0,
+                                          color: Color.fromARGB(255, 231, 116, 150),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -176,23 +201,31 @@ class _RequestState extends State<Request> {
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                 )
-                                    : Container(
-                                  height: 200,
-                                  color: Colors.grey,
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.image,
-                                      size: 80,
-                                      color: Colors.white,
+                                    : ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Container(
+                                    height: 200,
+                                    color: Colors.purple.shade100,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.image,
+                                        size: 80,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 16),
+                                SizedBox(height: 20),
                                 ElevatedButton(
                                   onPressed: () {
-                                    _getImageFromGallery(
-                                        2, _textFieldController2.text);
+                                    _getImageFromGallery(2, _textFieldController2.text);
                                   },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(Color(0xFF8ED2B2)),
+                                    padding: MaterialStateProperty.all(
+                                      EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+                                    ),
+                                  ),
                                   child: Text(
                                     "Select Image",
                                     style: TextStyle(
@@ -209,7 +242,7 @@ class _RequestState extends State<Request> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 40),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: TextField(
@@ -219,18 +252,40 @@ class _RequestState extends State<Request> {
                           hintText: 'Enter Name Picture',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(20.0),
+                              Radius.circular(30.0),
                             ),
-                            borderSide: BorderSide(color: Colors.black),
-                          ), filled: true,
+                            borderSide: BorderSide(
+                              color: Colors.black,
+                              width: 3.0,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30.0),
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.black,
+                              width: 3.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30.0),
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.blueGrey,
+                              width: 2.0,
+                            ),
+                          ),
+                          filled: true,
                           fillColor: Colors.white,
                           labelStyle: TextStyle(
                             fontFamily: 'TonphaiThin',
-                            color: Colors.black,
+                            color: Colors.blueGrey,
                           ),
-                          hintStyle: TextStyle( // ตั้งค่ารูปแบบของ Hint Text ที่นี่
+                          hintStyle: TextStyle(
                             fontFamily: 'TonphaiThin',
-                            color: Colors.black,
+                            color: Colors.blueGrey,
                           ),
                         ),
                       ),
@@ -245,47 +300,80 @@ class _RequestState extends State<Request> {
                           hintText: 'Enter Meaning',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
-                              Radius.circular(20.0),
+                              Radius.circular(30.0),
                             ),
-                            borderSide:
-                            BorderSide(color: Colors.black),
+                            borderSide: BorderSide(
+                              color: Colors.black,
+                              width: 3.0,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30.0),
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.black,
+                              width: 3.0,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30.0),
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.blueGrey,
+                              width: 2.0,
+                            ),
                           ),
                           filled: true,
                           fillColor: Colors.white,
                           labelStyle: TextStyle(
                             fontFamily: 'TonphaiThin',
-                            color: Colors.black,
+                            color: Colors.blueGrey,
                           ),
-                          hintStyle: TextStyle( // ตั้งค่ารูปแบบของ Hint Text ที่นี่
+                          hintStyle: TextStyle(
                             fontFamily: 'TonphaiThin',
-                            color: Colors.black,
+                            color: Colors.blueGrey,
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 80),
                     ElevatedButton(
                       onPressed: () {
                         _saveImages();
                       },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Color(0x7F7DD3AC)),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+                        ),
+                      ),
                       child: Text(
                         "Save",
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 45,
                           color: Colors.black,
                           fontFamily: 'TonphaiThin',
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w900,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(1.0, 1.0),
+                              blurRadius: 2.0,
+                              color: Color.fromARGB(255, 173, 133, 172),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 5),
                   ],
                 ),
               ),
             ),
           ],
         ),
-        ),
-      );
+      ),
+    );
   }
 }
