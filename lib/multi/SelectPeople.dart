@@ -34,8 +34,8 @@ class _SelectPeople extends State<SelectPeople> {
                     'Select People',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 60.0,
-                      fontFamily: 'TonphaiThin',
+                      fontSize: 50.0,
+                      fontFamily: 'DANKI',
                       shadows: [
                         Shadow(
                           blurRadius: 60,
@@ -58,7 +58,7 @@ class _SelectPeople extends State<SelectPeople> {
                   textStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
-                    fontFamily: 'TonphaiThin',
+                    fontFamily: 'PandaThin',
                     fontWeight: FontWeight.bold,
                   ),
                   borderColor: Colors.indigo.shade200,
@@ -80,7 +80,7 @@ class _SelectPeople extends State<SelectPeople> {
                   textStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
-                    fontFamily: 'TonphaiThin',
+                    fontFamily: 'PandaThin',
                     fontWeight: FontWeight.bold,
                   ),
                   borderColor: Colors.indigo.shade200,
@@ -102,7 +102,7 @@ class _SelectPeople extends State<SelectPeople> {
                   textStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
-                    fontFamily: 'TonphaiThin',
+                    fontFamily: 'PandaThin',
                     fontWeight: FontWeight.bold,
                   ),
                   borderColor: Colors.indigo.shade200,

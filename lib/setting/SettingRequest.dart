@@ -97,7 +97,7 @@ class _RequestState extends State<Request> {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20.0, 5.0, 30.0, 8.0),
+                            padding: const EdgeInsets.fromLTRB(20.0, 20.0, 30.0, 8.0),
                             child: Column(
                               children: [
                                 Padding(
@@ -172,7 +172,7 @@ class _RequestState extends State<Request> {
                         SizedBox(width: 16),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20.0, 5.0, 30.0, 8.0),
+                            padding: const EdgeInsets.fromLTRB(20.0, 20.0, 30.0, 8.0),
                             child: Column(
                               children: [
                                 Padding(

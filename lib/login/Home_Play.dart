@@ -85,8 +85,8 @@ class _PlayPageState extends State<PlayPage> {
                           textStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 30.0,
-                            fontFamily: 'TonphaiThin',
-                            fontWeight: FontWeight.bold,
+                            fontFamily: 'PandaThin',
+                            fontWeight: FontWeight.w900,
                           ),
                           borderColor: Colors.indigo.shade200,
                           borderWidth: 3.0,
@@ -106,8 +106,8 @@ class _PlayPageState extends State<PlayPage> {
                           textStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 24.0,
-                            fontFamily: 'TonphaiThin',
-                            fontWeight: FontWeight.bold,
+                            fontFamily: 'PandaThin',
+                            fontWeight: FontWeight.w900,
                           ),
                           borderColor: Colors.indigo.shade200,
                           borderWidth: 3.5,
@@ -123,8 +123,8 @@ class _PlayPageState extends State<PlayPage> {
                           textStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 27.0,
-                            fontFamily: 'TonphaiThin',
-                            fontWeight: FontWeight.bold,
+                            fontFamily: 'PandaThin',
+                            fontWeight: FontWeight.w900,
                           ),
                           borderColor: Colors.indigo.shade200,
                           borderWidth: 3.0,

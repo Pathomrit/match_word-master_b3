@@ -34,7 +34,7 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                       'Select Mode',
                       style: TextStyle(
                         fontSize: 60.0,
-                        fontFamily: 'TonphaiThin',
+                        fontFamily: 'DANKI',
                         fontWeight: FontWeight.bold,
                         foreground: Paint()
                           ..style = PaintingStyle.stroke
@@ -62,7 +62,7 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                     textStyle: TextStyle(
                       color: Colors.white,
                       fontSize: 30.0,
-                      fontFamily: 'TonphaiThin',
+                      fontFamily: 'PandaThin',
                       fontWeight: FontWeight.bold,
                     ),
                     borderColor: Colors.indigo.shade200,
@@ -82,7 +82,7 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                     textStyle: TextStyle(
                       color: Colors.white,
                       fontSize: 30.0,
-                      fontFamily: 'TonphaiThin',
+                      fontFamily: 'PandaThin',
                       fontWeight: FontWeight.bold,
                     ),
                     borderColor: Colors.indigo.shade200,

@@ -36,7 +36,7 @@ class _Level extends State<Level> {
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 60.0,
-                      fontFamily: 'TonphaiThin',
+                      fontFamily: 'DANKI',
                       shadows: [
                         Shadow(
                           blurRadius: 60,
@@ -59,7 +59,7 @@ class _Level extends State<Level> {
                   textStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
-                    fontFamily: 'TonphaiThin',
+                    fontFamily: 'PandaThin',
                     fontWeight: FontWeight.bold,
                   ),
                   borderColor: Colors.indigo.shade200,
@@ -81,7 +81,7 @@ class _Level extends State<Level> {
                   textStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
-                    fontFamily: 'TonphaiThin',
+                    fontFamily: 'PandaThin',
                     fontWeight: FontWeight.bold,
                   ),
                   borderColor: Colors.indigo.shade200,
@@ -103,7 +103,7 @@ class _Level extends State<Level> {
                   textStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
-                    fontFamily: 'TonphaiThin',
+                    fontFamily: 'PandaThin',
                     fontWeight: FontWeight.bold,
                   ),
                   borderColor: Colors.indigo.shade200,

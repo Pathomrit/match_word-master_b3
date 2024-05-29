@@ -543,12 +543,17 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                                 column_card: int.parse(columnTextHard));
                             DataColumCardHard.count = [inputDataHard];
                           },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue,
+                            onPrimary: Colors.white,
+                            side: BorderSide(color: Colors.indigo.shade200, width: 3),
+                          ),
                           child: Text(
                             "Save",
                             style: TextStyle(
                               fontSize: 30,
                               color: Colors.black,
-                              fontFamily: 'TonphaiThin',
+                              fontFamily: 'PandaThin',
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -583,12 +588,17 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                             ];
                             _countControllerHard.clear();
                           },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue,
+                            onPrimary: Colors.white,
+                            side: BorderSide(color: Colors.indigo.shade200, width: 3),
+                          ),
                           child: Text(
                             'Reset',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 30,
-                                fontFamily: 'TonphaiThin',
+                                fontFamily: 'PandaThin',
                                 fontWeight: FontWeight.bold),
                           ),
                         ),

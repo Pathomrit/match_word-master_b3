@@ -300,9 +300,9 @@ class _Four extends State<Four> {
                                         title: Text(
                                           '${word[index]} - ${meaning[index]}',
                                           style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 18,
                                             color: Colors.black,
-                                            fontFamily: 'TonphaiThin',
+                                            fontFamily: 'PandaThin',
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -335,6 +335,11 @@ class _Four extends State<Four> {
                                             0.6;
                                   });
                                 },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFFE4F8BA),
+                                  onPrimary: Colors.black,
+                                  side: BorderSide(color: Colors.green, width: 2),
+                                ),
                                 child: Text(
                                   "Words",
                                   style: TextStyle(
@@ -359,6 +364,11 @@ class _Four extends State<Four> {
                                 shuffleCard();
                                 startTimer();
                               },
+                              style: ElevatedButton.styleFrom(
+                                primary: Color(0xFFE4F8BA),
+                                onPrimary: Colors.black,
+                                side: BorderSide(color: Colors.green, width: 2),
+                              ),
                               child: Text(
                                 "Retry",
                                 style: TextStyle(
@@ -382,6 +392,11 @@ class _Four extends State<Four> {
                                       builder: (context) => SelectPeople()),
                                 );
                               },
+                              style: ElevatedButton.styleFrom(
+                                primary: Color(0xFFE4F8BA),
+                                onPrimary: Colors.black,
+                                side: BorderSide(color: Colors.green, width: 2),
+                              ),
                               child: Text(
                                 "Back",
                                 style: TextStyle(
@@ -801,7 +816,7 @@ class _Four extends State<Four> {
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 50.0,
-                                    fontFamily: 'TonphaiThin',
+                                    fontFamily: 'DANKI',
                                     fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.center,
@@ -826,7 +841,7 @@ class _Four extends State<Four> {
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 20.0,
-                                      fontFamily: 'TonphaiThin',
+                                      fontFamily: 'PandaThin',
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -856,7 +871,7 @@ class _Four extends State<Four> {
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 20.0,
-                                      fontFamily: 'TonphaiThin',
+                                      fontFamily: 'PandaThin',
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -878,7 +893,7 @@ class _Four extends State<Four> {
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 40.0,
-                    fontFamily: 'TonphaiThin',
+                    fontFamily: 'DANKI',
                     fontWeight: FontWeight.bold,
                   ),
                 ),
