@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:match_word/multi/SelectPeople.dart';
 import 'package:match_word/setting/DataMultiPlayer.dart';
+
 class DatabaseHelper {
   static Database? _database;
   static const String dbName = 'Vword3.sqlite';
@@ -35,17 +36,19 @@ class DatabaseHelper {
     if (FileSystemEntity.typeSync(path) == FileSystemEntityType.notFound) {
       ByteData data = await rootBundle.load('assets/$dbName');
       List<int> bytes =
-      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes, flush: true);
     }
   }
 }
+
 class CardData {
   String word;
   String imageData;
 
   CardData({required this.word, required this.imageData});
 }
+
 class Four extends StatefulWidget {
   @override
   _Four createState() => _Four();
@@ -53,9 +56,11 @@ class Four extends StatefulWidget {
 
 class _Four extends State<Four> {
   DatabaseHelper databaseHelper = DatabaseHelper();
+
   Future<void> initDatabase() async {
     await databaseHelper.initDatabase();
   }
+
   Future<List<Map<String, dynamic>>> fetchRandomData() async {
     final Database db = await databaseHelper.database;
     final List<Map<String, dynamic>> data = await db.query(
@@ -71,8 +76,8 @@ class _Four extends State<Four> {
     List<String> randomMeanings = [];
 
     for (int i = 0;
-    i < DataCountCardFour.countCard.first.count_card ~/ 2;
-    i++) {
+        i < DataCountCardFour.countCard.first.count_card ~/ 2;
+        i++) {
       int currentIndex = indices[i];
       randomWords.add(data[currentIndex]['Word']);
       Uint8List picBytes = data[currentIndex]['picImages'];
@@ -85,8 +90,8 @@ class _Four extends State<Four> {
     }
     List<Map<String, dynamic>> randomData = [];
     for (int i = 0;
-    i < DataCountCardFour.countCard.first.count_card ~/ 2;
-    i++) {
+        i < DataCountCardFour.countCard.first.count_card ~/ 2;
+        i++) {
       randomData.add({
         'Word': randomWords[i],
         'picImages': randomPicImages[i],
@@ -97,6 +102,7 @@ class _Four extends State<Four> {
 
     return randomData;
   }
+
   String selectedBgImage = '';
 
   void RandomBg() {
@@ -131,10 +137,14 @@ class _Four extends State<Four> {
   @override
   void initState() {
     super.initState();
-    RandomBg();
+    timeLeft = maxTime;
+    matchedCard = 0;
+    disableDeck = false;
+    isResultDialogShowing = false;
     shuffleCard();
-    startTimer();
+    RandomBg();
   }
+
   void shuffleCard() {
     fetchRandomData().then((data) {
       List<String> fetchedWords = [];
@@ -154,7 +164,7 @@ class _Four extends State<Four> {
         meaning.add(item['Meaning']);
       });
       List<int> indices =
-      List<int>.generate(fetchedWords.length, (int index) => index);
+          List<int>.generate(fetchedWords.length, (int index) => index);
       indices.shuffle();
       List<String> shuffledWords = [];
       List<String> shuffledPicImages = [];
@@ -190,7 +200,9 @@ class _Four extends State<Four> {
       });
     });
   }
+
   String currentPlayer = 'Player 1';
+
   void showResultDialog(bool isWin) async {
     String winner;
     if (currentPlayer == 'Player 1') {
@@ -249,13 +261,17 @@ class _Four extends State<Four> {
                           Center(
                             child: Text(
                               matchedCard ==
-                                  DataCountCardTwo.countCard.first.count_card ~/ 2
+                                      DataCountCardTwo
+                                              .countCard.first.count_card ~/
+                                          2
                                   ? "$winner Win"
                                   : "You Lose",
                               style: TextStyle(
                                 fontSize: 30,
                                 color: matchedCard ==
-                                    DataCountCardTwo.countCard.first.count_card ~/ 2
+                                        DataCountCardTwo
+                                                .countCard.first.count_card ~/
+                                            2
                                     ? Colors.green
                                     : Colors.red,
                                 fontFamily: 'TonphaiThin',
@@ -277,26 +293,25 @@ class _Four extends State<Four> {
                           Expanded(
                             child: showWords
                                 ? ListView.builder(
-                              itemCount: word.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ListTile(
-                                  title: Text(
-                                    '${word[index]} - ${meaning[index]}',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontFamily: 'TonphaiThin',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                );
-                              },
-                            )
+                                    itemCount: word.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        title: Text(
+                                          '${word[index]} - ${meaning[index]}',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontFamily: 'TonphaiThin',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
                                 : SizedBox(),
                           ),
-                          showWords
-                              ? SizedBox(height: 20)
-                              : SizedBox(),
+                          showWords ? SizedBox(height: 20) : SizedBox(),
                         ],
                       ),
                     ),
@@ -315,7 +330,9 @@ class _Four extends State<Four> {
                                 onPressed: () {
                                   setState(() {
                                     showWords = true;
-                                    dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                                    dialogHeight =
+                                        MediaQuery.of(context).size.height *
+                                            0.6;
                                   });
                                 },
                                 child: Text(
@@ -361,7 +378,8 @@ class _Four extends State<Four> {
                                 });
                                 Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (context) => SelectPeople()),
+                                  MaterialPageRoute(
+                                      builder: (context) => SelectPeople()),
                                 );
                               },
                               child: Text(
@@ -393,6 +411,7 @@ class _Four extends State<Four> {
       initTimer();
     });
   }
+
   @override
   void dispose() {
     timer?.cancel();
@@ -401,6 +420,7 @@ class _Four extends State<Four> {
 
   bool isResultDialogShowing = false;
   ValueNotifier<int> timerValueNotifier = ValueNotifier<int>(30);
+
   void initTimer() {
     if (!mounted) return;
     if (timeLeft <= 0 ||
@@ -434,6 +454,7 @@ class _Four extends State<Four> {
   void resumeTimer() {
     startTimer();
   }
+
   void showEnlargedImage(String base64Image) {
     showDialog(
       context: context,
@@ -571,7 +592,9 @@ class _Four extends State<Four> {
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 1' ? Colors.red : Colors.white,
+                        color: currentPlayer == 'Player 1'
+                            ? Colors.red
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.black, width: 2),
                       ),
@@ -582,14 +605,18 @@ class _Four extends State<Four> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 1' ? Colors.black : Colors.black,
+                          color: currentPlayer == 'Player 1'
+                              ? Colors.black
+                              : Colors.black,
                         ),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(right: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 2' ? Colors.red : Colors.white,
+                        color: currentPlayer == 'Player 2'
+                            ? Colors.red
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.black, width: 2),
                       ),
@@ -600,7 +627,9 @@ class _Four extends State<Four> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 2' ? Colors.black : Colors.black,
+                          color: currentPlayer == 'Player 2'
+                              ? Colors.black
+                              : Colors.black,
                         ),
                       ),
                     ),
@@ -652,8 +681,7 @@ class _Four extends State<Four> {
                   ),
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount:
-                      DataColumCardFour.count.first.column_card,
+                      crossAxisCount: DataColumCardFour.count.first.column_card,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 30,
                     ),
@@ -668,13 +696,13 @@ class _Four extends State<Four> {
                           borderRadius: BorderRadius.circular(10.0),
                           child: isFlipped[index]
                               ? Image.memory(
-                            base64Decode(picGame[index]),
-                            fit: BoxFit.cover,
-                          )
+                                  base64Decode(picGame[index]),
+                                  fit: BoxFit.cover,
+                                )
                               : Image.asset(
-                            'assets/BgCard/bgCard.png',
-                            fit: BoxFit.cover,
-                          ),
+                                  'assets/BgCard/bgCard.png',
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       );
                     },
@@ -686,7 +714,9 @@ class _Four extends State<Four> {
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 3' ? Colors.red : Colors.white,
+                        color: currentPlayer == 'Player 3'
+                            ? Colors.red
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.black, width: 2),
                       ),
@@ -697,14 +727,18 @@ class _Four extends State<Four> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 3' ? Colors.black : Colors.black,
+                          color: currentPlayer == 'Player 3'
+                              ? Colors.black
+                              : Colors.black,
                         ),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(right: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 4' ? Colors.red : Colors.white,
+                        color: currentPlayer == 'Player 4'
+                            ? Colors.red
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.black, width: 2),
                       ),
@@ -715,7 +749,9 @@ class _Four extends State<Four> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 4' ? Colors.black : Colors.black,
+                          color: currentPlayer == 'Player 4'
+                              ? Colors.black
+                              : Colors.black,
                         ),
                       ),
                     ),
@@ -748,10 +784,12 @@ class _Four extends State<Four> {
                         child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/images/kid_colorful.png'),
+                              image:
+                                  AssetImage('assets/images/kid_colorful.png'),
                               fit: BoxFit.cover,
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30.0)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -780,7 +818,8 @@ class _Four extends State<Four> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 12.0),
                                   ),
                                   child: Text(
                                     'Resume',
@@ -799,7 +838,8 @@ class _Four extends State<Four> {
                                     resumeTimer();
                                     Navigator.pushReplacement(
                                       context,
-                                      MaterialPageRoute(builder: (context) => Level()),
+                                      MaterialPageRoute(
+                                          builder: (context) => SelectPeople()),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -808,7 +848,8 @@ class _Four extends State<Four> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 12.0),
                                   ),
                                   child: Text(
                                     'Back To Menu',

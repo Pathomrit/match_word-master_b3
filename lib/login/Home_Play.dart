@@ -63,7 +63,7 @@ class _PlayPageState extends State<PlayPage> {
                         text: ' Matching Card',
                         style: TextStyle(
                           color: Colors.black,
-                          fontFamily: 'TonphaiThin',
+                          fontFamily: 'DANKI',
                           fontSize: 50,
                           fontWeight: FontWeight.bold,
                         ),

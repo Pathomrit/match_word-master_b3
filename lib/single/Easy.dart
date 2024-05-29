@@ -9,9 +9,11 @@ import 'package:flutter/services.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:typed_data';
+
 class DatabaseHelper {
   static Database? _database;
   static const String dbName = 'Vword3.sqlite';
+
   Future<Database> get database async {
     if (_database != null) {
       return _database!;
@@ -33,11 +35,12 @@ class DatabaseHelper {
     if (FileSystemEntity.typeSync(path) == FileSystemEntityType.notFound) {
       ByteData data = await rootBundle.load('assets/$dbName');
       List<int> bytes =
-      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes, flush: true);
     }
   }
 }
+
 class CardData {
   String word;
   String imageData;
@@ -52,6 +55,7 @@ class Easy extends StatefulWidget {
 
 class _Easy extends State<Easy> {
   DatabaseHelper databaseHelper = DatabaseHelper();
+
   Future<void> initDatabase() async {
     await databaseHelper.initDatabase();
   }
@@ -71,8 +75,8 @@ class _Easy extends State<Easy> {
     List<String> randomMeanings = [];
 
     for (int i = 0;
-    i < DataCountCardEasy.countCard.first.count_card ~/ 2;
-    i++) {
+        i < DataCountCardEasy.countCard.first.count_card ~/ 2;
+        i++) {
       int currentIndex = indices[i];
       randomWords.add(data[currentIndex]['Word']);
       Uint8List picBytes = data[currentIndex]['picImages'];
@@ -85,8 +89,8 @@ class _Easy extends State<Easy> {
     }
     List<Map<String, dynamic>> randomData = [];
     for (int i = 0;
-    i < DataCountCardEasy.countCard.first.count_card ~/ 2;
-    i++) {
+        i < DataCountCardEasy.countCard.first.count_card ~/ 2;
+        i++) {
       randomData.add({
         'Word': randomWords[i],
         'picImages': randomPicImages[i],
@@ -132,9 +136,12 @@ class _Easy extends State<Easy> {
   @override
   void initState() {
     super.initState();
-    RandomBg();
+    timeLeft = maxTime;
+    matchedCard = 0;
+    disableDeck = false;
+    isResultDialogShowing = false;
     shuffleCard();
-    startTimer();
+    RandomBg();
   }
 
   void shuffleCard() {
@@ -156,7 +163,7 @@ class _Easy extends State<Easy> {
         meaning.add(item['Meaning']);
       });
       List<int> indices =
-      List<int>.generate(fetchedWords.length, (int index) => index);
+          List<int>.generate(fetchedWords.length, (int index) => index);
       indices.shuffle();
       List<String> shuffledWords = [];
       List<String> shuffledPicImages = [];
@@ -241,14 +248,17 @@ class _Easy extends State<Easy> {
                           Center(
                             child: Text(
                               matchedCard ==
-                                  DataCountCardEasy.countCard.first.count_card ~/ 2
+                                      DataCountCardEasy
+                                              .countCard.first.count_card ~/
+                                          2
                                   ? "You Win"
                                   : "You Lose",
                               style: TextStyle(
                                 fontSize: 30,
                                 color: matchedCard ==
-                                    DataCountCardEasy
-                                        .countCard.first.count_card ~/ 2
+                                        DataCountCardEasy
+                                                .countCard.first.count_card ~/
+                                            2
                                     ? Colors.green
                                     : Colors.red,
                                 fontFamily: 'TonphaiThin',
@@ -270,26 +280,25 @@ class _Easy extends State<Easy> {
                           Expanded(
                             child: showWords
                                 ? ListView.builder(
-                              itemCount: word.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ListTile(
-                                  title: Text(
-                                    '${word[index]} - ${meaning[index]}',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontFamily: 'TonphaiThin',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                );
-                              },
-                            )
+                                    itemCount: word.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        title: Text(
+                                          '${word[index]} - ${meaning[index]}',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontFamily: 'TonphaiThin',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
                                 : SizedBox(),
                           ),
-                          showWords
-                              ? SizedBox(height: 20)
-                              : SizedBox(),
+                          showWords ? SizedBox(height: 20) : SizedBox(),
                         ],
                       ),
                     ),
@@ -308,7 +317,9 @@ class _Easy extends State<Easy> {
                                 onPressed: () {
                                   setState(() {
                                     showWords = true;
-                                    dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                                    dialogHeight =
+                                        MediaQuery.of(context).size.height *
+                                            0.6;
                                   });
                                 },
                                 child: Text(
@@ -354,7 +365,8 @@ class _Easy extends State<Easy> {
                                 });
                                 Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (context) => Level()),
+                                  MaterialPageRoute(
+                                      builder: (context) => Level()),
                                 );
                               },
                               child: Text(
@@ -380,8 +392,6 @@ class _Easy extends State<Easy> {
       },
     );
   }
-
-
 
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
@@ -613,13 +623,13 @@ class _Easy extends State<Easy> {
                           borderRadius: BorderRadius.circular(10.0),
                           child: isFlipped[index]
                               ? Image.memory(
-                            base64Decode(picGame[index]),
-                            fit: BoxFit.cover,
-                          )
+                                  base64Decode(picGame[index]),
+                                  fit: BoxFit.cover,
+                                )
                               : Image.asset(
-                            'assets/BgCard/bgCard.png',
-                            fit: BoxFit.cover,
-                          ),
+                                  'assets/BgCard/bgCard.png',
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       );
                     },
@@ -652,10 +662,12 @@ class _Easy extends State<Easy> {
                         child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/images/kid_colorful.png'),
+                              image:
+                                  AssetImage('assets/images/kid_colorful.png'),
                               fit: BoxFit.cover,
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30.0)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -684,7 +696,8 @@ class _Easy extends State<Easy> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 12.0),
                                   ),
                                   child: Text(
                                     'Resume',
@@ -703,7 +716,8 @@ class _Easy extends State<Easy> {
                                     resumeTimer();
                                     Navigator.pushReplacement(
                                       context,
-                                      MaterialPageRoute(builder: (context) => Level()),
+                                      MaterialPageRoute(
+                                          builder: (context) => Level()),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -712,7 +726,8 @@ class _Easy extends State<Easy> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 12.0),
                                   ),
                                   child: Text(
                                     'Back To Menu',

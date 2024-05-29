@@ -137,9 +137,12 @@ class _Three extends State<Three> {
   @override
   void initState() {
     super.initState();
-    RandomBg();
+    timeLeft = maxTime;
+    matchedCard = 0;
+    disableDeck = false;
+    isResultDialogShowing = false;
     shuffleCard();
-    startTimer();
+    RandomBg();
   }
 
   void shuffleCard() {
@@ -256,13 +259,17 @@ class _Three extends State<Three> {
                           Center(
                             child: Text(
                               matchedCard ==
-                                  DataCountCardThree.countCard.first.count_card ~/ 2
+                                      DataCountCardThree
+                                              .countCard.first.count_card ~/
+                                          2
                                   ? "$winner Win"
                                   : "You Lose",
                               style: TextStyle(
                                 fontSize: 30,
                                 color: matchedCard ==
-                                    DataCountCardThree.countCard.first.count_card ~/ 2
+                                        DataCountCardThree
+                                                .countCard.first.count_card ~/
+                                            2
                                     ? Colors.green
                                     : Colors.red,
                                 fontFamily: 'TonphaiThin',
@@ -284,26 +291,25 @@ class _Three extends State<Three> {
                           Expanded(
                             child: showWords
                                 ? ListView.builder(
-                              itemCount: word.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ListTile(
-                                  title: Text(
-                                    '${word[index]} - ${meaning[index]}',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontFamily: 'TonphaiThin',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                );
-                              },
-                            )
+                                    itemCount: word.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        title: Text(
+                                          '${word[index]} - ${meaning[index]}',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontFamily: 'TonphaiThin',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
                                 : SizedBox(),
                           ),
-                          showWords
-                              ? SizedBox(height: 20)
-                              : SizedBox(),
+                          showWords ? SizedBox(height: 20) : SizedBox(),
                         ],
                       ),
                     ),
@@ -322,7 +328,9 @@ class _Three extends State<Three> {
                                 onPressed: () {
                                   setState(() {
                                     showWords = true;
-                                    dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                                    dialogHeight =
+                                        MediaQuery.of(context).size.height *
+                                            0.6;
                                   });
                                 },
                                 child: Text(
@@ -368,7 +376,8 @@ class _Three extends State<Three> {
                                 });
                                 Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (context) => SelectPeople()),
+                                  MaterialPageRoute(
+                                      builder: (context) => SelectPeople()),
                                 );
                               },
                               child: Text(
@@ -749,10 +758,12 @@ class _Three extends State<Three> {
                         child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/images/kid_colorful.png'),
+                              image:
+                                  AssetImage('assets/images/kid_colorful.png'),
                               fit: BoxFit.cover,
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30.0)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -781,7 +792,8 @@ class _Three extends State<Three> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 12.0),
                                   ),
                                   child: Text(
                                     'Resume',
@@ -800,7 +812,8 @@ class _Three extends State<Three> {
                                     resumeTimer();
                                     Navigator.pushReplacement(
                                       context,
-                                      MaterialPageRoute(builder: (context) => SelectPeople()),
+                                      MaterialPageRoute(
+                                          builder: (context) => SelectPeople()),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -809,7 +822,8 @@ class _Three extends State<Three> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 12.0),
                                   ),
                                   child: Text(
                                     'Back To Menu',

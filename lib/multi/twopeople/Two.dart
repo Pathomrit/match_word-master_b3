@@ -36,17 +36,19 @@ class DatabaseHelper {
     if (FileSystemEntity.typeSync(path) == FileSystemEntityType.notFound) {
       ByteData data = await rootBundle.load('assets/$dbName');
       List<int> bytes =
-      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes, flush: true);
     }
   }
 }
+
 class CardData {
   String word;
   String imageData;
 
   CardData({required this.word, required this.imageData});
 }
+
 class Two extends StatefulWidget {
   @override
   _Two createState() => _Two();
@@ -54,9 +56,11 @@ class Two extends StatefulWidget {
 
 class _Two extends State<Two> {
   DatabaseHelper databaseHelper = DatabaseHelper();
+
   Future<void> initDatabase() async {
     await databaseHelper.initDatabase();
   }
+
   Future<List<Map<String, dynamic>>> fetchRandomData() async {
     final Database db = await databaseHelper.database;
     final List<Map<String, dynamic>> data = await db.query(
@@ -71,9 +75,7 @@ class _Two extends State<Two> {
     List<String> randomWordImages = [];
     List<String> randomMeanings = [];
 
-    for (int i = 0;
-    i < DataCountCardTwo.countCard.first.count_card ~/ 2;
-    i++) {
+    for (int i = 0; i < DataCountCardTwo.countCard.first.count_card ~/ 2; i++) {
       int currentIndex = indices[i];
       randomWords.add(data[currentIndex]['Word']);
       Uint8List picBytes = data[currentIndex]['picImages'];
@@ -85,9 +87,7 @@ class _Two extends State<Two> {
       randomMeanings.add(data[currentIndex]['Meaning']);
     }
     List<Map<String, dynamic>> randomData = [];
-    for (int i = 0;
-    i < DataCountCardTwo.countCard.first.count_card ~/ 2;
-    i++) {
+    for (int i = 0; i < DataCountCardTwo.countCard.first.count_card ~/ 2; i++) {
       randomData.add({
         'Word': randomWords[i],
         'picImages': randomPicImages[i],
@@ -98,6 +98,7 @@ class _Two extends State<Two> {
 
     return randomData;
   }
+
   String selectedBgImage = '';
 
   void RandomBg() {
@@ -110,6 +111,7 @@ class _Two extends State<Two> {
     int bgIndex = randomBg.nextInt(bgImages.length);
     selectedBgImage = bgImages[bgIndex];
   }
+
   List<int> selectedCards = [];
   List<String> picImages = [];
   List<String> wordImages = [];
@@ -131,9 +133,12 @@ class _Two extends State<Two> {
   @override
   void initState() {
     super.initState();
-    RandomBg();
+    timeLeft = maxTime;
+    matchedCard = 0;
+    disableDeck = false;
+    isResultDialogShowing = false;
     shuffleCard();
-    startTimer();
+    RandomBg();
   }
 
   void shuffleCard() {
@@ -155,7 +160,7 @@ class _Two extends State<Two> {
         meaning.add(item['Meaning']);
       });
       List<int> indices =
-      List<int>.generate(fetchedWords.length, (int index) => index);
+          List<int>.generate(fetchedWords.length, (int index) => index);
       indices.shuffle();
       List<String> shuffledWords = [];
       List<String> shuffledPicImages = [];
@@ -191,7 +196,9 @@ class _Two extends State<Two> {
       });
     });
   }
+
   String currentPlayer = 'Player 1';
+
   void showResultDialog(bool isWin) async {
     String winner = currentPlayer == 'Player 1' ? 'Player 1' : 'Player 2';
     bool showWords = false;
@@ -241,13 +248,17 @@ class _Two extends State<Two> {
                           Center(
                             child: Text(
                               matchedCard ==
-                                  DataCountCardTwo.countCard.first.count_card ~/ 2
+                                      DataCountCardTwo
+                                              .countCard.first.count_card ~/
+                                          2
                                   ? "$winner Win"
                                   : "You Lose",
                               style: TextStyle(
                                 fontSize: 30,
                                 color: matchedCard ==
-                                    DataCountCardTwo.countCard.first.count_card ~/ 2
+                                        DataCountCardTwo
+                                                .countCard.first.count_card ~/
+                                            2
                                     ? Colors.green
                                     : Colors.red,
                                 fontFamily: 'TonphaiThin',
@@ -269,26 +280,25 @@ class _Two extends State<Two> {
                           Expanded(
                             child: showWords
                                 ? ListView.builder(
-                              itemCount: word.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ListTile(
-                                  title: Text(
-                                    '${word[index]} - ${meaning[index]}',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontFamily: 'TonphaiThin',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                );
-                              },
-                            )
+                                    itemCount: word.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        title: Text(
+                                          '${word[index]} - ${meaning[index]}',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontFamily: 'TonphaiThin',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
                                 : SizedBox(),
                           ),
-                          showWords
-                              ? SizedBox(height: 20)
-                              : SizedBox(),
+                          showWords ? SizedBox(height: 20) : SizedBox(),
                         ],
                       ),
                     ),
@@ -307,7 +317,9 @@ class _Two extends State<Two> {
                                 onPressed: () {
                                   setState(() {
                                     showWords = true;
-                                    dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                                    dialogHeight =
+                                        MediaQuery.of(context).size.height *
+                                            0.6;
                                   });
                                 },
                                 child: Text(
@@ -353,7 +365,8 @@ class _Two extends State<Two> {
                                 });
                                 Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (context) => SelectPeople()),
+                                  MaterialPageRoute(
+                                      builder: (context) => SelectPeople()),
                                 );
                               },
                               child: Text(
@@ -420,6 +433,7 @@ class _Two extends State<Two> {
     timeLeft--;
     timerValueNotifier.value = timeLeft;
   }
+
   void pauseTimer() {
     timer?.cancel();
   }
@@ -427,6 +441,7 @@ class _Two extends State<Two> {
   void resumeTimer() {
     startTimer();
   }
+
   void showEnlargedImage(String base64Image) {
     showDialog(
       context: context,
@@ -509,7 +524,8 @@ class _Two extends State<Two> {
             }
             timeLeft = maxTime;
             timerValueNotifier.value = timeLeft;
-            currentPlayer = currentPlayer == 'Player 1' ? 'Player 2' : 'Player 1';
+            currentPlayer =
+                currentPlayer == 'Player 1' ? 'Player 2' : 'Player 1';
           });
         } else {
           matchedCard += 1;
@@ -553,7 +569,9 @@ class _Two extends State<Two> {
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 1' ? Colors.red : Colors.white,
+                        color: currentPlayer == 'Player 1'
+                            ? Colors.red
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.black, width: 2),
                       ),
@@ -564,14 +582,18 @@ class _Two extends State<Two> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 1' ? Colors.black : Colors.black,
+                          color: currentPlayer == 'Player 1'
+                              ? Colors.black
+                              : Colors.black,
                         ),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(right: 20),
                       decoration: BoxDecoration(
-                        color: currentPlayer == 'Player 2' ? Colors.red : Colors.white,
+                        color: currentPlayer == 'Player 2'
+                            ? Colors.red
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.black, width: 2),
                       ),
@@ -582,7 +604,9 @@ class _Two extends State<Two> {
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
                           fontWeight: FontWeight.bold,
-                          color: currentPlayer == 'Player 2' ? Colors.black : Colors.black,
+                          color: currentPlayer == 'Player 2'
+                              ? Colors.black
+                              : Colors.black,
                         ),
                       ),
                     ),
@@ -633,7 +657,7 @@ class _Two extends State<Two> {
                     border: Border.all(color: Colors.black, width: 3.0),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child:  GridView.builder(
+                  child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: DataColumCardTwo.count.first.column_card,
                       crossAxisSpacing: 10,
@@ -650,13 +674,13 @@ class _Two extends State<Two> {
                           borderRadius: BorderRadius.circular(10.0),
                           child: isFlipped[index]
                               ? Image.memory(
-                            base64Decode(picGame[index]),
-                            fit: BoxFit.cover,
-                          )
+                                  base64Decode(picGame[index]),
+                                  fit: BoxFit.cover,
+                                )
                               : Image.asset(
-                            'assets/BgCard/bgCard.png',
-                            fit: BoxFit.cover,
-                          ),
+                                  'assets/BgCard/bgCard.png',
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       );
                     },
@@ -689,10 +713,12 @@ class _Two extends State<Two> {
                         child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/images/kid_colorful.png'),
+                              image:
+                                  AssetImage('assets/images/kid_colorful.png'),
                               fit: BoxFit.cover,
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30.0)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -721,7 +747,8 @@ class _Two extends State<Two> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 12.0),
                                   ),
                                   child: Text(
                                     'Resume',
@@ -740,7 +767,8 @@ class _Two extends State<Two> {
                                     resumeTimer();
                                     Navigator.pushReplacement(
                                       context,
-                                      MaterialPageRoute(builder: (context) => SelectPeople()),
+                                      MaterialPageRoute(
+                                          builder: (context) => SelectPeople()),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -749,7 +777,8 @@ class _Two extends State<Two> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 12.0),
                                   ),
                                   child: Text(
                                     'Back To Menu',

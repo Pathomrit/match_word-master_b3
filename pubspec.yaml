@@ -142,6 +142,10 @@ flutter:
     - family: TonphaiThin
       fonts:
         - asset: assets/font/FCIglooRounded[Non-commercial].ttf
+
+    - family: DANKI
+      fonts:
+        - asset: assets/font/DANKI.otf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

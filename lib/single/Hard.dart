@@ -35,7 +35,7 @@ class DatabaseHelper {
     if (FileSystemEntity.typeSync(path) == FileSystemEntityType.notFound) {
       ByteData data = await rootBundle.load('assets/$dbName');
       List<int> bytes =
-      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes, flush: true);
     }
   }
@@ -75,8 +75,8 @@ class _Hard extends State<Hard> {
     List<String> randomMeanings = [];
 
     for (int i = 0;
-    i < DataCountCardHard.countCard.first.count_card ~/ 2;
-    i++) {
+        i < DataCountCardHard.countCard.first.count_card ~/ 2;
+        i++) {
       int currentIndex = indices[i];
       randomWords.add(data[currentIndex]['Word']);
       Uint8List picBytes = data[currentIndex]['picImages'];
@@ -89,8 +89,8 @@ class _Hard extends State<Hard> {
     }
     List<Map<String, dynamic>> randomData = [];
     for (int i = 0;
-    i < DataCountCardHard.countCard.first.count_card ~/ 2;
-    i++) {
+        i < DataCountCardHard.countCard.first.count_card ~/ 2;
+        i++) {
       randomData.add({
         'Word': randomWords[i],
         'picImages': randomPicImages[i],
@@ -136,9 +136,12 @@ class _Hard extends State<Hard> {
   @override
   void initState() {
     super.initState();
-    RandomBg();
+    timeLeft = maxTime;
+    matchedCard = 0;
+    disableDeck = false;
+    isResultDialogShowing = false;
     shuffleCard();
-    startTimer();
+    RandomBg();
   }
 
   void shuffleCard() {
@@ -160,7 +163,7 @@ class _Hard extends State<Hard> {
         meaning.add(item['Meaning']);
       });
       List<int> indices =
-      List<int>.generate(fetchedWords.length, (int index) => index);
+          List<int>.generate(fetchedWords.length, (int index) => index);
       indices.shuffle();
       List<String> shuffledWords = [];
       List<String> shuffledPicImages = [];
@@ -245,13 +248,17 @@ class _Hard extends State<Hard> {
                           Center(
                             child: Text(
                               matchedCard ==
-                                  DataCountCardHard.countCard.first.count_card ~/ 2
+                                      DataCountCardHard
+                                              .countCard.first.count_card ~/
+                                          2
                                   ? "You Win"
                                   : "You Lose",
                               style: TextStyle(
                                 fontSize: 30,
                                 color: matchedCard ==
-                                    DataCountCardHard.countCard.first.count_card ~/ 2
+                                        DataCountCardHard
+                                                .countCard.first.count_card ~/
+                                            2
                                     ? Colors.green
                                     : Colors.red,
                                 fontFamily: 'TonphaiThin',
@@ -273,26 +280,25 @@ class _Hard extends State<Hard> {
                           Expanded(
                             child: showWords
                                 ? ListView.builder(
-                              itemCount: word.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ListTile(
-                                  title: Text(
-                                    '${word[index]} - ${meaning[index]}',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontFamily: 'TonphaiThin',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                );
-                              },
-                            )
+                                    itemCount: word.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        title: Text(
+                                          '${word[index]} - ${meaning[index]}',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontFamily: 'TonphaiThin',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
                                 : SizedBox(),
                           ),
-                          showWords
-                              ? SizedBox(height: 20)
-                              : SizedBox(),
+                          showWords ? SizedBox(height: 20) : SizedBox(),
                         ],
                       ),
                     ),
@@ -311,7 +317,9 @@ class _Hard extends State<Hard> {
                                 onPressed: () {
                                   setState(() {
                                     showWords = true;
-                                    dialogHeight = MediaQuery.of(context).size.height * 0.6;
+                                    dialogHeight =
+                                        MediaQuery.of(context).size.height *
+                                            0.6;
                                   });
                                 },
                                 child: Text(
@@ -357,7 +365,8 @@ class _Hard extends State<Hard> {
                                 });
                                 Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (context) => Level()),
+                                  MaterialPageRoute(
+                                      builder: (context) => Level()),
                                 );
                               },
                               child: Text(
@@ -614,13 +623,13 @@ class _Hard extends State<Hard> {
                           borderRadius: BorderRadius.circular(10.0),
                           child: isFlipped[index]
                               ? Image.memory(
-                            base64Decode(picGame[index]),
-                            fit: BoxFit.cover,
-                          )
+                                  base64Decode(picGame[index]),
+                                  fit: BoxFit.cover,
+                                )
                               : Image.asset(
-                            'assets/BgCard/bgCard.png',
-                            fit: BoxFit.cover,
-                          ),
+                                  'assets/BgCard/bgCard.png',
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       );
                     },
@@ -653,10 +662,12 @@ class _Hard extends State<Hard> {
                         child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/images/kid_colorful.png'),
+                              image:
+                                  AssetImage('assets/images/kid_colorful.png'),
                               fit: BoxFit.cover,
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30.0)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -685,7 +696,8 @@ class _Hard extends State<Hard> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 12.0),
                                   ),
                                   child: Text(
                                     'Resume',
@@ -704,7 +716,8 @@ class _Hard extends State<Hard> {
                                     resumeTimer();
                                     Navigator.pushReplacement(
                                       context,
-                                      MaterialPageRoute(builder: (context) => Level()),
+                                      MaterialPageRoute(
+                                          builder: (context) => Level()),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -713,7 +726,8 @@ class _Hard extends State<Hard> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24.0, vertical: 12.0),
                                   ),
                                   child: Text(
                                     'Back To Menu',

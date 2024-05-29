@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:match_word/setting/DataSinglePlayer.dart';
 import 'package:match_word/single/Level.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart'show join, getDatabasesPath;
+import 'package:path/path.dart' show join, getDatabasesPath;
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:typed_data';
+
 class DatabaseHelper {
   static Database? _database;
   static const String dbName = 'Vword3.sqlite';
@@ -34,17 +35,19 @@ class DatabaseHelper {
     if (FileSystemEntity.typeSync(path) == FileSystemEntityType.notFound) {
       ByteData data = await rootBundle.load('assets/$dbName');
       List<int> bytes =
-      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes, flush: true);
     }
   }
 }
+
 class CardData {
   String word;
   String imageData;
 
   CardData({required this.word, required this.imageData});
 }
+
 class ex extends StatefulWidget {
   @override
   _ex createState() => _ex();
@@ -52,6 +55,7 @@ class ex extends StatefulWidget {
 
 class _ex extends State<ex> {
   DatabaseHelper databaseHelper = DatabaseHelper();
+
   Future<void> initDatabase() async {
     await databaseHelper.initDatabase();
   }
@@ -70,8 +74,9 @@ class _ex extends State<ex> {
     List<String> randomWordImages = [];
     List<String> randomMeanings = [];
 
-    for (int i = 0; i <
-        DataCountCardEasy.countCard.first.count_card ~/ 2; i++) {
+    for (int i = 0;
+        i < DataCountCardEasy.countCard.first.count_card ~/ 2;
+        i++) {
       int currentIndex = indices[i];
       randomWords.add(data[currentIndex]['Word']);
       Uint8List picBytes = data[currentIndex]['picImages'];
@@ -83,8 +88,9 @@ class _ex extends State<ex> {
       randomMeanings.add(data[currentIndex]['Meaning']);
     }
     List<Map<String, dynamic>> randomData = [];
-    for (int i = 0; i <
-        DataCountCardEasy.countCard.first.count_card ~/ 2; i++) {
+    for (int i = 0;
+        i < DataCountCardEasy.countCard.first.count_card ~/ 2;
+        i++) {
       randomData.add({
         'Word': randomWords[i],
         'picImages': randomPicImages[i],
@@ -95,7 +101,6 @@ class _ex extends State<ex> {
 
     return randomData;
   }
-
 
   String selectedBgImage = '';
 
@@ -154,8 +159,8 @@ class _ex extends State<ex> {
         word.add(item['Word']);
         meaning.add(item['Meaning']);
       });
-      List<int> indices = List<int>.generate(
-          fetchedWords.length, (int index) => index);
+      List<int> indices =
+          List<int>.generate(fetchedWords.length, (int index) => index);
       indices.shuffle();
       List<String> shuffledWords = [];
       List<String> shuffledPicImages = [];
@@ -167,10 +172,12 @@ class _ex extends State<ex> {
       }
       setState(() {
         timeLeft = maxTime;
-        picImages = shuffledPicImages.take(
-            DataCountCardEasy.countCard.first.count_card ~/ 2).toList();
-        wordImages = shuffledWordImages.take(
-            DataCountCardEasy.countCard.first.count_card ~/ 2).toList();
+        picImages = shuffledPicImages
+            .take(DataCountCardEasy.countCard.first.count_card ~/ 2)
+            .toList();
+        wordImages = shuffledWordImages
+            .take(DataCountCardEasy.countCard.first.count_card ~/ 2)
+            .toList();
         List<CardData> combinedData = [];
         for (int i = 0; i < picImages.length; i++) {
           combinedData.add(CardData(
@@ -210,15 +217,16 @@ class _ex extends State<ex> {
                     Center(
                       child: Text(
                         matchedCard ==
-                            DataCountCardEasy
-                                .countCard.first.count_card ~/ 2
+                                DataCountCardEasy.countCard.first.count_card ~/
+                                    2
                             ? "You Win"
                             : "You Lose",
                         style: TextStyle(
                           fontSize: 30,
                           color: matchedCard ==
-                              DataCountCardEasy
-                                  .countCard.first.count_card ~/ 2
+                                  DataCountCardEasy
+                                          .countCard.first.count_card ~/
+                                      2
                               ? Colors.green
                               : Colors.red,
                           fontFamily: 'TonphaiThin',
@@ -240,21 +248,21 @@ class _ex extends State<ex> {
                     Expanded(
                       child: showWords
                           ? ListView.builder(
-                        itemCount: word.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(
-                              '${word[index]} - ${meaning[index]}',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                                fontFamily: 'TonphaiThin',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        },
-                      )
+                              itemCount: word.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  title: Text(
+                                    '${word[index]} - ${meaning[index]}',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontFamily: 'TonphaiThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
                           : SizedBox(),
                     ),
                   ],
@@ -337,7 +345,6 @@ class _ex extends State<ex> {
     );
   }
 
-
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       initTimer();
@@ -355,7 +362,8 @@ class _ex extends State<ex> {
 
   void initTimer() {
     if (!mounted) return;
-    if (timeLeft <= 0 || matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2) {
+    if (timeLeft <= 0 ||
+        matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2) {
       timer?.cancel();
       if (mounted && !isResultDialogShowing) {
         isResultDialogShowing = true;
@@ -385,6 +393,7 @@ class _ex extends State<ex> {
   void resumeTimer() {
     startTimer();
   }
+
   void showEnlargedImage(String base64Image) {
     showDialog(
       context: context,
@@ -407,7 +416,11 @@ class _ex extends State<ex> {
   }
 
   void onTapCard(int index) async {
-    if (!disableDeck && !isFlipped[index] && index >= 0 && index < picGame.length && timeLeft > 0) {
+    if (!disableDeck &&
+        !isFlipped[index] &&
+        index >= 0 &&
+        index < picGame.length &&
+        timeLeft > 0) {
       if (!isPlaying) {
         isPlaying = true;
         timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
@@ -467,7 +480,8 @@ class _ex extends State<ex> {
         } else {
           matchedCard += 1;
           print(matchedCard);
-          if (matchedCard == DataCountCardEasy.countCard.first.count_card ~/ 2) {
+          if (matchedCard ==
+              DataCountCardEasy.countCard.first.count_card ~/ 2) {
             if (!isResultDialogShowing) {
               isResultDialogShowing = true;
               await Future.delayed(Duration(milliseconds: 300));
@@ -485,9 +499,6 @@ class _ex extends State<ex> {
       }
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -566,13 +577,13 @@ class _ex extends State<ex> {
                           borderRadius: BorderRadius.circular(10.0),
                           child: isFlipped[index]
                               ? Image.memory(
-                            base64Decode(picGame[index]),
-                            fit: BoxFit.cover,
-                          )
+                                  base64Decode(picGame[index]),
+                                  fit: BoxFit.cover,
+                                )
                               : Image.asset(
-                            'assets/BgCard/bgCard.png',
-                            fit: BoxFit.cover,
-                          ),
+                                  'assets/BgCard/bgCard.png',
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       );
                     },

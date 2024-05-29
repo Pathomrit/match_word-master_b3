@@ -50,7 +50,7 @@ class _Level extends State<Level> {
                 SizedBox(height: 30.0),
                 RoundedButton(
                   'Easy',
-                      () {
+                  () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Easy()),
@@ -72,7 +72,7 @@ class _Level extends State<Level> {
                 ),
                 RoundedButton(
                   'Medium',
-                      () {
+                  () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Medium()),
@@ -94,7 +94,7 @@ class _Level extends State<Level> {
                 ),
                 RoundedButton(
                   'Hard',
-                      () {
+                  () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Hard()),
