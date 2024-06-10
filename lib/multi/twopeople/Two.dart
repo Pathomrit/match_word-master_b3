@@ -200,9 +200,16 @@ class _Two extends State<Two> {
   String currentPlayer = 'Player 1';
 
   void showResultDialog(bool isWin) async {
-    String winner = currentPlayer == 'Player 1' ? 'Player 1' : 'Player 2';
+    String winner;
     bool showWords = false;
-    double dialogHeight = MediaQuery.of(context).size.height * 0.2;
+    double dialogHeight = MediaQuery.of(context).size.height * 0.25;
+    if (player1Score > player2Score) {
+      winner = 'Player 1 Win';
+    } else if (player2Score > player1Score) {
+      winner = 'Player 2 Win';
+    } else {
+      winner = 'Draw';
+    }
     if (word.isEmpty || meaning.isEmpty) {
       await fetchRandomData();
     }
@@ -251,8 +258,8 @@ class _Two extends State<Two> {
                                       DataCountCardTwo
                                               .countCard.first.count_card ~/
                                           2
-                                  ? "$winner Win"
-                                  : "You Lose",
+                                  ? "$winner"
+                                  : "$winner",
                               style: TextStyle(
                                 fontSize: 30,
                                 color: matchedCard ==
@@ -268,7 +275,7 @@ class _Two extends State<Two> {
                           ),
                           SizedBox(height: 10),
                           Text(
-                            "Card can flips ${matchedCard} from ${flips ~/ 2}",
+                            "Player 1 Score : $player1Score\nPlayer 2 Score : $player2Score",
                             style: TextStyle(
                               fontSize: 20,
                               color: Colors.black,
@@ -285,7 +292,7 @@ class _Two extends State<Two> {
                                         (BuildContext context, int index) {
                                       return ListTile(
                                         title: Text(
-                                          '${word[index]} - ${meaning[index]}',
+                                          '${word[index]} = ${meaning[index]}',
                                           style: TextStyle(
                                             fontSize: 18,
                                             color: Colors.black,
@@ -346,8 +353,13 @@ class _Two extends State<Two> {
                                   isResultDialogShowing = false;
                                   timeLeft = maxTime;
                                   timerValueNotifier.value = timeLeft;
+                                  currentPlayer = 'Player 1';
+                                  player1Score = 0;
+                                  player2Score = 0;
                                   RandomBg();
                                 });
+                                word.clear();
+                                meaning.clear();
                                 shuffleCard();
                                 startTimer();
                               },
@@ -477,8 +489,25 @@ class _Two extends State<Two> {
       },
     );
   }
+  int player1Score = 0;
+  int player2Score = 0;
 
   void onTapCard(int index) async {
+    if (index == -1) {
+      if (selectedCards.length == 1) {
+        setState(() {
+          cardOne = "";
+          isFlipped[selectedCards[0]] = false;
+          selectedCards.clear();
+        });
+      }
+      currentPlayer = currentPlayer == 'Player 1' ? 'Player 2' : 'Player 1';
+      setState(() {
+        timeLeft = maxTime;
+        timerValueNotifier.value = timeLeft;
+      });
+      return;
+    }
     if (!disableDeck &&
         !isFlipped[index] &&
         index >= 0 &&
@@ -496,18 +525,18 @@ class _Two extends State<Two> {
         isFlipped[index] = true;
         selectedCards.add(index);
       });
+
       await showDialog(
         context: context,
+        barrierDismissible: true,
         builder: (BuildContext context) {
-          return FutureBuilder(
-            future: Future.delayed(Duration(milliseconds: 300)),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                Navigator.of(context).pop();
-                return SizedBox();
-              }
-              return Dialog(
-                child: Container(
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -518,8 +547,19 @@ class _Two extends State<Two> {
                     fit: BoxFit.contain,
                   ),
                 ),
-              );
-            },
+                SizedBox(height: 10),
+                IconButton(
+                  icon: Image.asset(
+                    'assets/images/Close.png',
+                    width: 60,
+                    height: 60,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
           );
         },
       );
@@ -539,11 +579,18 @@ class _Two extends State<Two> {
             }
             timeLeft = maxTime;
             timerValueNotifier.value = timeLeft;
-            currentPlayer =
-                currentPlayer == 'Player 1' ? 'Player 2' : 'Player 1';
+            currentPlayer = currentPlayer == 'Player 1' ? 'Player 2' : 'Player 1';
           });
         } else {
           matchedCard += 1;
+          setState(() {
+            if (currentPlayer == 'Player 1') {
+              player1Score += 1;
+            } else {
+              player2Score += 1;
+            }
+          });
+
           print(matchedCard);
           if (matchedCard == DataCountCardTwo.countCard.first.count_card ~/ 2) {
             if (!isResultDialogShowing) {
@@ -592,7 +639,7 @@ class _Two extends State<Two> {
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        'Player 1',
+                        'Player 1\nScore : $player1Score',
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
@@ -614,7 +661,7 @@ class _Two extends State<Two> {
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        'Player 2',
+                        'Player 2\nScore : $player2Score',
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
@@ -664,7 +711,7 @@ class _Two extends State<Two> {
                     },
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 10),
                 Container(
                   margin: EdgeInsets.all(20.0),
                   padding: EdgeInsets.all(10.0),
@@ -700,6 +747,21 @@ class _Two extends State<Two> {
                       );
                     },
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Image.asset(
+                        'assets/images/Skip.png',
+                        width: 60,
+                        height: 60,
+                      ),
+                      onPressed: () {
+                        onTapCard(-1);
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -814,11 +876,11 @@ class _Two extends State<Two> {
                   );
                 },
               ),
-              SizedBox(width: 60),
+              SizedBox(width: 50),
               Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Text(
-                  'Two Player',
+                  'Two Players',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 40.0,

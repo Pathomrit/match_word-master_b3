@@ -205,17 +205,42 @@ class _Four extends State<Four> {
 
   void showResultDialog(bool isWin) async {
     String winner;
-    if (currentPlayer == 'Player 1') {
-      winner = 'Player 1';
-    } else if (currentPlayer == 'Player 2') {
-      winner = 'Player 2';
-    } else if (currentPlayer == 'Player 3') {
-      winner = 'Player 3';
-    } else {
-      winner = 'Player 4';
-    }
     bool showWords = false;
-    double dialogHeight = MediaQuery.of(context).size.height * 0.2;
+    double dialogHeight = MediaQuery.of(context).size.height * 0.3;
+
+    if (player1Score > player2Score && player1Score > player3Score && player1Score > player4Score) {
+      winner = 'Player 1 Win';
+    } else if (player2Score > player1Score && player2Score > player3Score && player2Score > player4Score) {
+      winner = 'Player 2 Win';
+    } else if (player3Score > player1Score && player3Score > player2Score && player3Score > player4Score) {
+      winner = 'Player 3 Win';
+    } else if (player4Score > player1Score && player4Score > player2Score && player4Score > player3Score) {
+      winner = 'Player 4 Win';
+    } else if (player1Score == player2Score && player1Score == player3Score && player1Score == player4Score) {
+      winner = 'Draw';
+    } else if (player1Score == player2Score && player1Score == player3Score) {
+      winner = 'P1, P2 and P3 Win';
+    } else if (player1Score == player2Score && player1Score == player4Score) {
+      winner = 'P1, P2 and P4 Win';
+    } else if (player1Score == player3Score && player1Score == player4Score) {
+      winner = 'P1, P3 and P4 Win';
+    } else if (player2Score == player3Score && player2Score == player4Score) {
+      winner = 'P2, P3 and P4 Win';
+    } else if (player1Score == player2Score) {
+      winner = 'P1 and P2 Win';
+    } else if (player1Score == player3Score) {
+      winner = 'P1 and P3 Win';
+    } else if (player1Score == player4Score) {
+      winner = 'P1 and P4 Win';
+    } else if (player2Score == player3Score) {
+      winner = 'P2 and P3 Win';
+    } else if (player2Score == player4Score) {
+      winner = 'P2 and P4 Win';
+    } else if (player3Score == player4Score) {
+      winner = 'P3 and P4 Win';
+    } else {
+      winner = 'Draw';
+    }
     if (word.isEmpty || meaning.isEmpty) {
       await fetchRandomData();
     }
@@ -261,17 +286,17 @@ class _Four extends State<Four> {
                           Center(
                             child: Text(
                               matchedCard ==
-                                      DataCountCardTwo
-                                              .countCard.first.count_card ~/
-                                          2
-                                  ? "$winner Win"
-                                  : "You Lose",
+                                  DataCountCardFour
+                                      .countCard.first.count_card ~/
+                                      2
+                                  ? "$winner"
+                                  : "$winner",
                               style: TextStyle(
                                 fontSize: 30,
                                 color: matchedCard ==
-                                        DataCountCardTwo
-                                                .countCard.first.count_card ~/
-                                            2
+                                    DataCountCardFour
+                                        .countCard.first.count_card ~/
+                                        2
                                     ? Colors.green
                                     : Colors.red,
                                 fontFamily: 'TonphaiThin',
@@ -281,7 +306,7 @@ class _Four extends State<Four> {
                           ),
                           SizedBox(height: 10),
                           Text(
-                            "Card can flips ${matchedCard} from ${flips ~/ 2}",
+                            "Player 1 Score : $player1Score\nPlayer 2 Score : $player2Score\nPlayer 3 Score : $player3Score\nPlayer 4 Score : $player4Score",
                             style: TextStyle(
                               fontSize: 20,
                               color: Colors.black,
@@ -293,22 +318,22 @@ class _Four extends State<Four> {
                           Expanded(
                             child: showWords
                                 ? ListView.builder(
-                                    itemCount: word.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return ListTile(
-                                        title: Text(
-                                          '${word[index]} - ${meaning[index]}',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.black,
-                                            fontFamily: 'PandaThin',
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  )
+                              itemCount: word.length,
+                              itemBuilder:
+                                  (BuildContext context, int index) {
+                                return ListTile(
+                                  title: Text(
+                                    '${word[index]} = ${meaning[index]}',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontFamily: 'PandaThin',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
                                 : SizedBox(),
                           ),
                           showWords ? SizedBox(height: 20) : SizedBox(),
@@ -359,8 +384,15 @@ class _Four extends State<Four> {
                                   isResultDialogShowing = false;
                                   timeLeft = maxTime;
                                   timerValueNotifier.value = timeLeft;
+                                  currentPlayer = 'Player 1';
+                                  player1Score = 0;
+                                  player2Score = 0;
+                                  player3Score = 0;
+                                  player4Score = 0;
                                   RandomBg();
                                 });
+                                word.clear();
+                                meaning.clear();
                                 shuffleCard();
                                 startTimer();
                               },
@@ -490,8 +522,26 @@ class _Four extends State<Four> {
       },
     );
   }
-
+  int player1Score = 0;
+  int player2Score = 0;
+  int player3Score = 0;
+  int player4Score = 0;
   void onTapCard(int index) async {
+    if (index == -1) {
+      if (selectedCards.length == 1) {
+        setState(() {
+          cardOne = "";
+          isFlipped[selectedCards[0]] = false;
+          selectedCards.clear();
+        });
+      }
+      currentPlayer = getNextPlayer(currentPlayer);
+      setState(() {
+        timeLeft = maxTime;
+        timerValueNotifier.value = timeLeft;
+      });
+      return;
+    }
     if (!disableDeck &&
         !isFlipped[index] &&
         index >= 0 &&
@@ -510,19 +560,17 @@ class _Four extends State<Four> {
         selectedCards.add(index);
       });
 
-      // Show enlarged image
       await showDialog(
         context: context,
+        barrierDismissible: true,
         builder: (BuildContext context) {
-          return FutureBuilder(
-            future: Future.delayed(Duration(milliseconds: 300)),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                Navigator.of(context).pop();
-                return SizedBox();
-              }
-              return Dialog(
-                child: Container(
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -533,8 +581,19 @@ class _Four extends State<Four> {
                     fit: BoxFit.contain,
                   ),
                 ),
-              );
-            },
+                SizedBox(height: 10),
+                IconButton(
+                  icon: Image.asset(
+                    'assets/images/Close.png',
+                    width: 60,
+                    height: 60,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
           );
         },
       );
@@ -554,21 +613,24 @@ class _Four extends State<Four> {
             }
             timeLeft = maxTime;
             timerValueNotifier.value = timeLeft;
-            if (currentPlayer == 'Player 1') {
-              currentPlayer = 'Player 2';
-            } else if (currentPlayer == 'Player 2') {
-              currentPlayer = 'Player 3';
-            } else if (currentPlayer == 'Player 3') {
-              currentPlayer = 'Player 4';
-            } else {
-              currentPlayer = 'Player 1';
-            }
+            currentPlayer = getNextPlayer(currentPlayer);
           });
         } else {
           matchedCard += 1;
+          setState(() {
+            if (currentPlayer == 'Player 1') {
+              player1Score += 1;
+            } else if (currentPlayer == 'Player 2') {
+              player2Score += 1;
+            } else if (currentPlayer == 'Player 3') {
+              player3Score += 1;
+            }else if (currentPlayer == 'Player 4'){
+              player4Score += 1;
+            }
+          });
+
           print(matchedCard);
-          if (matchedCard ==
-              DataCountCardFour.countCard.first.count_card ~/ 2) {
+          if (matchedCard == DataCountCardFour.countCard.first.count_card ~/ 2) {
             if (!isResultDialogShowing) {
               isResultDialogShowing = true;
               await Future.delayed(Duration(milliseconds: 300));
@@ -586,6 +648,17 @@ class _Four extends State<Four> {
     }
   }
 
+  String getNextPlayer(String currentPlayer) {
+    if (currentPlayer == 'Player 1') {
+      return 'Player 2';
+    } else if (currentPlayer == 'Player 2') {
+      return 'Player 3';
+    } else if(currentPlayer == 'Player 3'){
+      return 'Player 4';
+    }else {
+      return 'Player 1';
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -615,7 +688,7 @@ class _Four extends State<Four> {
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        'Player 1',
+                        'Player 1\nScore : $player1Score',
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
@@ -637,7 +710,7 @@ class _Four extends State<Four> {
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        'Player 2',
+                        'Player 2\nScore : $player2Score',
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
@@ -737,7 +810,7 @@ class _Four extends State<Four> {
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        'Player 3',
+                        'Player 3\nScore : $player3Score',
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
@@ -746,6 +819,18 @@ class _Four extends State<Four> {
                               ? Colors.black
                               : Colors.black,
                         ),
+                      ),
+                    ),
+                    Container(
+                      child:  IconButton(
+                        icon: Image.asset(
+                          'assets/images/Skip.png',
+                          width: 60,
+                          height: 60,
+                        ),
+                        onPressed: () {
+                          onTapCard(-1);
+                        },
                       ),
                     ),
                     Container(
@@ -759,7 +844,7 @@ class _Four extends State<Four> {
                       ),
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        'Player 4',
+                        'Player 4\nScore : $player4Score',
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'TonphaiThin',
@@ -771,7 +856,7 @@ class _Four extends State<Four> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -885,11 +970,11 @@ class _Four extends State<Four> {
                   );
                 },
               ),
-              SizedBox(width: 60),
+              SizedBox(width: 40),
               Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Text(
-                  'Four Player',
+                  'Four Players',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 40.0,

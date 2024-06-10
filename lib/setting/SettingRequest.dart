@@ -126,7 +126,7 @@ class _RequestState extends State<Request> {
                                   _image1!,
                                   height: 200,
                                   width: double.infinity,
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.contain,
                                 )
                                     : ClipRRect(
                                   borderRadius: BorderRadius.circular(20.0),
@@ -199,7 +199,7 @@ class _RequestState extends State<Request> {
                                   _image2!,
                                   height: 200,
                                   width: double.infinity,
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.contain,
                                 )
                                     : ClipRRect(
                                   borderRadius: BorderRadius.circular(20.0),

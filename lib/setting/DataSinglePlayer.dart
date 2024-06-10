@@ -89,6 +89,53 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
+                                "Card",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                  fontFamily: 'TonphaiThin',
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 60,
+                                      color: Colors.black,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: TextField(
+                                  controller: _countControllerEasy,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    labelText: 'Sum card',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(20.0),
+                                      ),
+                                      borderSide:
+                                      BorderSide(color: Colors.black),
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    labelStyle: TextStyle(
+                                      fontFamily: 'TonphaiThin',
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
                                 "Columns",
                                 style: TextStyle(
                                   fontSize: 22,
@@ -134,13 +181,33 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                             ],
                           ),
                         ),
-                        SizedBox(width: 20),
+                      ],
+                    ),
+                    Text("Medium Mode Setting",
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontFamily: 'TonphaiThin',
+                        fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 60,
+                            color: Colors.black,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Card",
+                                "Cards",
                                 style: TextStyle(
                                   fontSize: 22,
                                   color: Colors.white,
@@ -158,7 +225,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextField(
-                                  controller: _countControllerEasy,
+                                  controller: _countControllerMedium,
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     labelText: 'Sum card',
@@ -181,27 +248,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                    Text("Medium Mode Setting",
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.white,
-                        fontFamily: 'TonphaiThin',
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 60,
-                            color: Colors.black,
-                            offset: Offset(0, 0),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
+                        SizedBox(width: 20),
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -252,7 +299,27 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                             ],
                           ),
                         ),
-                        SizedBox(width: 20),
+                      ],
+                    ),
+                    Text("Hard Mode Setting",
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontFamily: 'TonphaiThin',
+                        fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 60,
+                            color: Colors.black,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -276,7 +343,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: TextField(
-                                  controller: _countControllerMedium,
+                                  controller: _countControllerHard,
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     labelText: 'Sum card',
@@ -299,27 +366,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                    Text("Hard Mode Setting",
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.white,
-                        fontFamily: 'TonphaiThin',
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 60,
-                            color: Colors.black,
-                            offset: Offset(0, 0),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
+                        SizedBox(width: 20),
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -365,53 +412,6 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                                       _selectedColumnCardHard = value!;
                                     });
                                   },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 20),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Cards",
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  color: Colors.white,
-                                  fontFamily: 'TonphaiThin',
-                                  fontWeight: FontWeight.bold,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 60,
-                                      color: Colors.black,
-                                      offset: Offset(0, 0),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: TextField(
-                                  controller: _countControllerHard,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    labelText: 'Sum card',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(20.0),
-                                      ),
-                                      borderSide:
-                                      BorderSide(color: Colors.black),
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    labelStyle: TextStyle(
-                                      fontFamily: 'TonphaiThin',
-                                      color: Colors.grey,
-                                    ),
-                                  ),
                                 ),
                               ),
                             ],

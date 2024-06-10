@@ -202,7 +202,7 @@ class _Hard extends State<Hard> {
 
   void showResultDialog(bool isWin) async {
     bool showWords = false;
-    double dialogHeight = MediaQuery.of(context).size.height * 0.2;
+    double dialogHeight = MediaQuery.of(context).size.height * 0.25;
     if (word.isEmpty || meaning.isEmpty) {
       await fetchRandomData();
     }
@@ -268,7 +268,7 @@ class _Hard extends State<Hard> {
                           ),
                           SizedBox(height: 10),
                           Text(
-                            "Card can flips ${matchedCard} from ${flips ~/ 2}",
+                            "Total Flips : ${flips ~/ 2}\nCard opened successfully : ${matchedCard}",
                             style: TextStyle(
                               fontSize: 20,
                               color: Colors.black,
@@ -348,6 +348,8 @@ class _Hard extends State<Hard> {
                                   timerValueNotifier.value = timeLeft;
                                   RandomBg();
                                 });
+                                word.clear();
+                                meaning.clear();
                                 shuffleCard();
                                 startTimer();
                               },
@@ -499,16 +501,15 @@ class _Hard extends State<Hard> {
 
       await showDialog(
         context: context,
+        barrierDismissible: true,
         builder: (BuildContext context) {
-          return FutureBuilder(
-            future: Future.delayed(Duration(milliseconds: 300)),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                Navigator.of(context).pop();
-                return SizedBox();
-              }
-              return Dialog(
-                child: Container(
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -519,8 +520,19 @@ class _Hard extends State<Hard> {
                     fit: BoxFit.contain,
                   ),
                 ),
-              );
-            },
+                SizedBox(height: 10),
+                IconButton(
+                  icon: Image.asset(
+                    'assets/images/Close.png',
+                    width: 60,
+                    height: 60,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
           );
         },
       );
