@@ -33,13 +33,17 @@ class _SelectPeople extends State<SelectPeople> {
                   child: Text(
                     'Select People',
                     style: TextStyle(
-                      color: Colors.black,
                       fontSize: 50.0,
-                      fontFamily: 'DANKI',
+                      fontFamily: 'Palamecia',
+                      fontWeight: FontWeight.bold,
+                      foreground: Paint()
+                        ..style = PaintingStyle.stroke
+                        ..strokeWidth = 3
+                        ..color = Color(0xFFF9F7C9),
                       shadows: [
                         Shadow(
-                          blurRadius: 60,
-                          color: Colors.white,
+                          blurRadius: 20,
+                          color: Colors.black,
                           offset: Offset(0, 0),
                         ),
                       ],
@@ -57,14 +61,23 @@ class _SelectPeople extends State<SelectPeople> {
                   },
                   textStyle: TextStyle(
                     color: Colors.white,
-                    fontSize: 30.0,
+                    fontSize: 40.0,
                     fontFamily: 'PandaThin',
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w900,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(2.0, 2.0),
+                        blurRadius: 3.0,
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ],
                   ),
-                  borderColor: Colors.indigo.shade200,
-                  borderWidth: 3.0,
-                  buttonWidth: 250.0,
-                  buttonHeight: 50.0,
+                  borderColor: Color(0xFFF9F7C9),
+                  borderWidth: 8.0,
+                  buttonWidth: 270.0,
+                  buttonHeight: 85.0,
+                  backgroundColor: Color(0xFFB0EBB4),
+                  pressedColor: Color(0xFF8ACDD7),
                 ),
                 SizedBox(
                   height: 30,
@@ -79,14 +92,23 @@ class _SelectPeople extends State<SelectPeople> {
                   },
                   textStyle: TextStyle(
                     color: Colors.white,
-                    fontSize: 30.0,
+                    fontSize: 40.0,
                     fontFamily: 'PandaThin',
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w900,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(2.0, 2.0),
+                        blurRadius: 3.0,
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ],
                   ),
-                  borderColor: Colors.indigo.shade200,
-                  borderWidth: 3.0,
-                  buttonWidth: 250.0,
-                  buttonHeight: 50.0,
+                  borderColor: Color(0xFFF9F7C9),
+                  borderWidth: 8.0,
+                  buttonWidth: 270.0,
+                  buttonHeight: 85.0,
+                  backgroundColor: Color(0xFFF6F193),
+                  pressedColor: Color(0xFF8ACDD7),
                 ),
                 SizedBox(
                   height: 30,
@@ -101,14 +123,23 @@ class _SelectPeople extends State<SelectPeople> {
                   },
                   textStyle: TextStyle(
                     color: Colors.white,
-                    fontSize: 30.0,
+                    fontSize: 40.0,
                     fontFamily: 'PandaThin',
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w900,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(2.0, 2.0),
+                        blurRadius: 3.0,
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ],
                   ),
-                  borderColor: Colors.indigo.shade200,
-                  borderWidth: 3.0,
-                  buttonWidth: 250.0,
-                  buttonHeight: 50.0,
+                  borderColor: Color(0xFFF9F7C9),
+                  borderWidth: 8.0,
+                  buttonWidth: 270.0,
+                  buttonHeight: 85.0,
+                  backgroundColor: Color(0xFF7BD3EA),
+                  pressedColor: Color(0xFF8ACDD7),
                 ),
                 SizedBox(height: 30),
               ],
@@ -168,16 +199,20 @@ class RoundedButton extends StatelessWidget {
   final double buttonHeight;
   final Color borderColor;
   final double borderWidth;
+  final Color backgroundColor;
+  final Color pressedColor;
 
   RoundedButton(
-    this.label,
-    this.onPressed, {
-    required this.textStyle,
-    required this.buttonWidth,
-    required this.buttonHeight,
-    required this.borderColor,
-    required this.borderWidth,
-  });
+      this.label,
+      this.onPressed, {
+        required this.textStyle,
+        required this.buttonWidth,
+        required this.buttonHeight,
+        required this.borderColor,
+        required this.borderWidth,
+        this.backgroundColor = Colors.indigo,
+        this.pressedColor = Colors.pink,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +229,8 @@ class RoundedButton extends StatelessWidget {
         ),
       ),
       style: ElevatedButton.styleFrom(
-        primary: Colors.indigo.shade700,
+        primary: backgroundColor,
+        onPrimary: pressedColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(200.0),
           side: BorderSide(
@@ -202,6 +238,13 @@ class RoundedButton extends StatelessWidget {
             width: borderWidth,
           ),
         ),
+      ).copyWith(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+          if (states.contains(MaterialState.pressed)) {
+            return pressedColor;
+          }
+          return backgroundColor;
+        }),
       ),
     );
   }

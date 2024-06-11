@@ -592,9 +592,9 @@ class _Medium extends State<Medium> {
                 Container(
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.black, width: 2.0),
-                    borderRadius: BorderRadius.circular(15.0),
+                    color: Color(0xFFF9F7C9),
+                    border: Border.all(color: Colors.black, width: 5.0),
+                    borderRadius: BorderRadius.circular(25.0),
                   ),
                   child: ValueListenableBuilder<int>(
                     valueListenable: timerValueNotifier,
@@ -631,8 +631,16 @@ class _Medium extends State<Medium> {
                   margin: EdgeInsets.all(20.0),
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 3.0),
-                    borderRadius: BorderRadius.circular(15.0),
+                    border: Border.all(color: Color(0xFF6B7AA1).withOpacity(0.1), width: 5.0),
+                    borderRadius: BorderRadius.circular(30.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xFF6B7AA1).withOpacity(0.50),
+                        spreadRadius: 0,
+                        blurRadius: 1,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
                   ),
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -656,7 +664,7 @@ class _Medium extends State<Medium> {
                                   fit: BoxFit.cover,
                                 )
                               : Image.asset(
-                                  'assets/BgCard/bgCard.png',
+                                  'assets/BgCard/back_card2.jpg',
                                   fit: BoxFit.cover,
                                 ),
                         ),

@@ -65,19 +65,19 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                     Text("Two Player Mode Setting",
                         style: TextStyle(
                             fontSize: 30,
-                          color: Colors.white,
+                            color: Color(0xFFFDFFAB),
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
                           shadows: [
                             Shadow(
-                              blurRadius: 60,
-                              color: Colors.black,
-                              offset: Offset(0, 0),
+                              offset: Offset(2.0, 2.0),
+                              blurRadius: 15.0,
+                              color: Colors.black.withOpacity(0.9),
                             ),
                           ],
                         ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -113,10 +113,10 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                                         Radius.circular(20.0),
                                       ),
                                       borderSide:
-                                          BorderSide(color: Colors.black),
+                                      BorderSide(color: Color(0xFF92C7CF)),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: Color(0xFFF1F7B5),
                                     labelStyle: TextStyle(
                                       fontFamily: 'TonphaiThin',
                                       color: Colors.grey,
@@ -154,7 +154,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                                 child: DropdownButtonFormField<int>(
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: Color(0xFFF1F7B5),
                                   ),
                                   value: _selectedColumnCardTwo,
                                   items: [4, 6, 8, 10].map((int value) {
@@ -163,6 +163,8 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                                       child: Text(
                                         '$value Columns',
                                         style: TextStyle(
+                                          fontFamily: 'PandaThin',
+                                          fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -183,14 +185,14 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                     Text("Three Player Mode Setting",
                         style: TextStyle(
                             fontSize: 30,
-                          color: Colors.white,
+                            color: Color(0xFFF4B183),
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
                           shadows: [
                             Shadow(
-                              blurRadius: 60,
-                              color: Colors.black,
-                              offset: Offset(0, 0),
+                              offset: Offset(2.0, 2.0),
+                              blurRadius: 15.0,
+                              color: Colors.black.withOpacity(0.9),
                             ),
                           ],
                         ),
@@ -234,7 +236,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                                           BorderSide(color: Colors.black),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: Color(0xFFF4B183),
                                     labelStyle: TextStyle(
                                       fontFamily: 'TonphaiThin',
                                       color: Colors.grey,
@@ -272,7 +274,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                                 child: DropdownButtonFormField<int>(
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: Color(0xFFF4B183),
                                   ),
                                   value: _selectedColumnCardThree,
                                   items: [4, 6, 8, 10].map((int value) {
@@ -281,6 +283,8 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                                       child: Text(
                                         '$value Columns',
                                         style: TextStyle(
+                                          fontFamily: 'PandaThin',
+                                          fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -301,14 +305,14 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                     Text("Four Player Mode Setting",
                         style: TextStyle(
                             fontSize: 30,
-                          color: Colors.white,
+                            color: Color(0xFFFDCEDF),
                             fontFamily: 'TonphaiThin',
                             fontWeight: FontWeight.bold,
                           shadows: [
                             Shadow(
-                              blurRadius: 60,
-                              color: Colors.black,
-                              offset: Offset(0, 0),
+                              offset: Offset(2.0, 2.0),
+                              blurRadius: 15.0,
+                              color: Colors.black.withOpacity(0.9),
                             ),
                           ],
                         ),
@@ -352,7 +356,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                                           BorderSide(color: Colors.black),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: Color(0xFFE0AED0),
                                     labelStyle: TextStyle(
                                       fontFamily: 'TonphaiThin',
                                       color: Colors.grey,
@@ -390,7 +394,7 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                                 child: DropdownButtonFormField<int>(
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: Color(0xFFE0AED0),
                                   ),
                                   value: _selectedColumnCardFour,
                                   items: [4, 6, 8, 10].map((int value) {
@@ -399,6 +403,8 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                                       child: Text(
                                         '$value Columns',
                                         style: TextStyle(
+                                          fontFamily: 'PandaThin',
+                                          fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -542,9 +548,11 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                             DataColumCardFour.count = [inputDataFour];
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
+                            primary: Color(0xFF99FEFF),
                             onPrimary: Colors.white,
-                            side: BorderSide(color: Colors.indigo.shade200, width: 3),
+                            side: BorderSide(color: Color(0xFFFFD966), width: 4,
+                            ),
+                            minimumSize: Size(110, 50),
                           ),
                           child: Text(
                             "Save",
@@ -588,9 +596,10 @@ class _MultiPlayerSetting extends State<MultiPlayerSetting> {
                             _countControllerFour.clear();
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
+                            primary: Color(0xFFFF9494),
                             onPrimary: Colors.white,
-                            side: BorderSide(color: Colors.indigo.shade200, width: 3),
+                            side: BorderSide(color: Color(0xFFFFD966), width: 4),
+                            minimumSize: Size(100, 50),
                           ),
                           child: Text(
                             'Reset',

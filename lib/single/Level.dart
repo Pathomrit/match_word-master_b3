@@ -34,23 +34,28 @@ class _Level extends State<Level> {
                   child: Text(
                     'Game Mode',
                     style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 60.0,
-                      fontFamily: 'DANKI',
+                      fontSize: 65.0,
+                      fontFamily: 'Palamecia',
+                      fontWeight: FontWeight.bold,
+                      foreground: Paint()
+                        ..style = PaintingStyle.stroke
+                        ..strokeWidth = 2
+                        ..color = Color(0xFFFDFFAB),
                       shadows: [
                         Shadow(
-                          blurRadius: 60,
-                          color: Colors.white,
+                          blurRadius: 20,
+                          color: Colors.black,
                           offset: Offset(0, 0),
                         ),
                       ],
                     ),
                   ),
                 ),
+                //PandaThin
                 SizedBox(height: 30.0),
                 RoundedButton(
                   'Easy',
-                  () {
+                      () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Easy()),
@@ -58,21 +63,30 @@ class _Level extends State<Level> {
                   },
                   textStyle: TextStyle(
                     color: Colors.white,
-                    fontSize: 30.0,
-                    fontFamily: 'PandaThin',
+                    fontSize: 40.0,
+                    fontFamily: 'Palamecia',
                     fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(2.0, 2.0),
+                        blurRadius: 3.0,
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ],
                   ),
-                  borderColor: Colors.indigo.shade200,
-                  borderWidth: 3.0,
+                  borderColor: Color(0xFFF1F7B5),
+                  borderWidth: 8.0,
                   buttonWidth: 250.0,
-                  buttonHeight: 50.0,
+                  buttonHeight: 75.0,
+                  backgroundColor: Color(0xFFFFD966),
+                  pressedColor: Color(0xFF92C7CF),
                 ),
                 SizedBox(
                   height: 30,
                 ),
                 RoundedButton(
                   'Medium',
-                  () {
+                      () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Medium()),
@@ -80,21 +94,30 @@ class _Level extends State<Level> {
                   },
                   textStyle: TextStyle(
                     color: Colors.white,
-                    fontSize: 30.0,
-                    fontFamily: 'PandaThin',
+                    fontSize: 40.0,
+                    fontFamily: 'Palamecia',
                     fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(2.0, 2.0),
+                        blurRadius: 3.0,
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ],
                   ),
-                  borderColor: Colors.indigo.shade200,
-                  borderWidth: 3.0,
+                  borderColor: Color(0xFFF1F7B5),
+                  borderWidth: 8.0,
                   buttonWidth: 250.0,
-                  buttonHeight: 50.0,
+                  buttonHeight: 75.0,
+                  backgroundColor: Color(0xFFF4B183),
+                  pressedColor: Color(0xFF92C7CF),
                 ),
                 SizedBox(
                   height: 30,
                 ),
                 RoundedButton(
                   'Hard',
-                  () {
+                      () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Hard()),
@@ -102,14 +125,23 @@ class _Level extends State<Level> {
                   },
                   textStyle: TextStyle(
                     color: Colors.white,
-                    fontSize: 30.0,
-                    fontFamily: 'PandaThin',
+                    fontSize: 40.0,
+                    fontFamily: 'Palamecia',
                     fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(2.0, 2.0),
+                        blurRadius: 3.0,
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ],
                   ),
-                  borderColor: Colors.indigo.shade200,
-                  borderWidth: 3.0,
+                  borderColor: Color(0xFFF1F7B5),
+                  borderWidth: 8.0,
                   buttonWidth: 250.0,
-                  buttonHeight: 50.0,
+                  buttonHeight: 75.0,
+                  backgroundColor: Color(0xFFF29393),
+                  pressedColor: Color(0xFF92C7CF),
                 ),
                 SizedBox(height: 30),
               ],
@@ -187,16 +219,20 @@ class RoundedButton extends StatelessWidget {
   final double buttonHeight;
   final Color borderColor;
   final double borderWidth;
+  final Color backgroundColor;
+  final Color pressedColor;
 
   RoundedButton(
-    this.label,
-    this.onPressed, {
-    required this.textStyle,
-    required this.buttonWidth,
-    required this.buttonHeight,
-    required this.borderColor,
-    required this.borderWidth,
-  });
+      this.label,
+      this.onPressed, {
+        required this.textStyle,
+        required this.buttonWidth,
+        required this.buttonHeight,
+        required this.borderColor,
+        required this.borderWidth,
+        this.backgroundColor = Colors.indigo,
+        this.pressedColor = Colors.pink,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +249,8 @@ class RoundedButton extends StatelessWidget {
         ),
       ),
       style: ElevatedButton.styleFrom(
-        primary: Colors.indigo.shade700,
+        primary: backgroundColor,
+        onPrimary: pressedColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(200.0),
           side: BorderSide(
@@ -221,6 +258,13 @@ class RoundedButton extends StatelessWidget {
             width: borderWidth,
           ),
         ),
+      ).copyWith(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+          if (states.contains(MaterialState.pressed)) {
+            return pressedColor;
+          }
+          return backgroundColor;
+        }),
       ),
     );
   }

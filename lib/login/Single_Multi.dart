@@ -33,13 +33,13 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                     child: Text(
                       'Select Mode',
                       style: TextStyle(
-                        fontSize: 60.0,
-                        fontFamily: 'DANKI',
+                        fontSize: 64.0,
+                        fontFamily: 'Palamecia',
                         fontWeight: FontWeight.bold,
                         foreground: Paint()
                           ..style = PaintingStyle.stroke
-                          ..strokeWidth = 2
-                          ..color = Colors.white,
+                          ..strokeWidth = 3
+                          ..color = Color(0xFFF9F7C9),
                         shadows: [
                           Shadow(
                             blurRadius: 20,
@@ -50,10 +50,10 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 25),
+                  SizedBox(height: 40),
                   RoundedButton(
                     'Single Player',
-                    () {
+                        () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Level()),
@@ -61,19 +61,28 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                     },
                     textStyle: TextStyle(
                       color: Colors.white,
-                      fontSize: 30.0,
+                      fontSize: 40.0,
                       fontFamily: 'PandaThin',
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w900,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(2.0, 2.0),
+                          blurRadius: 3.0,
+                          color: Colors.black.withOpacity(0.7),
+                        ),
+                      ],
                     ),
-                    borderColor: Colors.indigo.shade200,
-                    borderWidth: 3.0,
-                    buttonWidth: 250.0,
-                    buttonHeight: 50.0,
+                    borderColor: Color(0xFFF9F7C9),
+                    borderWidth: 8.0,
+                    buttonWidth: 270.0,
+                    buttonHeight: 85.0,
+                    backgroundColor: Color(0xFF7BD3EA),
+                    pressedColor: Color(0xFF8ACDD7),
                   ),
                   SizedBox(height: 25),
                   RoundedButton(
                     'Multi player',
-                    () {
+                        () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SelectPeople()),
@@ -81,14 +90,23 @@ class _SingleOrMulti extends State<SingleOrMulti> {
                     },
                     textStyle: TextStyle(
                       color: Colors.white,
-                      fontSize: 30.0,
+                      fontSize: 40.0,
                       fontFamily: 'PandaThin',
                       fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(2.0, 2.0),
+                          blurRadius: 3.0,
+                          color: Colors.black.withOpacity(0.7),
+                        ),
+                      ],
                     ),
-                    borderColor: Colors.indigo.shade200,
-                    borderWidth: 3.0,
-                    buttonWidth: 250.0,
-                    buttonHeight: 50.0,
+                    borderColor: Color(0xFFF9F7C9),
+                    borderWidth: 8.0,
+                    buttonWidth: 270.0,
+                    buttonHeight: 85.0,
+                    backgroundColor: Color(0xFF80BCBD),
+                    pressedColor: Color(0xFF92C7CF),
                   ),
                 ],
               ),
@@ -128,16 +146,20 @@ class RoundedButton extends StatelessWidget {
   final double buttonHeight;
   final Color borderColor;
   final double borderWidth;
+  final Color backgroundColor;
+  final Color pressedColor;
 
   RoundedButton(
-    this.label,
-    this.onPressed, {
-    required this.textStyle,
-    required this.buttonWidth,
-    required this.buttonHeight,
-    required this.borderColor,
-    required this.borderWidth,
-  });
+      this.label,
+      this.onPressed, {
+        required this.textStyle,
+        required this.buttonWidth,
+        required this.buttonHeight,
+        required this.borderColor,
+        required this.borderWidth,
+        this.backgroundColor = Colors.indigo,
+        this.pressedColor = Colors.pink,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +176,8 @@ class RoundedButton extends StatelessWidget {
         ),
       ),
       style: ElevatedButton.styleFrom(
-        primary: Colors.indigo.shade700,
+        primary: backgroundColor,
+        onPrimary: pressedColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(200.0),
           side: BorderSide(
@@ -162,6 +185,13 @@ class RoundedButton extends StatelessWidget {
             width: borderWidth,
           ),
         ),
+      ).copyWith(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+          if (states.contains(MaterialState.pressed)) {
+            return pressedColor;
+          }
+          return backgroundColor;
+        }),
       ),
     );
   }

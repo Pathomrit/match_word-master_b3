@@ -146,6 +146,9 @@ flutter:
     - family: DANKI
       fonts:
         - asset: assets/font/DANKI.otf
+    - family: Palamecia
+      fonts:
+        - asset: assets/font/Palamecia Titling.otf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

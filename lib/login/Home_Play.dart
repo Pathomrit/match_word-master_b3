@@ -18,7 +18,7 @@ class _PlayPageState extends State<PlayPage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/homeMenu.png',
+              'assets/images/flower_purple.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -38,7 +38,7 @@ class _PlayPageState extends State<PlayPage> {
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.5),
+                                  color: Colors.indigo.withOpacity(0.5),
                                   spreadRadius: 5,
                                   blurRadius: 7,
                                   offset: Offset(0, 3),
@@ -48,8 +48,8 @@ class _PlayPageState extends State<PlayPage> {
                             child: ClipOval(
                               child: Image.asset(
                                 'assets/images/Logo_MatchCard.png',
-                                width: 250.0,
-                                height: 250.0,
+                                width: 330.0,
+                                height: 330.0,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -57,25 +57,14 @@ class _PlayPageState extends State<PlayPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 35.0),
-                    RichText(
-                      text: TextSpan(
-                        text: ' Matching Card',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'DANKI',
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 40.0),
+
+                    SizedBox(height: 56.0),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         RoundedButton(
                           'START',
-                          () {
+                              () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -84,19 +73,29 @@ class _PlayPageState extends State<PlayPage> {
                           },
                           textStyle: TextStyle(
                             color: Colors.white,
-                            fontSize: 30.0,
-                            fontFamily: 'PandaThin',
-                            fontWeight: FontWeight.w900,
+                            fontSize: 50.0,
+                            fontFamily: 'Palamecia',
+                            fontWeight: FontWeight.w700,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(2.0, 2.0),
+                                blurRadius: 3.0,
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                            ],
+
                           ),
                           borderColor: Colors.indigo.shade200,
-                          borderWidth: 3.0,
-                          buttonWidth: 250.0,
-                          buttonHeight: 50.0,
+                          borderWidth: 8.0,
+                          buttonWidth: 260.0,
+                          buttonHeight: 80.0,
+                          backgroundColor: Color(0xFFFFC0CB),
+                          pressedColor: Color(0xFFE393B8),
                         ),
-                        SizedBox(height: 15.0),
+                        SizedBox(height: 22.0),
                         RoundedButton(
                           'Options',
-                          () {
+                              () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -105,31 +104,51 @@ class _PlayPageState extends State<PlayPage> {
                           },
                           textStyle: TextStyle(
                             color: Colors.white,
-                            fontSize: 24.0,
-                            fontFamily: 'PandaThin',
-                            fontWeight: FontWeight.w900,
+                            fontSize: 50.0,
+                            fontFamily: 'Palamecia',
+                            fontWeight: FontWeight.w700,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(2.0, 2.0),
+                                blurRadius: 3.0,
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                            ],
+
                           ),
                           borderColor: Colors.indigo.shade200,
-                          borderWidth: 3.5,
-                          buttonWidth: 250.0,
-                          buttonHeight: 50.0,
+                          borderWidth: 8.0,
+                          buttonWidth: 260.0,
+                          buttonHeight: 80.0,
+                          backgroundColor: Color(0xFFFFD5C0),
+                          pressedColor: Color(0xFFE393B8),
                         ),
-                        SizedBox(height: 15.0),
+                        SizedBox(height: 22.0),
                         RoundedButton(
                           'Quit',
-                          () {
+                              () {
                             SystemNavigator.pop();
                           },
                           textStyle: TextStyle(
                             color: Colors.white,
-                            fontSize: 27.0,
-                            fontFamily: 'PandaThin',
-                            fontWeight: FontWeight.w900,
+                            fontSize: 50.0,
+                            fontFamily: 'Palamecia',
+                            fontWeight: FontWeight.w700,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(2.0, 2.0),
+                                blurRadius: 3.0,
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                            ],
+
                           ),
                           borderColor: Colors.indigo.shade200,
-                          borderWidth: 3.0,
-                          buttonWidth: 250.0,
-                          buttonHeight: 50.0,
+                          borderWidth: 8.0,
+                          buttonWidth: 260.0,
+                          buttonHeight: 80.0,
+                          backgroundColor: Color(0xFFb1dd9e),
+                          pressedColor: Color(0xFF97cf8a),
                         ),
                       ],
                     ),
@@ -152,16 +171,20 @@ class RoundedButton extends StatelessWidget {
   final double buttonHeight;
   final Color borderColor;
   final double borderWidth;
+  final Color backgroundColor;
+  final Color pressedColor;
 
   RoundedButton(
-    this.label,
-    this.onPressed, {
-    required this.textStyle,
-    required this.buttonWidth,
-    required this.buttonHeight,
-    required this.borderColor,
-    required this.borderWidth,
-  });
+      this.label,
+      this.onPressed, {
+        required this.textStyle,
+        required this.buttonWidth,
+        required this.buttonHeight,
+        required this.borderColor,
+        required this.borderWidth,
+        this.backgroundColor = Colors.indigo,
+        this.pressedColor = Colors.pink,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +201,8 @@ class RoundedButton extends StatelessWidget {
         ),
       ),
       style: ElevatedButton.styleFrom(
-        primary: Colors.indigo.shade700,
+        primary: backgroundColor,
+        onPrimary: pressedColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(200.0),
           side: BorderSide(
@@ -186,6 +210,13 @@ class RoundedButton extends StatelessWidget {
             width: borderWidth,
           ),
         ),
+      ).copyWith(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+          if (states.contains(MaterialState.pressed)) {
+            return pressedColor;
+          }
+          return backgroundColor;
+        }),
       ),
     );
   }
