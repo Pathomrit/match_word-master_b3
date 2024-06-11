@@ -208,35 +208,35 @@ class _Four extends State<Four> {
     bool showWords = false;
     double dialogHeight = MediaQuery.of(context).size.height * 0.3;
 
-    if (player1Score > player2Score && player1Score > player3Score && player1Score > player4Score) {
+    if (player1Score > 0 && player1Score > player2Score && player1Score > player3Score && player1Score > player4Score) {
       winner = 'Player 1 Win';
-    } else if (player2Score > player1Score && player2Score > player3Score && player2Score > player4Score) {
+    } else if (player2Score > 0 && player2Score > player1Score && player2Score > player3Score && player2Score > player4Score) {
       winner = 'Player 2 Win';
-    } else if (player3Score > player1Score && player3Score > player2Score && player3Score > player4Score) {
+    } else if (player3Score > 0 && player3Score > player1Score && player3Score > player2Score && player3Score > player4Score) {
       winner = 'Player 3 Win';
-    } else if (player4Score > player1Score && player4Score > player2Score && player4Score > player3Score) {
+    } else if (player4Score > 0 && player4Score > player1Score && player4Score > player2Score && player4Score > player3Score) {
       winner = 'Player 4 Win';
-    } else if (player1Score == player2Score && player1Score == player3Score && player1Score == player4Score) {
+    } else if (player1Score == player2Score && player1Score == player3Score && player1Score == player4Score && player1Score > 0) {
       winner = 'Draw';
-    } else if (player1Score == player2Score && player1Score == player3Score) {
+    } else if (player1Score == player2Score && player1Score == player3Score && player1Score > 0) {
       winner = 'P1, P2 and P3 Win';
-    } else if (player1Score == player2Score && player1Score == player4Score) {
+    } else if (player1Score == player2Score && player1Score == player4Score && player1Score > 0) {
       winner = 'P1, P2 and P4 Win';
-    } else if (player1Score == player3Score && player1Score == player4Score) {
+    } else if (player1Score == player3Score && player1Score == player4Score && player1Score > 0) {
       winner = 'P1, P3 and P4 Win';
-    } else if (player2Score == player3Score && player2Score == player4Score) {
+    } else if (player2Score == player3Score && player2Score == player4Score && player2Score > 0) {
       winner = 'P2, P3 and P4 Win';
-    } else if (player1Score == player2Score) {
+    } else if (player1Score == player2Score && player1Score > 0) {
       winner = 'P1 and P2 Win';
-    } else if (player1Score == player3Score) {
+    } else if (player1Score == player3Score && player1Score > 0) {
       winner = 'P1 and P3 Win';
-    } else if (player1Score == player4Score) {
+    } else if (player1Score == player4Score && player1Score > 0) {
       winner = 'P1 and P4 Win';
-    } else if (player2Score == player3Score) {
+    } else if (player2Score == player3Score && player2Score > 0) {
       winner = 'P2 and P3 Win';
-    } else if (player2Score == player4Score) {
+    } else if (player2Score == player4Score && player2Score > 0) {
       winner = 'P2 and P4 Win';
-    } else if (player3Score == player4Score) {
+    } else if (player3Score == player4Score && player3Score > 0) {
       winner = 'P3 and P4 Win';
     } else {
       winner = 'Draw';
