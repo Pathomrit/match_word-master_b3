@@ -89,7 +89,7 @@ class _SinglePlayerSetting extends State<SinglePlayerSetting> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Card",
+                                "Cards",
                                 style: TextStyle(
                                   fontSize: 22,
                                   color: Colors.white,
